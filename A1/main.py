@@ -13,11 +13,11 @@ Path = (os.path.split(os.path.realpath(__file__))[0] + "/").replace("\\\\", "/")
 os.chdir(Path)
 
 
-tsp_files = []
+tsp_instances = []
 
 
-def print_tsp_files():
-    for tsp_file in tsp_files:
+def print_tsp_instances():
+    for tsp_file in tsp_instances:
         print('\n' + '-'*50)
         print(f'File: {tsp_file.filepath}')
         print(f'Name: {tsp_file.name}')
@@ -47,7 +47,7 @@ if __name__ == '__main__':
         root = tk.Tk()
         root.withdraw()
         tsp_loader.choose_files()
-    tsp_files = tsp_loader.tsp_files
+    tsp_instances = tsp_loader.tsp_files
 
-    # Print the loaded TSP files
-    print_tsp_files()
+    # Print the loaded TSP instances
+    print_tsp_instances()
