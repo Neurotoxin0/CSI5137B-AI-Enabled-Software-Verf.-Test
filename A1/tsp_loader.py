@@ -9,7 +9,25 @@ from tkinter import filedialog
 
 
 class TSPFile:
-    def __init__(self, filepath):
+    """
+    A class to represent a TSP file and extract the relevant information from the header and node coordinates.
+
+    Attributes:
+    - filepath (str): The path to the TSP file.
+    - name (str): The name of the TSP problem.
+    - type (str): The type of the TSP problem.
+    - comment (str): A comment about the TSP problem.
+    - dimension (int): The number of nodes in the TSP problem.
+    - edge_weight_type (str): The type of edge weights in the TSP problem.
+    - node_coords (list): A list of tuples containing the node ID and coordinates.
+    - solution (list): A list of node IDs representing the solution path.
+    - total_cost (float): The total cost of the solution path.
+
+    Methods:
+    - validate(): Validate the instance variables to ensure that the file is a valid TSP problem and meet the requirements for this assignment.
+    """
+    
+    def __init__(self, filepath) -> None:
         """
         Initialize the TSP file object with the given file path.
 
@@ -17,7 +35,7 @@ class TSPFile:
         - filepath (str): The path to the TSP file.
 
         Returns:
-        - valid (bool): True if the file was successfully loaded and validated, False otherwise.
+        - None
         """
         self.filepath = filepath
         self.name = None
@@ -31,7 +49,8 @@ class TSPFile:
 
         self.__load()
 
-    def __load(self):
+    
+    def __load(self) -> None:
         """
         Load the TSP file and extract the relevant information from the header and node coordinates.
         """
@@ -56,7 +75,8 @@ class TSPFile:
                     y_coord = float(parts[2])
                     self.node_coords.append((node_id, x_coord, y_coord))
 
-    def validate(self):
+    
+    def validate(self) -> bool:
         """
         Validate the instance variables to ensure that the file is a valid TSP problem and meet the requirements for this assignment.
 
@@ -70,10 +90,22 @@ class TSPFile:
 
 
 class TSPLoader:
-    def __init__(self):
+    """
+    A class to load TSP files from the command line arguments or prompt the user to choose files.
+
+    Attributes:
+    - tsp_files (list): A list of TSPFile objects representing the loaded TSP files.
+
+    Methods:
+    - choose_files(): Prompt the user to choose TSP files using a file dialog.
+    - load_files_from_args(filepaths): Load TSP files from the command line arguments.
+    """
+    
+    def __init__(self) -> None:
         self.tsp_files = []
 
-    def choose_files(self):
+
+    def choose_files(self) -> None:
         """
         Prompt the user to choose TSP files using a file dialog.
         """
@@ -85,7 +117,8 @@ class TSPLoader:
             tsp_file = TSPFile(filepath)
             if tsp_file.validate(): self.tsp_files.append(tsp_file)
 
-    def load_files_from_args(self, filepaths):
+
+    def load_files_from_args(self, filepaths) -> None:
         """
         Load TSP files from the command line arguments.
         """
