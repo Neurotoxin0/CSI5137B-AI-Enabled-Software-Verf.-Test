@@ -12,23 +12,7 @@ import tsp_loader, tsp_solver
 Path = (os.path.split(os.path.realpath(__file__))[0] + "/").replace("\\\\", "/").replace("\\", "/")
 os.chdir(Path)
 
-
 tsp_instances = []
-
-
-def print_tsp_instances():
-    for tsp_file in tsp_instances:
-        print('\n' + '-'*50)
-        print(f'File: {tsp_file.filepath}')
-        print(f'Name: {tsp_file.name}')
-        print(f'Type: {tsp_file.type}')
-        print(f'Comment: {tsp_file.comment}')
-        print(f'Dimension: {tsp_file.dimension}')
-        print(f'Edge Weight Type: {tsp_file.edge_weight_type}')
-        print(f'Node Coordinates: {tsp_file.node_coords[:5]} ...')
-        print(f'Solution: {tsp_file.solution}')
-        print(f'Total Cost: {tsp_file.total_cost}')
-        print('\n' + '-'*50)
 
 
 
@@ -50,4 +34,4 @@ if __name__ == '__main__':
     tsp_instances = tsp_loader.tsp_files
 
     # Print the loaded TSP instances
-    print_tsp_instances()
+    for tsp_instance in tsp_instances: print(tsp_instance)
