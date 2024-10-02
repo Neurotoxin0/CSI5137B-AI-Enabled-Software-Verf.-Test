@@ -87,6 +87,28 @@ class TSPFile:
             if self.type == 'TSP' and self.edge_weight_type == 'EUC_2D':    # Only fpcus on TSP and EUC_2D for this assignment
                 return True
         return False
+    
+
+    def __str__(self) -> str:
+        """
+        Return a string representation of the TSP file object.
+
+        Returns:
+        - string (str): A string representation of the TSP file object.
+        """
+        message = f"\n \
+-------------------------------------------------- \n \
+File: {self.filepath} \n \
+Name: {self.name} \n \
+Type: {self.type} \n \
+Comment: {self.comment} \n \
+Dimension: {self.dimension} \n \
+Edge Weight Type: {self.edge_weight_type} \n \
+Node Coordinates: {self.node_coords[:5]} ... \n \
+Solution: {self.solution} \n \
+Total Cost: {self.total_cost} \n \
+-------------------------------------------------- \n"
+        return message
 
 
 class TSPLoader:
