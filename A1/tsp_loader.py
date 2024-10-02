@@ -1,7 +1,7 @@
 """
 @Description  :   TSP File Loader
 @Author1      :   Yang Xu, 300342009
-@Author2      :   XXX, XXX
+@Author2      :   Peizhou Zhang, 300400642
 @Comment      :   Dev with Python 3.10.0
 """
 
