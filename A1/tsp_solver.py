@@ -121,7 +121,7 @@ class GeneticAlgorithm:
         parent2 = min(random.sample(self.population, tournament_size), key=self.assess_fitness)
         return parent1, parent2
 
-    def crossover(self):
+    def crossover(self, parent1, parent2):
         """ 
         Perform ordered crossover (OX1) between two parents to create an offspring. 
         """
