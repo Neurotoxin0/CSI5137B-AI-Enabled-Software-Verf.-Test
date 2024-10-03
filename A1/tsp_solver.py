@@ -77,7 +77,7 @@ class GeneticAlgorithm:
         return self.get_best_individual()
 
 
-    def assess_fitness(self):
+    def assess_fitness(self, tour):
         """
         Calculate the total distance for a given tour.
         Parameters:
@@ -137,7 +137,7 @@ class GeneticAlgorithm:
                 pos += 1
         return child
 
-    def mutate(self):
+    def mutate(self, tour):
         """ 
         Perform swap mutation on a tour. 
         """
