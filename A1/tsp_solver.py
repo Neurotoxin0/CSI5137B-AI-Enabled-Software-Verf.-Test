@@ -8,6 +8,9 @@
 import math, random
 
 
+debug = False
+
+
 def euclidean_distance(city1: tuple, city2: tuple) -> float:
     """
     Calculate the Euclidean distance between two cities.
@@ -143,7 +146,7 @@ class GeneticAlgorithm:
             self.evaluate_population()
             
             # Print progress every 10 generations
-            if (generation + 1) % 10 == 0: print(f'Generation {generation + 1}/{self.generations}, Best Distance: {self.best_fitness:.2f}')
+            if debug and (generation + 1) % 10 == 0: print(f'Generation {generation + 1}/{self.generations}, Best Distance: {self.best_fitness:.2f}')
              
         solution, fitness = self.get_best_individual()
         return solution, fitness, verify_tsp_solution(solution, len(self.cities))

@@ -13,7 +13,7 @@ Path = (os.path.split(os.path.realpath(__file__))[0] + "/").replace("\\\\", "/")
 os.chdir(Path)
 
 tsp_instances = []
-
+debug = False
 
 
 if __name__ == '__main__':
@@ -37,7 +37,7 @@ if __name__ == '__main__':
 
 
     # Generate a genetic algorithm solver for the TSP instances
-    ga_instance = tsp_solver.GeneticAlgorithm(popsize=50, mutation_rate=0.1, generations=10)
+    ga_instance = tsp_solver.GeneticAlgorithm(popsize=50, mutation_rate=0.1, generations=100)
     for tsp_instance in tsp_instances: 
         print(f'Running GA solver on {tsp_instance.name} with {tsp_instance.dimension} cities...')
         best_tour, total_cost, validate = ga_instance.solve(tsp_instance.node_coords)
@@ -45,10 +45,11 @@ if __name__ == '__main__':
         tsp_instance.total_cost = total_cost
         tsp_instance.solution_validation = validate
 
-
+    
     # Print summary
-    tsp_scorer_instance = tsp_loader.TSPScorer(Path + 'Assets/tsplib/solutions')
+    if debug:
+        tsp_scorer_instance = tsp_loader.TSPScorer(Path + 'Assets/tsplib/solutions')
 
-    for tsp_instance in tsp_instances: 
-        print(tsp_instance)
-        print(f"Ratio: {tsp_scorer_instance.validate_fitness(tsp_instance):.2f}")
+        for tsp_instance in tsp_instances: 
+            print(tsp_instance)
+            print(f"Ratio: {tsp_scorer_instance.validate_fitness(tsp_instance):.2f}")
