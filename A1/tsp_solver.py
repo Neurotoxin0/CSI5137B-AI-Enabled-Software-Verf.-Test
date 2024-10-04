@@ -123,8 +123,10 @@ class GeneticAlgorithm:
         - node_coords (list): A list of tuples containing the city indices and coordinates; e.g., [(0, (x0, y0)), (1, (x1, y1)), ...].
 
         Returns:
-        - tuple: The best tour (list of indices) and its total cost (distance).
+        - tuple: The best solution (list of city indices), the total distance of the best solution, and a tuple indicating the validation result.
         """
+        self._clr()  # Clear the genetic algorithm attributes
+
         self.cities = node_coords
         self.initialize_population()  # Initial population of random tours
         self.evaluate_population()  # Assess the fitness of the initial population
