@@ -5,7 +5,7 @@
 @Comment      :   Dev with Python 3.10.0
 """
 
-import argparse, os
+import argparse, csv, os
 import tsp_loader, tsp_solver
 
 
@@ -14,6 +14,21 @@ os.chdir(Path)
 
 tsp_instances = []
 debug = False
+
+
+def save_solution_to_csv(tour: list, filename: str = 'solution.csv') -> None:
+    """
+    Save the tour to a CSV file with a single column of city indices.
+
+    Parameters:
+    - tour (list): The list of city indices representing the tour.
+    - filename (str): The name of the output CSV file.
+    """
+    with open(filename, mode='w', newline='') as file:
+        writer = csv.writer(file)
+        for city in tour:
+            writer.writerow([city])
+
 
 
 if __name__ == '__main__':
@@ -39,7 +54,7 @@ if __name__ == '__main__':
     # Generate a genetic algorithm solver for the TSP instances
     ga_instance = tsp_solver.GeneticAlgorithm(popsize=50, mutation_rate=0.1, generations=100)
     for tsp_instance in tsp_instances: 
-        print(f'Running GA solver on {tsp_instance.name} with {tsp_instance.dimension} cities...')
+        if debug: print(f'Running GA solver on {tsp_instance.name} with {tsp_instance.dimension} cities...')
         best_tour, total_cost, validate = ga_instance.solve(tsp_instance.node_coords)
         tsp_instance.solution = best_tour
         tsp_instance.total_cost = total_cost
@@ -53,3 +68,12 @@ if __name__ == '__main__':
         for tsp_instance in tsp_instances: 
             print(tsp_instance)
             print(f"Ratio: {tsp_scorer_instance.validate_fitness(tsp_instance):.2f}")
+    else:
+        if len(tsp_instances) == 1:
+            tsp_instance = tsp_instances[0]
+            print(f"{tsp_instance.total_cost:.2f}")
+            save_solution_to_csv(tsp_instance.solution, f'solution.csv')
+        else:
+            for tsp_instance in tsp_instances: 
+                print(f"{tsp_instance.name}: {tsp_instance.total_cost:.2f}")
+                save_solution_to_csv(tsp_instance.solution, f'{tsp_instance.name}_solution.csv')
