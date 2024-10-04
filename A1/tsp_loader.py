@@ -24,18 +24,14 @@ class TSPFile:
     - total_cost (float): The total cost of the solution path.
 
     Methods:
+    - __load(): Load the TSP file and extract the relevant information from the header and node coordinates.
     - validate(): Validate the instance variables to ensure that the file is a valid TSP problem and meet the requirements for this assignment.
+    - __str__(): Return a string representation of the TSP file object.
     """
     
     def __init__(self, filepath) -> None:
         """
-        Initialize the TSP file object with the given file path.
-
-        Parameters:
-        - filepath (str): The path to the TSP file.
-
-        Returns:
-        - None
+        Initialize the TSP file object by loading the given file path.
         """
         self.filepath = filepath
         self.name = None
@@ -83,7 +79,7 @@ class TSPFile:
         Returns:
         - valid (bool): True if the file is a valid TSP problem with EUC_2D edge weights, False otherwise.
         """
-        if self.name and self.type and self.dimension and self.edge_weight_type and self.node_coords:
+        if self.name and self.type and self.dimension and self.edge_weight_type and len(self.node_coords) > 0:
             if self.type == 'TSP' and self.edge_weight_type == 'EUC_2D':    # Only fpcus on TSP and EUC_2D for this assignment
                 return True
         return False
