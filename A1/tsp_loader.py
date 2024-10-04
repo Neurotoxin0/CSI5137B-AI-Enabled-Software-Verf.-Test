@@ -146,3 +146,57 @@ class TSPLoader:
         for filepath in filepaths:
             tsp_file = TSPFile(filepath)
             if tsp_file.validate(): self.tsp_files.append(tsp_file)
+
+
+class TSPScorer:
+    """
+    A class to score TSP solutions against the best known solutions for the TSP instances.
+
+    Attributes:
+    - filepath (str): The path to the file containing the best known solutions.
+    - best_fitness (dict): A dictionary containing the best known fitness values for the TSP instances.
+
+    Methods:
+    - __load(): Load the best known solutions from the file.
+    - validate_fitness(instance_name, fitness): Validate the given fitness against the best known fitness for the specified instance.
+    """
+
+    def __init__(self, filepath) -> None:
+        self.filepath = filepath
+        self.best_fitness = {}
+
+        self.__load()
+
+
+    def __load(self) -> None:
+        try:
+            with open(self.filepath, 'r') as file:
+                for line in file:
+                    parts = line.strip().split(':')
+                    if len(parts) == 2:
+                        name = parts[0].strip()
+                        best_fitness = float(parts[1].strip().replace(',', ''))  # Remove commas if present
+                        self.best_fitness[name] = best_fitness
+        except FileNotFoundError:
+            return False, f"Error: The file '{self.filepath}' was not found."
+        except Exception as e:
+            return False, f"Error reading the file: {str(e)}"
+
+        
+    def validate_fitness(self, tsp_instance: TSPFile) -> float:
+        """
+        Validate the given fitness against the best known fitness for the specified instance.
+
+        Parameters:
+        - instance_name (str): The name of the TSP instance.
+        - fitness (float): The fitness (total distance) of the TSP solution to verify.
+
+        Returns:
+        - score (float): the ratio of the fitness to the best known fitness (1.0 if equal, <1.0 if better, >1.0 if worse).
+        """
+        if tsp_instance.total_cost is None: return -1.0
+        if tsp_instance.name not in self.best_fitness: return -1.0
+
+        best_known_fitness = self.best_fitness[tsp_instance.name]
+        ratio = tsp_instance.total_cost / best_known_fitness
+        return ratio

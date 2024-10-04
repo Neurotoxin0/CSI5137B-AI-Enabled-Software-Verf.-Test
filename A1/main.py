@@ -24,26 +24,31 @@ if __name__ == '__main__':
 
 
     # Load TSP files from the command line arguments or prompt the user to choose files
-    tsp_loader = tsp_loader.TSPLoader()
+    tsp_loader_instance = tsp_loader.TSPLoader()
     if args.files:
-        tsp_loader.load_files_from_args(args.files)
+        tsp_loader_instance.load_files_from_args(args.files)
     else:
         import tkinter as tk
         root = tk.Tk()
         root.withdraw()
-        tsp_loader.choose_files()
-    tsp_instances = tsp_loader.tsp_files
+        tsp_loader_instance.choose_files()
+    tsp_instances = tsp_loader_instance.tsp_files
+    del tsp_loader_instance
 
 
     # Generate a genetic algorithm solver for the TSP instances
-    ga = tsp_solver.GeneticAlgorithm(popsize=50, mutation_rate=0.1, generations=100)
+    ga_instance = tsp_solver.GeneticAlgorithm(popsize=50, mutation_rate=0.1, generations=10)
     for tsp_instance in tsp_instances: 
         print(f'Running GA solver on {tsp_instance.name} with {tsp_instance.dimension} cities...')
-        best_tour, total_cost, validate = ga.solve(tsp_instance.node_coords)
+        best_tour, total_cost, validate = ga_instance.solve(tsp_instance.node_coords)
         tsp_instance.solution = best_tour
         tsp_instance.total_cost = total_cost
         tsp_instance.solution_validation = validate
 
 
-    # Print the loaded TSP instances
-    for tsp_instance in tsp_instances: print(tsp_instance)
+    # Print summary
+    tsp_scorer_instance = tsp_loader.TSPScorer(Path + 'Assets/tsplib/solutions')
+
+    for tsp_instance in tsp_instances: 
+        print(tsp_instance)
+        print(f"Ratio: {tsp_scorer_instance.validate_fitness(tsp_instance):.2f}")
