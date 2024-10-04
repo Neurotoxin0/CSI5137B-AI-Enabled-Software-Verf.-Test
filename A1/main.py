@@ -39,9 +39,10 @@ if __name__ == '__main__':
     ga = tsp_solver.GeneticAlgorithm(popsize=50, mutation_rate=0.1, generations=100)
     for tsp_instance in tsp_instances: 
         print(f'Running GA solver on {tsp_instance.name} with {tsp_instance.dimension} cities...')
-        best_tour, total_cost = ga.solve(tsp_instance.node_coords)
+        best_tour, total_cost, validate = ga.solve(tsp_instance.node_coords)
         tsp_instance.solution = best_tour
         tsp_instance.total_cost = total_cost
+        tsp_instance.solution_validation = validate
 
 
     # Print the loaded TSP instances

@@ -22,6 +22,44 @@ def euclidean_distance(city1: tuple, city2: tuple) -> float:
     return math.sqrt((city1[0] - city2[0]) ** 2 + (city1[1] - city2[1]) ** 2)
 
 
+def verify_tsp_solution(solution: list, num_nodes: int) -> tuple:
+    """
+    Verify if the solution is valid for the Travelling Salesman Problem (TSP).
+
+    Parameters:
+    - solution (list): A list of city indices representing the tour.
+    - num_nodes (int): The number of cities in the TSP instance.
+
+    Returns:
+    - valid (bool): True if the solution is valid, False otherwise.
+    - message (str): A message indicating the validation result.
+    """
+    # Check if the solution has the correct number of cities
+    if len(solution) != num_nodes:
+        return False, f"The solution contains {len(solution)} nodes, but it should contain {num_nodes} nodes."
+
+    # Check if all cities are within the valid range
+    if not all(1 <= city <= num_nodes for city in solution):
+        invalid_cities = [city for city in solution if city < 1 or city > num_nodes]
+        return False, f"The solution contains invalid city indices: {invalid_cities}. Valid range is 1 to {num_nodes}."
+
+    # Check for duplicates and missing cities
+    city_set = set(solution)
+    if len(city_set) != num_nodes:
+        missing_cities = [city for city in range(1, num_nodes + 1) if city not in city_set]
+        duplicate_cities = [city for city in solution if solution.count(city) > 1]
+        
+        if missing_cities and duplicate_cities:
+            return False, f"The solution is missing cities: {missing_cities} and contains duplicate cities: {duplicate_cities}."
+        elif missing_cities:
+            return False, f"The solution is missing cities: {missing_cities}."
+        elif duplicate_cities:
+            return False, f"The solution contains duplicate cities: {duplicate_cities}."
+
+    # If all checks pass, the solution is valid
+    return True, "The solution is valid."
+
+
 class GeneticAlgorithm:
     """
     A class to represent a genetic algorithm solver for the Travelling Salesman Problem (TSP).
@@ -105,8 +143,9 @@ class GeneticAlgorithm:
             # Print progress every 10 generations
             if (generation + 1) % 10 == 0: print(f'Generation {generation + 1}/{self.generations}, Best Distance: {self.best_fitness:.2f}')
              
-        return self.get_best_individual()
-    
+        solution, fitness = self.get_best_individual()
+        return solution, fitness, verify_tsp_solution(solution, len(self.cities))
+
 
     def assess_fitness(self, tour: list) -> float:
         """

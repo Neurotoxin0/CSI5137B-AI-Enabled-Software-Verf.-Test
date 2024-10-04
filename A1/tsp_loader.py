@@ -22,6 +22,7 @@ class TSPFile:
     - node_coords (list): A list of tuples containing the node ID and coordinates.
     - solution (list): A list of node IDs representing the solution path.
     - total_cost (float): The total cost of the solution path.
+    - solution_validation (tuple): A bool and a message indicating the validation result of the solution.
 
     Methods:
     - __load(): Load the TSP file and extract the relevant information from the header and node coordinates.
@@ -42,6 +43,7 @@ class TSPFile:
         self.node_coords = []
         self.solution = None
         self.total_cost = None
+        self.solution_validation = None
 
         self.__load()
 
@@ -103,6 +105,7 @@ Edge Weight Type: {self.edge_weight_type} \n \
 Node Coordinates: {self.node_coords[:5]} ... \n \
 Solution: {self.solution} \n \
 Total Cost: {self.total_cost} \n \
+Solution Validation: {self.solution_validation} \n \
 -------------------------------------------------- \n"
         return message
 
