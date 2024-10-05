@@ -89,7 +89,7 @@ class GeneticAlgorithm:
     - get_best_individual(): Return the best tour and its total distance.
     """
 
-    def __init__(self, popsize: int, mutation_rate: float = 0.1, generations: int = 1000, tournament_size: int = 5) -> None:
+    def __init__(self, popsize: int, mutation_rate: float = 0.1, generations: int = 1000, tournament_size: int = 10) -> None:
         """
         Initialize the genetic algorithm with the given parameters.
 
