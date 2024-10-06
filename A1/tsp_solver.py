@@ -5,10 +5,11 @@
 @Comment      :   Dev with Python 3.10.0
 """
 
-import math, random, string
+import logging, math, os, random, string
 from concurrent.futures import ProcessPoolExecutor, as_completed
 
 
+Path = (os.path.split(os.path.realpath(__file__))[0] + "/").replace("\\\\", "/").replace("\\", "/")
 debug = False
 
 
@@ -62,6 +63,28 @@ def verify_tsp_solution(solution: list, num_nodes: int) -> tuple:
 
     # If all checks pass, the solution is valid
     return True, "The solution is valid."
+
+
+def setup_logger(logger_name: str, log_file_path: str):
+    """
+    Setup the logger to write to a specified file.
+
+    Parameters:
+    - log_file_path (str): The path to the log file.
+    """
+    logger = logging.getLogger(logger_name)
+    logger.setLevel(logging.INFO)
+    
+    # Create a file handler for logging
+    file_handler = logging.FileHandler(log_file_path)
+    file_handler.setLevel(logging.INFO)
+    
+    # Create a logging format
+    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+    file_handler.setFormatter(formatter)
+    
+    logger.addHandler(file_handler)
+    return logger
 
 
 class GeneticAlgorithm:
@@ -268,6 +291,7 @@ class GAOptimizer:
     - max_inner_workers (int): The maximum number of workers for the inner loop.
     - best_params (dict): The best hyperparameters found during optimization.
     - best_fitness (float): The total fitness of the best parameters.
+    - logger (Logger): The logger object for recording optimization progress.
 
     Methods:
     - _run_ga(params, tsp_instance): Run the genetic algorithm for a single set of parameters and a single TSP instance.
@@ -289,6 +313,7 @@ class GAOptimizer:
         self.max_inner_workers = max_inner_workers
         self.best_params = None
         self.best_fitness = float('inf')
+        self.logger = setup_logger('GAOptimizer', Path + 'ga_optimizer.log')
 
 
     def _run_ga(self, params: dict, tsp_instance) -> float:
@@ -312,17 +337,17 @@ class GAOptimizer:
         return fitness
 
 
-    def _evaluate_hyperparams(self, params: dict, tsp_instances: list, outer_id: str) -> tuple:
+    def _evaluate_hyperparams(self, outer_id: str, params: dict, tsp_instances: list) -> tuple:
         """
         Helper function to evaluate a set of hyperparameters on all TSP instances.
 
         Parameters:
+        - outer_id (str): A unique identifier for this outer loop run.
         - params (dict): Dictionary containing the parameters for the GA.
         - tsp_instances (list): A list of TSP instances to run the GA on.
-        - outer_id (str): A unique identifier for this outer loop run.
 
         Returns:
-        - tuple: (params, total_fitness) where total_fitness is the sum of fitness values for this parameter set.
+        - tuple: (outer_id, params, total_fitness) where total_fitness is the sum of fitness values for this parameter set.
         """
         total_fitness = 0
         # Run GA on all TSP instances in parallel
@@ -335,7 +360,7 @@ class GAOptimizer:
                 total_fitness += fitness
                 print(f"\t{outer_id}: {i}/{len(tsp_instances)} instances completed.")
 
-        return params, total_fitness
+        return outer_id, params, total_fitness
 
 
     def optimize(self, tsp_instances: list) -> dict:
@@ -365,23 +390,23 @@ class GAOptimizer:
                 }
 
                 # Submit a task to evaluate hyperparameters
-                outer_futures.append(
-                    executor.submit(self._evaluate_hyperparams, params, tsp_instances, outer_id)
-                )
+                self.logger.info(f"Starting outer loop run `{outer_id}` with params: {params}")
+                outer_futures.append(executor.submit(self._evaluate_hyperparams, outer_id, params, tsp_instances))
 
             # Collect results from outer futures (hyperparameter sets) as they complete
             for future in as_completed(outer_futures):
-                params, total_fitness = future.result()
+                outer_id, params, total_fitness = future.result()
 
                 # Update the total completed runs
+                self.logger.info(f"Outer loop run `{outer_id}` completed with total fitness: {total_fitness:.2f}")
                 completed_ga_runs += len(tsp_instances)
                 overall_progress = (completed_ga_runs / total_ga_runs) * 100
-                print(f"Overall progress: {completed_ga_runs}/{total_ga_runs} runs completed ({overall_progress:.2f}%).")
+                self.logger.info(f"Overall progress: {completed_ga_runs}/{total_ga_runs} runs completed ({overall_progress:.2f}%).")
 
                 # Update the best parameters if the current total fitness is better
                 if total_fitness < self.best_fitness:
                     self.best_fitness = total_fitness
                     self.best_params = params
-                    print(f"New best fitness: {self.best_fitness:.2f} with params: {self.best_params}")
+                    self.logger.info(f"New best fitness: {self.best_fitness:.2f} from `{outer_id}` with params: {self.best_params}")
 
         return self.best_params
