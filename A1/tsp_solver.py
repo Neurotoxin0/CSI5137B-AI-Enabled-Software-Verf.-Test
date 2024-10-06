@@ -90,7 +90,7 @@ class GeneticAlgorithm:
     - get_best_individual(): Return the best tour and its total distance.
     """
 
-    def __init__(self, *, popsize: int, mutation_rate: float = 0.1, generations: int = 1000, tournament_size: int = 10) -> None:
+    def __init__(self, *, popsize: int, mutation_rate: float, generations: int, tournament_size: int) -> None:
         """
         Initialize the genetic algorithm with the given parameters.
 
@@ -275,7 +275,7 @@ class GAOptimizer:
     - optimize(tsp_instances): Perform random search to find the best parameters for the genetic algorithm.
     """
 
-    def __init__(self, *, n_iter: int = 20, max_outer_workers: int = 5, max_inner_workers: int = 5) -> None:
+    def __init__(self, *, n_iter: int, max_outer_workers: int, max_inner_workers: int) -> None:
         """
         Initialize the optimizer with the number of iterations for random search.
 
@@ -355,7 +355,7 @@ class GAOptimizer:
             outer_futures = []
             
             for _ in range(self.n_iter):
-                # Randomly select unique name and hyperparameters
+                # Randomly select unique name and hyperparameters and create a new outer loop run
                 outer_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
                 params = {
                     'popsize': random.choice([50, 100, 200, 300]),
