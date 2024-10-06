@@ -289,8 +289,6 @@ class GAOptimizer:
         self.max_inner_workers = max_inner_workers
         self.best_params = None
         self.best_fitness = float('inf')
-        self.total_ga_runs = 0  # Total number of GA runs
-        self.completed_ga_runs = 0  # Counter for completed GA runs
 
 
     def _run_ga(self, params: dict, tsp_instance) -> float:
@@ -311,12 +309,6 @@ class GAOptimizer:
             tournament_size=params['tournament_size']
         )
         _, fitness, _ = ga_instance.solve(tsp_instance.node_coords)
-
-        # Update progress in a thread-safe way
-        self.completed_ga_runs += 1
-        overall_progress = (self.completed_ga_runs / self.total_ga_runs) * 100
-        print(f"Overall progress: {self.completed_ga_runs}/{self.total_ga_runs} runs completed ({overall_progress:.2f}%).")
-
         return fitness
 
 
@@ -331,10 +323,17 @@ class GAOptimizer:
         Returns:
         - tuple: (params, total_fitness) where total_fitness is the sum of fitness values for this parameter set.
         """
+        total_fitness = 0
         # Run GA on all TSP instances in parallel
         with ProcessPoolExecutor(max_workers=self.max_inner_workers) as executor:
-            futures = [executor.submit(self._run_ga, params, tsp_instance) for tsp_instance in tsp_instances]
-            total_fitness = sum(future.result() for future in futures)
+            futures = {executor.submit(self._run_ga, params, tsp_instance): tsp_instance for tsp_instance in tsp_instances}
+
+            # Collect results as they complete
+            for i, future in enumerate(as_completed(futures), 1):
+                fitness = future.result()
+                total_fitness += fitness
+                print(f"\tInner loop progress: {i}/{len(tsp_instances)} instances completed.")
+
         return params, total_fitness
 
 
@@ -348,12 +347,10 @@ class GAOptimizer:
         Returns:
         - best_params (dict): Dictionary containing the best parameters found.
         """
-        # Calculate total number of GA runs (for progress tracking)
-        self.total_ga_runs = self.n_iter * len(tsp_instances)
-        self.completed_ga_runs = 0  # Reset the counter
+        total_ga_runs = self.n_iter * len(tsp_instances)  # Calculate the total number of GA runs
+        completed_ga_runs = 0  # Counter for completed GA runs
 
         with ProcessPoolExecutor(max_workers=self.max_outer_workers) as executor:
-            # Define a list to hold all future tasks
             outer_futures = []
             
             for _ in range(self.n_iter):
@@ -365,14 +362,19 @@ class GAOptimizer:
                     'tournament_size': random.choice([5, 7, 10])
                 }
 
-                # Submit a task to run GA on all TSP instances for this set of hyperparameters
+                # Submit a task to evaluate hyperparameters
                 outer_futures.append(
                     executor.submit(self._evaluate_hyperparams, params, tsp_instances)
                 )
 
-            # Collect results from outer futures (hyperparameter sets)
+            # Collect results from outer futures (hyperparameter sets) as they complete
             for future in as_completed(outer_futures):
                 params, total_fitness = future.result()
+
+                # Update the total completed runs
+                completed_ga_runs += len(tsp_instances)
+                overall_progress = (completed_ga_runs / total_ga_runs) * 100
+                print(f"Overall progress: {completed_ga_runs}/{total_ga_runs} runs completed ({overall_progress:.2f}%).")
 
                 # Update the best parameters if the current total fitness is better
                 if total_fitness < self.best_fitness:
