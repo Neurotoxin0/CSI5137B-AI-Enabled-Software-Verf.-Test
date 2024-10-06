@@ -50,13 +50,16 @@ if __name__ == '__main__':
     tsp_instances = tsp_loader_instance.tsp_files
     del tsp_loader_instance
 
-
-    # Initialize GAOptimizer and find the best parameters
-    optimizer = tsp_solver.GAOptimizer(n_iter=20, max_outer_workers=2, max_inner_workers=10)
-    best_params = optimizer.optimize(tsp_instances)
-    
     '''
-    # best_params = {'popsize': 100, 'mutation_rate': 0.1, 'generations': 100, 'tournament_size': 5}
+    # Initialize GAOptimizer and find the best parameters
+    optimizer = tsp_solver.GAOptimizer(n_iter=20, max_outer_workers=1, max_inner_workers=25)
+    best_params = optimizer.optimize(tsp_instances)
+    '''
+
+    best_params = {'popsize': 100, 'mutation_rate': 0.05, 'generations': 500, 'tournament_size': 7}   # Manually set based on common practice
+    # best_params = {'popsize': 50, 'mutation_rate': 0.14, 'generations': 200, 'tournament_size': 10}   # Found by the optimizer
+    
+    
     # Generate a genetic algorithm solver for the TSP instances
     ga_instance = tsp_solver.GeneticAlgorithm(
         popsize=best_params['popsize'],
@@ -88,4 +91,4 @@ if __name__ == '__main__':
             for tsp_instance in tsp_instances: 
                 print(f"{tsp_instance.name}: {tsp_instance.total_cost:.2f}")
                 save_solution_to_csv(tsp_instance.solution, f'{tsp_instance.name}_solution.csv')
-    '''
+    
