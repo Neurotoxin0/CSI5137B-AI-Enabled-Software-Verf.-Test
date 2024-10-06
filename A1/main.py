@@ -52,7 +52,7 @@ if __name__ == '__main__':
 
 
     # Initialize GAOptimizer and find the best parameters
-    optimizer = tsp_solver.GAOptimizer(n_iter=20)
+    optimizer = tsp_solver.GAOptimizer(n_iter=20, max_outer_workers=5)
     best_params = optimizer.optimize(tsp_instances)
     
     '''
