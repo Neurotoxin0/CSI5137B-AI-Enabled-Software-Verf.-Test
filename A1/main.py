@@ -68,7 +68,7 @@ if __name__ == '__main__':
         for tsp_instance in tsp_instances: 
             print(tsp_instance)
             print(f"Ratio: {tsp_scorer_instance.validate_fitness(tsp_instance):.2f}")
-    else:
+    else:   # print and save according to this assignment's requirement
         if len(tsp_instances) == 1:
             tsp_instance = tsp_instances[0]
             print(f"{tsp_instance.total_cost:.2f}")
