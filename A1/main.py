@@ -13,7 +13,7 @@ Path = (os.path.split(os.path.realpath(__file__))[0] + "/").replace("\\\\", "/")
 os.chdir(Path)
 
 tsp_instances = []
-debug = False
+debug = True
 
 
 def save_solution_to_csv(tour: list, filename: str = 'solution.csv') -> None:
@@ -51,8 +51,19 @@ if __name__ == '__main__':
     del tsp_loader_instance
 
 
+    # Initialize GAOptimizer and find the best parameters
+    optimizer = tsp_solver.GAOptimizer(n_iter=20)
+    best_params = optimizer.optimize(tsp_instances)
+    
+    '''
+    # best_params = {'popsize': 100, 'mutation_rate': 0.1, 'generations': 100, 'tournament_size': 5}
     # Generate a genetic algorithm solver for the TSP instances
-    ga_instance = tsp_solver.GeneticAlgorithm(popsize=50, mutation_rate=0.1, generations=100)
+    ga_instance = tsp_solver.GeneticAlgorithm(
+        popsize=best_params['popsize'],
+        mutation_rate=best_params['mutation_rate'],
+        generations=best_params['generations'],
+        tournament_size=best_params['tournament_size']
+    )
     for tsp_instance in tsp_instances: 
         if debug: print(f'Running GA solver on {tsp_instance.name} with {tsp_instance.dimension} cities...')
         best_tour, total_cost, validate = ga_instance.solve(tsp_instance.node_coords)
@@ -77,3 +88,4 @@ if __name__ == '__main__':
             for tsp_instance in tsp_instances: 
                 print(f"{tsp_instance.name}: {tsp_instance.total_cost:.2f}")
                 save_solution_to_csv(tsp_instance.solution, f'{tsp_instance.name}_solution.csv')
+    '''

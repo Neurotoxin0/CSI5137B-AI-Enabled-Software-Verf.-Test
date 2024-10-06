@@ -6,6 +6,7 @@
 """
 
 import math, random
+from concurrent.futures import ProcessPoolExecutor, as_completed
 
 
 debug = False
@@ -255,3 +256,122 @@ class GeneticAlgorithm:
         """
         best_tour_indices = [self.cities[i][0] for i in self.best_individual]  # Get original city indices
         return best_tour_indices, self.best_fitness
+
+
+
+class GAOptimizer:
+    """
+    A class to optimize the hyperparameters of the genetic algorithm using random search with double layer parallelization.
+
+    Attributes:
+    - n_iter (int): The number of iterations to run random search.
+    - best_params (dict): The best hyperparameters found during optimization.
+    - best_fitness (float): The total fitness of the best parameters.
+
+    Methods:
+    - _run_ga(params, tsp_instance): Run the genetic algorithm for a single set of parameters and a single TSP instance.
+    - optimize(tsp_instances): Perform random search to find the best parameters for the genetic algorithm.
+    - _evaluate_hyperparams(params, tsp_instances): Evaluate a set of hyperparameters on all TSP instances.
+    """
+
+    def __init__(self, n_iter: int = 20):
+        """
+        Initialize the optimizer with the number of iterations for random search.
+
+        Parameters:
+        - n_iter (int): Number of iterations to run random search.
+        """
+        self.n_iter = n_iter
+        self.best_params = None
+        self.best_fitness = float('inf')
+
+
+    def _run_ga(self, params, tsp_instance):
+        """
+        Helper function to run GA for a single set of parameters and a single TSP instance.
+
+        Parameters:
+        - params (dict): Dictionary containing the parameters for the GA.
+        - tsp_instance: The TSP instance to run the GA on.
+
+        Returns:
+        - float: The total fitness for this set of parameters.
+        """
+        ga_instance = GeneticAlgorithm(
+            popsize=params['popsize'],
+            mutation_rate=params['mutation_rate'],
+            generations=params['generations'],
+            tournament_size=params['tournament_size']
+        )
+        _, fitness, _ = ga_instance.solve(tsp_instance.node_coords)
+        return fitness
+
+
+    def optimize(self, tsp_instances: list) -> dict:
+        """
+        Perform random search to find the best parameters for the genetic algorithm using multiprocessing.
+
+        Parameters:
+        - tsp_instances (list): A list of TSP instances to use for optimization.
+
+        Returns:
+        - best_params (dict): Dictionary containing the best parameters found.
+        """
+        with ProcessPoolExecutor() as executor:
+            # Define a list to hold all future tasks
+            outer_futures = []
+            
+            for _ in range(self.n_iter):
+                # Randomly select hyperparameters
+                params = {
+                    'popsize': random.choice([50, 100, 200, 300]),
+                    'mutation_rate': random.uniform(0.01, 0.2),
+                    'generations': random.choice([100, 200, 500]),
+                    'tournament_size': random.choice([5, 7, 10])
+                }
+
+                # Submit a task to run GA on all TSP instances for this set of hyperparameters
+                outer_futures.append(
+                    executor.submit(self._evaluate_hyperparams, params, tsp_instances)
+                )
+
+            # Collect results from outer futures (hyperparameter sets)
+            total_futures = len(outer_futures)
+            completed_futures = 0
+
+            for future in as_completed(outer_futures):
+                params, total_fitness = future.result()
+
+                # Print progress and completion message
+                completed_futures += 1
+                progress_percentage = (completed_futures / total_futures) * 100
+                print(f"Completed {completed_futures}/{total_futures} futures ({progress_percentage:.2f}%).")
+
+                # Update the best parameters if the current total fitness is better
+                if total_fitness < self.best_fitness:
+                    self.best_fitness = total_fitness
+                    self.best_params = params
+                    print(f"New best fitness: {self.best_fitness:.2f} with params: {self.best_params}")
+
+        return self.best_params
+
+
+    def _evaluate_hyperparams(self, params, tsp_instances):
+        """
+        Helper function to evaluate a set of hyperparameters on all TSP instances.
+
+        Parameters:
+        - params (dict): Dictionary containing the parameters for the GA.
+        - tsp_instances (list): A list of TSP instances to run the GA on.
+
+        Returns:
+        - tuple: (params, total_fitness) where total_fitness is the sum of fitness values for this parameter set.
+        """
+        # Run GA on all TSP instances in parallel
+        with ProcessPoolExecutor() as executor:
+            futures = [executor.submit(self._run_ga, params, tsp_instance) for tsp_instance in tsp_instances]
+
+            # Collect results
+            total_fitness = sum(future.result() for future in futures)
+
+        return params, total_fitness
