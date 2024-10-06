@@ -13,7 +13,7 @@ Path = (os.path.split(os.path.realpath(__file__))[0] + "/").replace("\\\\", "/")
 os.chdir(Path)
 
 tsp_instances = []
-debug = True
+debug = False
 
 
 def save_solution_to_csv(tour: list, filename: str = 'solution.csv') -> None:

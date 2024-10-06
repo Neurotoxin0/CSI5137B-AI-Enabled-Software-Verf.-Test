@@ -358,7 +358,7 @@ class GAOptimizer:
             for i, future in enumerate(as_completed(futures), 1):
                 fitness = future.result()
                 total_fitness += fitness
-                print(f"\t{outer_id}: {i}/{len(tsp_instances)} instances completed.")
+                print(f"{outer_id}: {i}/{len(tsp_instances)} instances completed.")
 
         return outer_id, params, total_fitness
 
