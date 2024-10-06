@@ -5,7 +5,7 @@
 @Comment      :   Dev with Python 3.10.0
 """
 
-import math, random
+import math, random, string
 from concurrent.futures import ProcessPoolExecutor, as_completed
 
 
@@ -275,7 +275,7 @@ class GAOptimizer:
     - optimize(tsp_instances): Perform random search to find the best parameters for the genetic algorithm.
     """
 
-    def __init__(self, *, n_iter: int = 20, max_outer_workers: int = 5, max_inner_workers: int = None) -> None:
+    def __init__(self, *, n_iter: int = 20, max_outer_workers: int = 5, max_inner_workers: int = 5) -> None:
         """
         Initialize the optimizer with the number of iterations for random search.
 
@@ -312,13 +312,14 @@ class GAOptimizer:
         return fitness
 
 
-    def _evaluate_hyperparams(self, params: dict, tsp_instances: list) -> tuple:
+    def _evaluate_hyperparams(self, params: dict, tsp_instances: list, outer_id: str) -> tuple:
         """
         Helper function to evaluate a set of hyperparameters on all TSP instances.
 
         Parameters:
         - params (dict): Dictionary containing the parameters for the GA.
         - tsp_instances (list): A list of TSP instances to run the GA on.
+        - outer_id (str): A unique identifier for this outer loop run.
 
         Returns:
         - tuple: (params, total_fitness) where total_fitness is the sum of fitness values for this parameter set.
@@ -332,7 +333,7 @@ class GAOptimizer:
             for i, future in enumerate(as_completed(futures), 1):
                 fitness = future.result()
                 total_fitness += fitness
-                print(f"\tInner loop progress: {i}/{len(tsp_instances)} instances completed.")
+                print(f"\t{outer_id}: {i}/{len(tsp_instances)} instances completed.")
 
         return params, total_fitness
 
@@ -354,7 +355,8 @@ class GAOptimizer:
             outer_futures = []
             
             for _ in range(self.n_iter):
-                # Randomly select hyperparameters
+                # Randomly select unique name and hyperparameters
+                outer_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
                 params = {
                     'popsize': random.choice([50, 100, 200, 300]),
                     'mutation_rate': random.uniform(0.01, 0.2),
@@ -364,7 +366,7 @@ class GAOptimizer:
 
                 # Submit a task to evaluate hyperparameters
                 outer_futures.append(
-                    executor.submit(self._evaluate_hyperparams, params, tsp_instances)
+                    executor.submit(self._evaluate_hyperparams, params, tsp_instances, outer_id)
                 )
 
             # Collect results from outer futures (hyperparameter sets) as they complete
