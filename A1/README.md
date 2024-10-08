@@ -58,3 +58,9 @@ The project also includes an optimizer to fine-tune GA parameters (turned off an
 - To use the hyperparameter optimizer: uncomment corresponding session in `main.py` -> `if __name__ == '__main__'` block 
 
 - To output full results (print only) as well as scoring ratio: change `main.py` -> `debug` to `True`; rename and put solution file as `Assets/tsplib/solutions`
+
+## Default Params & Run Time
+
+- `best_params = {'popsize': 100, 'mutation_rate': 0.05, 'generations': 500, 'tournament_size': 7}`   
+   - Manually set based on common practice.
+   - Estimated Run Time: `303.37` seconds (based on the `a280.tsp` file, which has 280 nodes (DIMENSION)).

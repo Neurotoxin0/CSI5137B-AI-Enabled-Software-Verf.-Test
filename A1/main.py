@@ -5,7 +5,7 @@
 @Comment      :   Dev with Python 3.10.0
 """
 
-import argparse, csv, os
+import argparse, csv, os, time
 import tsp_loader, tsp_solver
 
 
@@ -68,11 +68,13 @@ if __name__ == '__main__':
         tournament_size=best_params['tournament_size']
     )
     for tsp_instance in tsp_instances: 
+        start_time = time.time()
         if debug: print(f'Running GA solver on {tsp_instance.name} with {tsp_instance.dimension} cities...')
         best_tour, total_cost, validate = ga_instance.solve(tsp_instance.node_coords)
         tsp_instance.solution = best_tour
         tsp_instance.total_cost = total_cost
         tsp_instance.solution_validation = validate
+        if debug: print(f'Finished in {time.time() - start_time:.2f} seconds.')
 
     
     # Print summary
