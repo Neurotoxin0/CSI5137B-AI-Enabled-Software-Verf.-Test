@@ -471,7 +471,7 @@ class RandomSearchAlgorithm:
         Returns:
         - tuple: The best solution (list of city indices) and the total distance of the best solution.
         """
-        if debug: print(f'Running GA solver on {tsp_instance.name} with {tsp_instance.dimension} cities...')
+        if debug: print(f'Running Random solver on {tsp_instance.name} with {tsp_instance.dimension} cities...')
         
         self.__clr()  # Clear the random search algorithm attributes
         

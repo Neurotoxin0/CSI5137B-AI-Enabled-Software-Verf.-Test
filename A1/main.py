@@ -90,7 +90,7 @@ def draw_overview_plot() -> None:
     plt.xticks(rotation=90)  # Rotate instance names for better readability
     plt.xlabel("TSP Problem Instances")
     plt.ylabel("Fitness")
-    plt.title("Overview of Fitness for Different TSP Problem Instances")
+    plt.title("Overview Fitness Comparison for Different TSP Problems")
     plt.legend()
 
     plt.tight_layout()
