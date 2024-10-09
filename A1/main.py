@@ -28,7 +28,7 @@ else:
     import csv
 
 
-def setup_logger(logger_name: str, log_file_path: str, *, level = logging.INFO, streamline: bool = True) -> logging.Logger:
+def setup_logger(logger_name: str, log_file_path: str, *, level = logging.INFO, streamline: bool = False) -> logging.Logger:
     """
     Setup the logger to write to a specified file.
 
@@ -48,20 +48,19 @@ def setup_logger(logger_name: str, log_file_path: str, *, level = logging.INFO, 
     logger = logging.getLogger(logger_name)
     logger.setLevel(level)
 
-    # Create a file handler
+    # Create and add file handler
     if not os.path.exists(os.path.dirname(log_file_path)): os.makedirs(os.path.dirname(log_file_path))
     file_handler = logging.FileHandler(log_file_path)
     #file_handler.setLevel(level)
     file_handler.setFormatter(formatter)
+    logger.addHandler(file_handler)
     
     # Create a stream handler
-    cmd_handler = logging.StreamHandler()
-    #cmd_handler.setLevel(level)
-    cmd_handler.setFormatter(formatter)
-    
-    # Add the handlers to the logger
-    logger.addHandler(file_handler)
-    logger.addHandler(cmd_handler)
+    if streamline:
+        cmd_handler = logging.StreamHandler()
+        #cmd_handler.setLevel(level)
+        cmd_handler.setFormatter(formatter)
+        logger.addHandler(cmd_handler)
     
     return logger
 
