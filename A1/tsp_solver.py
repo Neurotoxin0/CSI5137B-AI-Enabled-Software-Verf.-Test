@@ -410,3 +410,76 @@ class GAOptimizer:
                     self.logger.info(f"New best fitness: {self.best_fitness:.2f} from `{outer_id}` with params: {self.best_params}")
 
         return self.best_params
+
+class RandomSearchAlgorithm:
+    """
+    A class to represent a random search solver for the Travelling Salesman Problem (TSP).
+
+    Attributes:
+    - cities (list): The list of cities with their coordinates.
+    - best_tour (list): The best tour found so far.
+    - best_fitness (float): The total distance of the best tour.
+    - iterations (int): The number of iterations to perform random search.
+
+    Methods:
+    - solve(): Run the random search and return the best tour and its total distance.
+    """
+    
+    def __init__(self, *, iterations: int) -> None:
+        """
+        Initialize the random search solver with the number of iterations.
+
+        Parameters:
+        - iterations (int): The number of iterations to run the random search.
+        """
+        self.iterations = iterations
+        self.cities = []
+        self.best_tour = None
+        self.best_fitness = float('inf')
+
+    def solve(self, node_coords: list) -> tuple:
+        """
+        Run the random search to find the best solution.
+
+        Parameters:
+        - node_coords (list): A list of tuples containing the city indices and coordinates.
+
+        Returns:
+        - tuple: The best solution (list of city indices) and the total distance of the best solution.
+        """
+        self.cities = node_coords
+        num_cities = len(self.cities)
+
+        for i in range(self.iterations):
+            # Generate a random tour
+            tour = random.sample(range(num_cities), num_cities)
+            fitness = self.total_distance(tour)
+
+            if fitness < self.best_fitness:
+                self.best_fitness = fitness
+                self.best_tour = tour
+
+            # Optional: print progress every 10 iterations
+            if debug and (i + 1) % 10 == 0:
+                print(f"Random Search Iteration {i + 1}: Best Distance = {self.best_fitness:.2f}")
+        
+        # Return best tour and fitness
+        best_tour_indices = [self.cities[i][0] for i in self.best_tour]
+        return best_tour_indices, self.best_fitness
+
+    def total_distance(self, tour: list) -> float:
+        """
+        Calculate the total distance of a tour by summing the distances between consecutive cities.
+
+        Parameters:
+        - tour (list): A list of city indices representing the tour.
+
+        Returns:
+        - float: The total distance of the tour.
+        """
+        total_distance = 0
+        for i in range(len(tour)):
+            city1 = self.cities[tour[i]]
+            city2 = self.cities[tour[(i + 1) % len(tour)]]  # Connect the last city back to the first
+            total_distance += euclidean_distance(city1, city2)  # Use the shared euclidean_distance function
+        return total_distance
