@@ -72,6 +72,8 @@ def setup_logger(logger_name: str, log_file_path: str):
     Parameters:
     - log_file_path (str): The path to the log file.
     """
+    if not os.path.exists(os.path.dirname(log_file_path)): os.makedirs(os.path.dirname(log_file_path))
+    
     logger = logging.getLogger(logger_name)
     logger.setLevel(logging.INFO)
     
@@ -153,7 +155,7 @@ class GeneticAlgorithm:
         Returns:
         - tuple: The best solution (list of city indices), a tuple indicating the validation result, the total distance of the best solution, and distance for each iteration.
         """
-        if debug: print(f'\tRunning GA solver on {tsp_instance.name} with {tsp_instance.dimension} cities...')
+        if debug: print(f'Running GA solver on {tsp_instance.name} with {tsp_instance.dimension} cities...')
         
         self.__clr()  # Clear the genetic algorithm attributes
 
@@ -172,7 +174,7 @@ class GeneticAlgorithm:
             self.__evaluate_population()
             
             # Print progress every 10 generations
-            if debug and (generation + 1) % 10 == 0: print(f'Generation {generation + 1}/{self.generations}, Best Distance: {self.best_fitness:.2f}')
+            if debug and (generation + 1) % 10 == 0: print(f'\tGeneration {generation + 1}/{self.generations}, Best Distance: {self.best_fitness:.2f}')
              
         solution, fitness = self.__get_best_individual()
         return solution, verify_tsp_solution(solution, len(self.cities)), fitness, self.fitness_list
@@ -322,7 +324,7 @@ class GAOptimizer:
         self.max_inner_workers = max_inner_workers
         self.best_params = None
         self.best_fitness = float('inf')
-        self.logger = setup_logger('GAOptimizer', Path + 'ga_optimizer.log')
+        self.logger = setup_logger('GAOptimizer', Path + 'log/ga_optimizer.log')
 
 
     def _run_ga(self, params: dict, tsp_instance) -> float:
@@ -469,7 +471,7 @@ class RandomSearchAlgorithm:
         Returns:
         - tuple: The best solution (list of city indices) and the total distance of the best solution.
         """
-        if debug: print(f'\tRunning GA solver on {tsp_instance.name} with {tsp_instance.dimension} cities...')
+        if debug: print(f'Running GA solver on {tsp_instance.name} with {tsp_instance.dimension} cities...')
         
         self.__clr()  # Clear the random search algorithm attributes
         
@@ -489,7 +491,7 @@ class RandomSearchAlgorithm:
 
             # Optional: print progress every 10 iterations
             if debug and (i + 1) % 10 == 0:
-                print(f"Random Search Iteration {i + 1}: Best Distance = {self.best_fitness:.2f}")
+                print(f"\tRandom Search Iteration {i + 1}: Best Distance = {self.best_fitness:.2f}")
         
         # Return best tour and fitness
         best_tour_indices = [self.cities[i][0] for i in self.best_tour]
