@@ -10,7 +10,7 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 
 
 Path = (os.path.split(os.path.realpath(__file__))[0] + "/").replace("\\\\", "/").replace("\\", "/")
-debug = False
+debug = True
 
 
 def euclidean_distance(city1: tuple, city2: tuple) -> float:

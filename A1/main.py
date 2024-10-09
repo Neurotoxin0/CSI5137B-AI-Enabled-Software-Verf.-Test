@@ -13,7 +13,7 @@ Path = (os.path.split(os.path.realpath(__file__))[0] + "/").replace("\\\\", "/")
 os.chdir(Path)
 
 tsp_instances = []
-debug = False
+debug = True
 iterations = 500     # 500, as recommended by best common practice
 
 
@@ -172,7 +172,7 @@ if __name__ == '__main__':
         tsp_instance.solution = best_tour
         tsp_instance.solver_fitness = ga_total_cost
         tsp_instance.solution_validation = validate
-        tsp_duration = time.time() - start_time
+        tsp_instance.duration = time.time() - start_time
         
         # Random solver (baseline)
         if debug:
