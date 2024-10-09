@@ -1,0 +1,8 @@
+2024-10-05 23:02:12,754 - INFO - Starting outer loop run `SKS21` with params: {'popsize': 50, 'mutation_rate': 0.11012919117340572, 'generations': 500, 'tournament_size': 10}
+2024-10-05 23:02:12,768 - INFO - Starting outer loop run `57VDU` with params: {'popsize': 50, 'mutation_rate': 0.1349270708518604, 'generations': 200, 'tournament_size': 10}
+2024-10-06 07:07:29,590 - INFO - Outer loop run `57VDU` completed with total fitness: 1139515447.20
+2024-10-06 07:07:29,590 - INFO - Overall progress: 78/1560 runs completed (5.00%).
+2024-10-06 07:07:29,591 - INFO - New best fitness: 1139515447.20 from `57VDU` with params: {'popsize': 50, 'mutation_rate': 0.1349270708518604, 'generations': 200, 'tournament_size': 10}
+2024-10-06 20:24:04,527 - INFO - Outer loop run `SKS21` completed with total fitness: 1029098501.10
+2024-10-06 20:24:04,527 - INFO - Overall progress: 156/1560 runs completed (10.00%).
+2024-10-06 20:24:04,527 - INFO - New best fitness: 1029098501.10 from `SKS21` with params: {'popsize': 50, 'mutation_rate': 0.11012919117340572, 'generations': 500, 'tournament_size': 10}
