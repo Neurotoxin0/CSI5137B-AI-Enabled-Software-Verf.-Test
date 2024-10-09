@@ -19,7 +19,7 @@ The project also includes an optimizer to fine-tune GA parameters (turned off an
 - Python 3.10.0 or later.
 - Coded & Tested under Windows system.
 - Required external libraries: `None`.
-- Required external libraries (debug): `matplotlib`, `numpy`.
+- Required external libraries (debug): `matplotlib`, `numpy`, `tqdm`.
 
 ### Steps
 
