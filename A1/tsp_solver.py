@@ -158,7 +158,7 @@ class GeneticAlgorithm:
         self.cities = []
 
 
-    def solve(self, tsp_instance) -> tuple:
+    def solve(self, tsp_instance, *, progress_bar_index: int = 1) -> tuple:
         """ 
         Run the genetic algorithm, evolving the population over generations, 
         and return the best solution.
@@ -174,10 +174,13 @@ class GeneticAlgorithm:
         self.cities = tsp_instance.node_coords
         self.__initialize_population()  # Initial population of random tours
         
-        if debug: from tqdm import trange  # Only import tqdm when debug is enabled
-        else: trange = range  # Use range as a fallback if tqdm is not needed -> does not have to install tqdm if debug is False
-
-        for _ in trange(self.generations):
+        if debug:
+            from tqdm import trange  # Only import tqdm when debug is enabled
+            sub_progress_bar = trange(self.generations, desc=f'TSP: {tsp_instance.name}', position=progress_bar_index, leave=False)
+        else:
+            sub_progress_bar = range(self.generations)  # Fallback to range if tqdm is not needed -> user dont need to install tqdm if not in debug mode
+        
+        for _ in sub_progress_bar:
             new_population = []
             for _ in range(self.popsize):
                 parent1, parent2 = self.__select_parents()  # Select two parents using tournament selection

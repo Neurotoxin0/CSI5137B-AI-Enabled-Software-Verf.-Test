@@ -17,12 +17,13 @@ os.chdir(Path)
 tsp_instances = []
 debug = True
 iterations = 500     # 500, as recommended by best common practice
-max_workers = 25
+max_workers = 15
 
 
 if debug:
     import matplotlib.pyplot as plt
     import numpy as np
+    from tqdm import tqdm
 else:
     import csv
 
@@ -69,6 +70,9 @@ def load_best_known_solutions(filepath) -> dict:
     """
     Load the best known solutions from the given solution file.
 
+    Parameters:
+    - filepath (str): The path to the solution file.
+
     Returns:
     - best_known_solutions (dict): A dictionary mapping TSP file names to the best known solutions.
     """
@@ -90,13 +94,24 @@ def load_best_known_solutions(filepath) -> dict:
     return best_known_solutions
 
 
-def solve(tsp_instance, ga_instance, random_instance):
+def solve(tsp_instance, ga_instance, random_instance, *, progress_bar_index: int) -> tuple:
     """
-    Helper function to run both GA solver and Random Search on a single TSP instance
+    Helper function to run both GA solver and Random Search on a single TSP instance.
+
+    Parameters:
+    - tsp_instance (TSPFile): The TSP instance to solve.
+    - ga_instance (GeneticAlgorithm): The GA solver instance.
+    - random_instance (RandomSearchAlgorithm): The random search solver instance.
+    - progress_bar_index (int): The index of the progress bar.
+
+    Returns:
+    - tsp_instance (TSPFile): The updated TSP instance with the solution and fitness values.
+    - ga_cost_list (list): The list of fitness values for the GA solver.
+    - rd_cost_list (list): The list of fitness values for the random solver.
     """
     # GA solver
     start_time = time.time()
-    best_tour, validate, ga_total_cost, ga_cost_list = ga_instance.solve(tsp_instance)
+    best_tour, validate, ga_total_cost, ga_cost_list = ga_instance.solve(tsp_instance, progress_bar_index=progress_bar_index)
     tsp_instance.solution = best_tour
     tsp_instance.solver_fitness = ga_total_cost
     tsp_instance.solution_validation = validate
@@ -174,6 +189,10 @@ if __name__ == '__main__':
     del tsp_loader_instance
 
     
+    # Load the best known solutions for the TSP instances, if given
+    best_known_solutions = load_best_known_solutions(Path + 'Assets/tsplib/solutions')
+    
+    
     # Prameter setting
     '''
     # Initialize GAOptimizer and find the best parameters
@@ -183,58 +202,59 @@ if __name__ == '__main__':
     best_params = {'popsize': 100, 'mutation_rate': 0.05, 'generations': iterations, 'tournament_size': 7}   # Manually set based on common practice
     # best_params = {'popsize': 50, 'mutation_rate': 0.14, 'generations': 200, 'tournament_size': 10}   # Found by the optimizer
     
-    
-    # Generate solver instances
-    ga_instance = tsp_solver.GeneticAlgorithm(
-        popsize=best_params['popsize'],
-        mutation_rate=best_params['mutation_rate'],
-        generations=best_params['generations'],
-        tournament_size=best_params['tournament_size']
-    )
-    random_instance = tsp_solver.RandomSearchAlgorithm(iterations=iterations)  # make it same as GA for comparison
-
-
-    # Load the best known solutions for the TSP instances, if given
-    best_known_solutions = load_best_known_solutions(Path + 'Assets/tsplib/solutions')
-
 
     # Run solvers concurrently using ProcessPoolExecutor
-    with ProcessPoolExecutor(max_workers=5) as executor:
-        futures = [executor.submit(solve, tsp_instance, ga_instance, random_instance) for tsp_instance in tsp_instances]
-        
-        for future in as_completed(futures):
-            updated_tsp_instance, ga_cost_list, rd_cost_list = future.result()
+    random_instance = tsp_solver.RandomSearchAlgorithm(iterations=iterations)  # make its iterations same as GA for comparison; this random instance is shared among all TSP instances
+    with ProcessPoolExecutor(max_workers=max_workers) as executor:
+        with tqdm(total=len(tsp_instances), desc="Solving TSP Instances", position=0, leave=True) as main_progress_bar:
+            futures = []
+            
+            for idx, tsp_instance in enumerate(tsp_instances):
+                # Create a separate GA instance for each TSP problem to avoid conflicts
+                ga_instance = tsp_solver.GeneticAlgorithm(
+                    popsize=best_params['popsize'],
+                    mutation_rate=best_params['mutation_rate'],
+                    generations=best_params['generations'],
+                    tournament_size=best_params['tournament_size']
+                )
 
-            # Load the best known solution for the TSP instance, if available
-            updated_tsp_instance.best_fitness = best_known_solutions.get(updated_tsp_instance.name, None)
+                # Submit the task to the executor
+                futures.append(executor.submit(solve, tsp_instance, ga_instance, random_instance, progress_bar_index=idx+1))
+            
+            # Collect results
+            for future in as_completed(futures):
+                updated_tsp_instance, ga_cost_list, rd_cost_list = future.result()
 
-            # Update the corresponding tsp_instance in tsp_instances
-            for idx, instance in enumerate(tsp_instances):
-                if instance.name == updated_tsp_instance.name:
-                    tsp_instances[idx] = updated_tsp_instance
-                    break
+                # Load the best known solution for the TSP instance, if available
+                updated_tsp_instance.best_fitness = best_known_solutions.get(updated_tsp_instance.name, None)
 
-            # Print and store the visualized result
-            if debug: 
-                logger.info(updated_tsp_instance)
-                iteration_range = list(range(1, iterations + 1))
+                # Update the corresponding tsp_instance in tsp_instances
+                for idx, instance in enumerate(tsp_instances):
+                    if instance.name == updated_tsp_instance.name:
+                        tsp_instances[idx] = updated_tsp_instance
+                        break
 
-                plt.figure(figsize=(10, 5))
-                plt.plot(iteration_range, rd_cost_list, 'o-', label='Random/Baseline', color='blue')
-                plt.plot(iteration_range, ga_cost_list, 'o-', label='GA Solver', color='green')
+                # Print and store the visualized result
+                if debug: 
+                    logger.info(updated_tsp_instance)
+                    iteration_range = list(range(1, iterations + 1))
 
-                plt.xlabel("Iterations")
-                plt.ylabel("Fitness")
-                plt.title(f"Detailed Fitness Comparison for `{updated_tsp_instance.name}.tsp`")
-                plt.legend()
+                    plt.figure(figsize=(10, 5))
+                    plt.plot(iteration_range, rd_cost_list, 'o-', label='Random/Baseline', color='blue')
+                    plt.plot(iteration_range, ga_cost_list, 'o-', label='GA Solver', color='green')
 
-                plt.tight_layout()
-                #plt.show()
-                if not os.path.exists('Assets/plots'): os.makedirs('Assets/plots')
-                plt.savefig(f'Assets/plots/{updated_tsp_instance.name}_fitness_comparison.png')
+                    plt.xlabel("Iterations")
+                    plt.ylabel("Fitness")
+                    plt.title(f"Detailed Fitness Comparison for `{updated_tsp_instance.name}.tsp`")
+                    plt.legend()
 
-                # Draw an overview plot of the fitness for different TSP problem instances
-                draw_overview_plot()
+                    plt.tight_layout()
+                    #plt.show()
+                    if not os.path.exists('Assets/plots'): os.makedirs('Assets/plots')
+                    plt.savefig(f'Assets/plots/{updated_tsp_instance.name}_fitness_comparison.png')
+
+                    # Draw an overview plot of the fitness for different TSP problem instances
+                    draw_overview_plot()
 
     
     # Print and save according to this assignment's requirement
