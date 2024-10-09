@@ -5,7 +5,7 @@
 @Comment      :   Dev with Python 3.10.0
 """
 
-import argparse, os, time
+import argparse, logging, os, time
 import tsp_loader, tsp_solver
 
 
@@ -22,6 +22,30 @@ if debug:
     import numpy as np
 else:
     import csv
+
+
+def setup_logger(logger_name: str, log_file_path: str):
+    """
+    Setup the logger to write to a specified file.
+
+    Parameters:
+    - log_file_path (str): The path to the log file.
+    """
+    if not os.path.exists(os.path.dirname(log_file_path)): os.makedirs(os.path.dirname(log_file_path))
+    
+    logger = logging.getLogger(logger_name)
+    logger.setLevel(logging.INFO)
+    
+    # Create a file handler for logging
+    file_handler = logging.FileHandler(log_file_path)
+    file_handler.setLevel(logging.INFO)
+    
+    # Create a logging format
+    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+    file_handler.setFormatter(formatter)
+    
+    logger.addHandler(file_handler)
+    return logger
 
 
 def load_best_known_solutions(filepath) -> dict:
@@ -49,6 +73,32 @@ def load_best_known_solutions(filepath) -> dict:
     return best_known_solutions
 
 
+def draw_overview_plot() -> None:
+    """
+    Draw an overview plot of the fitness for different TSP problem instances.
+    """
+    instance_names = [tsp_instance.name for tsp_instance in tsp_instances]
+    baseline_fitness = [tsp_instance.baseline_fitness for tsp_instance in tsp_instances]
+    solver_fitness = [tsp_instance.solver_fitness for tsp_instance in tsp_instances]
+    best_fitness = [tsp_instance.best_fitness for tsp_instance in tsp_instances]
+    
+    plt.figure(figsize=(12, 6))
+    plt.plot(instance_names, baseline_fitness, 'o-', label='Random Solver (Baseline)', color='blue')
+    plt.plot(instance_names, solver_fitness, 'o-', label='GA Solver', color='green')
+    plt.plot(instance_names, best_fitness, 'o-', label='Best Known Solution', color='red')
+
+    plt.xticks(rotation=90)  # Rotate instance names for better readability
+    plt.xlabel("TSP Problem Instances")
+    plt.ylabel("Fitness")
+    plt.title("Overview of Fitness for Different TSP Problem Instances")
+    plt.legend()
+
+    plt.tight_layout()
+    #plt.show()
+    if not os.path.exists('Assets/plots'): os.makedirs('Assets/plots')
+    plt.savefig('Assets/plots/overall_fitness_comparison.png')
+
+
 def save_solution_to_csv(tour: list, filename: str = 'solution.csv') -> None:
     """
     Save the tour to a CSV file with a single column of city indices.
@@ -65,6 +115,8 @@ def save_solution_to_csv(tour: list, filename: str = 'solution.csv') -> None:
 
 
 if __name__ == '__main__':
+    logger = setup_logger('Main', Path + 'log/main.log')
+
     # Parse command line arguments
     parser = argparse.ArgumentParser(description='Load TSP files.')
     parser.add_argument('files', nargs='*', help='Paths to TSP files (optional)')
@@ -84,6 +136,7 @@ if __name__ == '__main__':
     del tsp_loader_instance
 
     
+    # Prameter setting
     '''
     # Initialize GAOptimizer and find the best parameters
     optimizer = tsp_solver.GAOptimizer(n_iter=20, max_outer_workers=1, max_inner_workers=25)
@@ -130,8 +183,7 @@ if __name__ == '__main__':
 
         # Print and store the visualized result
         if debug: 
-            print(tsp_instance)
-
+            logger.info(tsp_instance)
             iteration_range = list(range(1, len(rd_cost_list) + 1))
 
             plt.figure(figsize=(10, 5))
@@ -148,6 +200,9 @@ if __name__ == '__main__':
             if not os.path.exists('Assets/plots'): os.makedirs('Assets/plots')
             plt.savefig(f'Assets/plots/{tsp_instance.name}_fitness_comparison.png')
 
+            # Draw an overview plot of the fitness for different TSP problem instances
+            draw_overview_plot()
+
     
     # Print and save according to this assignment's requirement
     if not debug:   
@@ -159,30 +214,3 @@ if __name__ == '__main__':
             for tsp_instance in tsp_instances: 
                 print(f"{tsp_instance.name}: {tsp_instance.total_cost:.2f}")
                 save_solution_to_csv(tsp_instance.solution, f'{tsp_instance.name}_solution.csv')
-    
-    # Extensive print and plot for debugging & visualization
-    else:
-        # Overview of fitness for different TSP problem instances
-        instance_names = [tsp_instance.name for tsp_instance in tsp_instances]
-        baseline_fitness = [tsp_instance.baseline_fitness for tsp_instance in tsp_instances]
-        solver_fitness = [tsp_instance.solver_fitness for tsp_instance in tsp_instances]
-        best_fitness = [tsp_instance.best_fitness for tsp_instance in tsp_instances]
-        plt.figure(figsize=(12, 6))
-        plt.plot(instance_names, baseline_fitness, 'o-', label='Random Solver (Baseline)', color='blue')
-        plt.plot(instance_names, solver_fitness, 'o-', label='GA Solver', color='green')
-        plt.plot(instance_names, best_fitness, 'o-', label='Best Known Solution', color='red')
-
-        plt.xticks(rotation=90)  # Rotate instance names for better readability
-        plt.xlabel("TSP Problem Instances")
-        plt.ylabel("Fitness")
-        plt.title("Overview of Fitness for Different TSP Problem Instances")
-        plt.legend()
-
-        plt.tight_layout()
-        #plt.show()
-        if not os.path.exists('Assets/plots'): os.makedirs('Assets/plots')
-        plt.savefig('Assets/plots/overall_fitness_comparison.png')
-
-        # Detailed fitness comparison for a specific TSP problem instance (first one)
-        
-
