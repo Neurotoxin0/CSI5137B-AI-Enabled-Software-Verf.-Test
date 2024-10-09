@@ -65,27 +65,41 @@ def verify_tsp_solution(solution: list, num_nodes: int) -> tuple:
     return True, "The solution is valid."
 
 
-def setup_logger(logger_name: str, log_file_path: str):
+def setup_logger(logger_name: str, log_file_path: str, *, level = logging.INFO, streamline: bool = True) -> logging.Logger:
     """
     Setup the logger to write to a specified file.
 
     Parameters:
+    - logger_name (str): The name of the logger.
     - log_file_path (str): The path to the log file.
+    - level (int): The logging level.
+    - streamline (bool): Whether to output the log to the CLI interface.
+    
+    Returns:
+    - logger (logging.Logger): The logger object.
     """
-    if not os.path.exists(os.path.dirname(log_file_path)): os.makedirs(os.path.dirname(log_file_path))
-    
-    logger = logging.getLogger(logger_name)
-    logger.setLevel(logging.INFO)
-    
-    # Create a file handler for logging
-    file_handler = logging.FileHandler(log_file_path)
-    file_handler.setLevel(logging.INFO)
-    
-    # Create a logging format
+
     formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+    
+    # Create a logger
+    logger = logging.getLogger(logger_name)
+    logger.setLevel(level)
+
+    # Create a file handler
+    if not os.path.exists(os.path.dirname(log_file_path)): os.makedirs(os.path.dirname(log_file_path))
+    file_handler = logging.FileHandler(log_file_path)
+    #file_handler.setLevel(level)
     file_handler.setFormatter(formatter)
     
+    # Create a stream handler
+    cmd_handler = logging.StreamHandler()
+    #cmd_handler.setLevel(level)
+    cmd_handler.setFormatter(formatter)
+    
+    # Add the handlers to the logger
     logger.addHandler(file_handler)
+    logger.addHandler(cmd_handler)
+    
     return logger
 
 
@@ -144,7 +158,7 @@ class GeneticAlgorithm:
         self.cities = []
 
 
-    def solve(self, tsp_instance) -> tuple:
+    def solve(self, tsp_instance, *, progress_bar_index: int = 1) -> tuple:
         """ 
         Run the genetic algorithm, evolving the population over generations, 
         and return the best solution.
@@ -155,14 +169,18 @@ class GeneticAlgorithm:
         Returns:
         - tuple: The best solution (list of city indices), a tuple indicating the validation result, the total distance of the best solution, and distance for each iteration.
         """
-        if debug: print(f'Running GA solver on {tsp_instance.name} with {tsp_instance.dimension} cities...')
-        
         self.__clr()  # Clear the genetic algorithm attributes
 
         self.cities = tsp_instance.node_coords
         self.__initialize_population()  # Initial population of random tours
         
-        for generation in range(self.generations):
+        if debug:
+            from tqdm import trange  # Only import tqdm when debug is enabled
+            sub_progress_bar = trange(self.generations, desc=f'TSP: {tsp_instance.name}', position=progress_bar_index, leave=False)
+        else:
+            sub_progress_bar = range(self.generations)  # Fallback to range if tqdm is not needed -> user dont need to install tqdm if not in debug mode
+        
+        for _ in sub_progress_bar:
             new_population = []
             for _ in range(self.popsize):
                 parent1, parent2 = self.__select_parents()  # Select two parents using tournament selection
@@ -172,10 +190,7 @@ class GeneticAlgorithm:
 
             self.population = new_population
             self.__evaluate_population()
-            
-            # Print progress every 10 generations
-            if debug and (generation + 1) % 10 == 0: print(f'\tGeneration {generation + 1}/{self.generations}, Best Distance: {self.best_fitness:.2f}')
-             
+        
         solution, fitness = self.__get_best_individual()
         return solution, verify_tsp_solution(solution, len(self.cities)), fitness, self.fitness_list
 
@@ -470,15 +485,13 @@ class RandomSearchAlgorithm:
 
         Returns:
         - tuple: The best solution (list of city indices) and the total distance of the best solution.
-        """
-        if debug: print(f'Running Random solver on {tsp_instance.name} with {tsp_instance.dimension} cities...')
-        
+        """  
         self.__clr()  # Clear the random search algorithm attributes
         
         self.cities = tsp_instance.node_coords
         num_cities = len(self.cities)
 
-        for i in range(self.iterations):
+        for _ in range(self.iterations):
             # Generate a random tour
             tour = random.sample(range(num_cities), num_cities)
             fitness = self._assess_fitness(tour)
@@ -489,10 +502,6 @@ class RandomSearchAlgorithm:
                 self.best_fitness = fitness
                 self.best_tour = tour
 
-            # Optional: print progress every 10 iterations
-            if debug and (i + 1) % 10 == 0:
-                print(f"\tRandom Search Iteration {i + 1}: Best Distance = {self.best_fitness:.2f}")
-        
         # Return best tour and fitness
         best_tour_indices = [self.cities[i][0] for i in self.best_tour]
         return best_tour_indices, self.best_fitness, self.fitness_list
