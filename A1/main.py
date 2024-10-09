@@ -115,7 +115,8 @@ def save_solution_to_csv(tour: list, filename: str = 'solution.csv') -> None:
 
 
 if __name__ == '__main__':
-    logger = setup_logger('Main', Path + 'log/main.log')
+    # Setup the logger for debugging
+    logger = setup_logger('Main', Path + 'log/main.log') if debug else None
 
     # Parse command line arguments
     parser = argparse.ArgumentParser(description='Load TSP files.')
