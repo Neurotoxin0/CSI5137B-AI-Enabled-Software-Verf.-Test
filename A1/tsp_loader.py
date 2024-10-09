@@ -113,6 +113,7 @@ Edge Weight Type: {self.edge_weight_type} \n \
 Node Coordinates: {self.node_coords[:5]} ... \n \
 Solution: {self.solution} \n \
 Solution Validation: {self.solution_validation} \n \
+Duration: {self.duration} \n \
 Baseline Fitness: {self.baseline_fitness} \n \
 Solver Fitness: {self.solver_fitness} \n \
 Best Fitness: {self.best_fitness} \n \

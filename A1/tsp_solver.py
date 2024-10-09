@@ -138,6 +138,7 @@ class GeneticAlgorithm:
         self.population = []
         self.best_individual = None
         self.best_fitness = float('inf')
+        self.fitness_list = []  # Store the fitness of the solution for each generation
         self.cities = []
 
 
@@ -150,7 +151,7 @@ class GeneticAlgorithm:
         - tsp_instance: The TSP instance to solve.
 
         Returns:
-        - tuple: The best solution (list of city indices), the total distance of the best solution, and a tuple indicating the validation result.
+        - tuple: The best solution (list of city indices), a tuple indicating the validation result, the total distance of the best solution, and distance for each iteration.
         """
         if debug: print(f'\tRunning GA solver on {tsp_instance.name} with {tsp_instance.dimension} cities...')
         
@@ -158,7 +159,6 @@ class GeneticAlgorithm:
 
         self.cities = tsp_instance.node_coords
         self.__initialize_population()  # Initial population of random tours
-        self.__evaluate_population()  # Assess the fitness of the initial population
         
         for generation in range(self.generations):
             new_population = []
@@ -175,7 +175,7 @@ class GeneticAlgorithm:
             if debug and (generation + 1) % 10 == 0: print(f'Generation {generation + 1}/{self.generations}, Best Distance: {self.best_fitness:.2f}')
              
         solution, fitness = self.__get_best_individual()
-        return solution, fitness, verify_tsp_solution(solution, len(self.cities))
+        return solution, verify_tsp_solution(solution, len(self.cities)), fitness, self.fitness_list
 
 
     def _assess_fitness(self, tour: list) -> float:
@@ -212,12 +212,19 @@ class GeneticAlgorithm:
         """ 
         Evaluate the fitness of the entire population and update the best solution if found.
         """
+        best_fitness_in_population = float('inf')  # Track the best fitness in the current population
         for individual in self.population:
             fitness = self._assess_fitness(individual)  # Calculate the total distance of the tour
+            if fitness < best_fitness_in_population:
+                best_fitness_in_population = fitness  # Track the best fitness for the generation
+
+            # Update the best solution if the current one is better
             if fitness < self.best_fitness:
-                # Update the best solution if the current one is better
                 self.best_fitness = fitness
                 self.best_individual = individual
+
+        # Store the best fitness for this generation
+        self.fitness_list.append(best_fitness_in_population)
 
 
     def __select_parents(self) -> tuple:
@@ -335,7 +342,7 @@ class GAOptimizer:
             generations=params['generations'],
             tournament_size=params['tournament_size']
         )
-        _, fitness, _ = ga_instance.solve(tsp_instance.node_coords)
+        _, _, fitness, _ = ga_instance.solve(tsp_instance.node_coords)
         return fitness
 
 
@@ -449,6 +456,7 @@ class RandomSearchAlgorithm:
         self.cities = []
         self.best_tour = None
         self.best_fitness = float('inf')
+        self.fitness_list = []  # Store the fitness of the solution for each iteration
     
 
     def solve(self, tsp_instance) -> tuple:
@@ -472,7 +480,9 @@ class RandomSearchAlgorithm:
             # Generate a random tour
             tour = random.sample(range(num_cities), num_cities)
             fitness = self._assess_fitness(tour)
+            self.fitness_list.append(fitness)  # Store the fitness of the solution for each iteration
 
+            # Update the best tour and fitness if the current tour is better
             if fitness < self.best_fitness:
                 self.best_fitness = fitness
                 self.best_tour = tour
@@ -483,7 +493,7 @@ class RandomSearchAlgorithm:
         
         # Return best tour and fitness
         best_tour_indices = [self.cities[i][0] for i in self.best_tour]
-        return best_tour_indices, self.best_fitness
+        return best_tour_indices, self.best_fitness, self.fitness_list
 
 
     def _assess_fitness(self, tour: list) -> float:

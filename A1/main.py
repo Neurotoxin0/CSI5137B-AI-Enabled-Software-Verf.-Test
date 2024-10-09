@@ -14,6 +14,14 @@ os.chdir(Path)
 
 tsp_instances = []
 debug = True
+iterations = 100     # 500, as recommended by best common practice
+
+
+if debug:
+    import matplotlib.pyplot as plt
+    import numpy as np
+else:
+    import csv
 
 
 def load_best_known_solutions(filepath) -> dict:
@@ -81,7 +89,7 @@ if __name__ == '__main__':
     optimizer = tsp_solver.GAOptimizer(n_iter=20, max_outer_workers=1, max_inner_workers=25)
     best_params = optimizer.optimize(tsp_instances)
     '''
-    best_params = {'popsize': 100, 'mutation_rate': 0.05, 'generations': 10, 'tournament_size': 7}   # Manually set based on common practice
+    best_params = {'popsize': 100, 'mutation_rate': 0.05, 'generations': iterations, 'tournament_size': 7}   # Manually set based on common practice
     # best_params = {'popsize': 50, 'mutation_rate': 0.14, 'generations': 200, 'tournament_size': 10}   # Found by the optimizer
     
     
@@ -95,7 +103,7 @@ if __name__ == '__main__':
 
     
     # Generate a random search algorithm solver for the TSP instances
-    random_instance = tsp_solver.RandomSearchAlgorithm(iterations=10)  # make it same as GA for comparison
+    random_instance = tsp_solver.RandomSearchAlgorithm(iterations=iterations)  # make it same as GA for comparison
 
 
     # Load the best known solutions for the TSP instances, if given
@@ -106,27 +114,43 @@ if __name__ == '__main__':
     for tsp_instance in tsp_instances: 
         # GA solver
         start_time = time.time()
-        best_tour, total_cost, validate = ga_instance.solve(tsp_instance)
+        best_tour, validate, ga_total_cost, ga_cost_list = ga_instance.solve(tsp_instance)
         tsp_instance.solution = best_tour
-        tsp_instance.solver_fitness = total_cost
+        tsp_instance.solver_fitness = ga_total_cost
         tsp_instance.solution_validation = validate
         tsp_duration = time.time() - start_time
         
         # Random solver (baseline)
         if debug:
-            best_tour, total_cost = random_instance.solve(tsp_instance)
-            tsp_instance.baseline_fitness = total_cost
+            best_tour, rd_total_cost, rd_cost_list = random_instance.solve(tsp_instance)
+            tsp_instance.baseline_fitness = rd_total_cost
 
         # Load the best known solution for the TSP instance, if available
         tsp_instance.best_fitness = best_known_solutions.get(tsp_instance.name, None)
 
-        if debug: print(tsp_instance)
+        # Print and store the visualized result
+        if debug: 
+            print(tsp_instance)
+
+            iteration_range = list(range(1, len(rd_cost_list) + 1))
+
+            plt.figure(figsize=(10, 5))
+            plt.plot(iteration_range, rd_cost_list, 'o-', label='Random/Baseline', color='blue')
+            plt.plot(iteration_range, ga_cost_list, 'o-', label='GA Solver', color='green')
+
+            plt.xlabel("Iterations")
+            plt.ylabel("Fitness")
+            plt.title(f"Detailed Fitness Comparison for `{tsp_instance.name}.tsp`")
+            plt.legend()
+
+            plt.tight_layout()
+            #plt.show()
+            if not os.path.exists('Assets/plots'): os.makedirs('Assets/plots')
+            plt.savefig(f'Assets/plots/{tsp_instance.name}_fitness_comparison.png')
 
     
     # Print and save according to this assignment's requirement
     if not debug:   
-        import csv
-
         if len(tsp_instances) == 1:
             tsp_instance = tsp_instances[0]
             print(f"{tsp_instance.total_cost:.2f}")
@@ -138,9 +162,7 @@ if __name__ == '__main__':
     
     # Extensive print and plot for debugging & visualization
     else:
-        import matplotlib.pyplot as plt
-        import numpy as np
-        
+        # Overview of fitness for different TSP problem instances
         instance_names = [tsp_instance.name for tsp_instance in tsp_instances]
         baseline_fitness = [tsp_instance.baseline_fitness for tsp_instance in tsp_instances]
         solver_fitness = [tsp_instance.solver_fitness for tsp_instance in tsp_instances]
@@ -157,4 +179,10 @@ if __name__ == '__main__':
         plt.legend()
 
         plt.tight_layout()
-        plt.show()
+        #plt.show()
+        if not os.path.exists('Assets/plots'): os.makedirs('Assets/plots')
+        plt.savefig('Assets/plots/overall_fitness_comparison.png')
+
+        # Detailed fitness comparison for a specific TSP problem instance (first one)
+        
+
