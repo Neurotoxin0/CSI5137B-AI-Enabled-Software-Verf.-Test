@@ -1,5 +1,5 @@
 """
-@Description  :   GA Solver
+@Description  :   TSP Solver
 @Author1      :   Yang Xu, 300342009
 @Author2      :   Peizhou Zhang, 300400642
 @Comment      :   Dev with Python 3.10.0
@@ -102,15 +102,15 @@ class GeneticAlgorithm:
     - cities (list): The list of cities with their coordinates and indices.
     
     Methods:
-    - _clr(): Clear the genetic algorithm attributes.
+    - __clr(): Clear the genetic algorithm attributes.
     - solve(node_coords): Run the genetic algorithm on the provided cities.
-    - assess_fitness(tour): Calculate the total distance for a given tour.
-    - initialize_population(): Initialize the population with random tours.
-    - evaluate_population(): Evaluate the fitness of the population and update the best solution.
-    - select_parents(): Select two parents for crossover using a tournament selection method.
-    - crossover(parent1, parent2): Perform ordered crossover to create an offspring.
-    - mutate(tour): Perform swap mutation on a tour.
-    - get_best_individual(): Return the best tour and its total distance.
+    - _assess_fitness(tour): Calculate the total distance for a given tour.
+    - __initialize_population(): Initialize the population with random tours.
+    - __evaluate_population(): Evaluate the fitness of the population and update the best solution.
+    - __select_parents(): Select two parents for crossover using a tournament selection method.
+    - __crossover(parent1, parent2): Perform ordered crossover to create an offspring.
+    - __mutate(tour): Perform swap mutation on a tour.
+    - __get_best_individual(): Return the best tour and its total distance.
     """
 
     def __init__(self, *, popsize: int, mutation_rate: float, generations: int, tournament_size: int) -> None:
@@ -128,10 +128,10 @@ class GeneticAlgorithm:
         self.generations = generations
         self.tournament_size = tournament_size  # Store the tournament size
 
-        self._clr()  # Init the genetic algorithm attributes
+        self.__clr()  # Init the genetic algorithm attributes
         
 
-    def _clr(self):
+    def __clr(self):
         """
         Clear the genetic algorithm attributes.
         """
@@ -152,31 +152,31 @@ class GeneticAlgorithm:
         Returns:
         - tuple: The best solution (list of city indices), the total distance of the best solution, and a tuple indicating the validation result.
         """
-        self._clr()  # Clear the genetic algorithm attributes
+        self.__clr()  # Clear the genetic algorithm attributes
 
         self.cities = node_coords
-        self.initialize_population()  # Initial population of random tours
-        self.evaluate_population()  # Assess the fitness of the initial population
+        self.__initialize_population()  # Initial population of random tours
+        self.__evaluate_population()  # Assess the fitness of the initial population
         
         for generation in range(self.generations):
             new_population = []
             for _ in range(self.popsize):
-                parent1, parent2 = self.select_parents()  # Select two parents using tournament selection
-                child = self.crossover(parent1, parent2)  # Perform crossover to produce a child
-                self.mutate(child)
+                parent1, parent2 = self.__select_parents()  # Select two parents using tournament selection
+                child = self.__crossover(parent1, parent2)  # Perform crossover to produce a child
+                self.__mutate(child)
                 new_population.append(child)
 
             self.population = new_population
-            self.evaluate_population()
+            self.__evaluate_population()
             
             # Print progress every 10 generations
             if debug and (generation + 1) % 10 == 0: print(f'Generation {generation + 1}/{self.generations}, Best Distance: {self.best_fitness:.2f}')
              
-        solution, fitness = self.get_best_individual()
+        solution, fitness = self.__get_best_individual()
         return solution, fitness, verify_tsp_solution(solution, len(self.cities))
 
 
-    def assess_fitness(self, tour: list) -> float:
+    def _assess_fitness(self, tour: list) -> float:
         """
         Calculate the total distance for a given tour.
 
@@ -194,7 +194,7 @@ class GeneticAlgorithm:
         return total_distance
     
 
-    def initialize_population(self) -> None:
+    def __initialize_population(self) -> None:
         """ 
         Initialize the population with random tours (permutations of city indices). 
         """
@@ -206,19 +206,19 @@ class GeneticAlgorithm:
             self.population.append(tour)
 
 
-    def evaluate_population(self) -> None:
+    def __evaluate_population(self) -> None:
         """ 
         Evaluate the fitness of the entire population and update the best solution if found.
         """
         for individual in self.population:
-            fitness = self.assess_fitness(individual)  # Calculate the total distance of the tour
+            fitness = self._assess_fitness(individual)  # Calculate the total distance of the tour
             if fitness < self.best_fitness:
                 # Update the best solution if the current one is better
                 self.best_fitness = fitness
                 self.best_individual = individual
 
 
-    def select_parents(self) -> tuple:
+    def __select_parents(self) -> tuple:
         """ 
         Select two parents using tournament selection.
 
@@ -226,12 +226,12 @@ class GeneticAlgorithm:
         - tuple: Two selected parents for crossover.
         """
         # Use self.tournament_size for the tournament selection
-        parent1 = min(random.sample(self.population, self.tournament_size), key=self.assess_fitness)
-        parent2 = min(random.sample(self.population, self.tournament_size), key=self.assess_fitness)
+        parent1 = min(random.sample(self.population, self.tournament_size), key=self._assess_fitness)
+        parent2 = min(random.sample(self.population, self.tournament_size), key=self._assess_fitness)
         return parent1, parent2
 
 
-    def crossover(self, parent1: list, parent2: list) -> list:
+    def __crossover(self, parent1: list, parent2: list) -> list:
         """ 
         Perform ordered crossover (OX1) between two parents to create an offspring.
 
@@ -257,7 +257,7 @@ class GeneticAlgorithm:
         return child
 
 
-    def mutate(self, tour: list) -> None:
+    def __mutate(self, tour: list) -> None:
         """ 
         Perform swap mutation on a tour.
 
@@ -270,7 +270,7 @@ class GeneticAlgorithm:
             tour[i], tour[j] = tour[j], tour[i]
 
 
-    def get_best_individual(self) -> tuple:
+    def __get_best_individual(self) -> tuple:
         """ 
         Return the best individual (tour) and its fitness.
 
@@ -411,18 +411,21 @@ class GAOptimizer:
 
         return self.best_params
 
+
 class RandomSearchAlgorithm:
     """
     A class to represent a random search solver for the Travelling Salesman Problem (TSP).
 
     Attributes:
+    - iterations (int): The number of iterations to perform random search.
     - cities (list): The list of cities with their coordinates.
     - best_tour (list): The best tour found so far.
     - best_fitness (float): The total distance of the best tour.
-    - iterations (int): The number of iterations to perform random search.
 
     Methods:
+    - __clr(): Clear the random search algorithm attributes.
     - solve(): Run the random search and return the best tour and its total distance.
+    - _assess_fitness(tour): Calculate the total distance of a tour.
     """
     
     def __init__(self, *, iterations: int) -> None:
@@ -433,9 +436,18 @@ class RandomSearchAlgorithm:
         - iterations (int): The number of iterations to run the random search.
         """
         self.iterations = iterations
+
+        self.__clr()  # Init the random search algorithm attributes
+        
+
+    def __clr(self):
+        """
+        Clear the random search algorithm attributes.
+        """
         self.cities = []
         self.best_tour = None
         self.best_fitness = float('inf')
+    
 
     def solve(self, node_coords: list) -> tuple:
         """
@@ -447,13 +459,15 @@ class RandomSearchAlgorithm:
         Returns:
         - tuple: The best solution (list of city indices) and the total distance of the best solution.
         """
+        self.__clr()  # Clear the random search algorithm attributes
+        
         self.cities = node_coords
         num_cities = len(self.cities)
 
         for i in range(self.iterations):
             # Generate a random tour
             tour = random.sample(range(num_cities), num_cities)
-            fitness = self.total_distance(tour)
+            fitness = self._assess_fitness(tour)
 
             if fitness < self.best_fitness:
                 self.best_fitness = fitness
@@ -467,19 +481,21 @@ class RandomSearchAlgorithm:
         best_tour_indices = [self.cities[i][0] for i in self.best_tour]
         return best_tour_indices, self.best_fitness
 
-    def total_distance(self, tour: list) -> float:
+
+    def _assess_fitness(self, tour: list) -> float:
         """
-        Calculate the total distance of a tour by summing the distances between consecutive cities.
+        Calculate the total distance for a given tour.
 
         Parameters:
         - tour (list): A list of city indices representing the tour.
 
         Returns:
-        - float: The total distance of the tour.
+        - fitness (float): The total distance of the tour.
         """
         total_distance = 0
         for i in range(len(tour)):
             city1 = self.cities[tour[i]]
             city2 = self.cities[tour[(i + 1) % len(tour)]]  # Connect the last city back to the first
-            total_distance += euclidean_distance(city1, city2)  # Use the shared euclidean_distance function
+            total_distance += euclidean_distance(city1, city2)
         return total_distance
+    
