@@ -80,12 +80,12 @@ def draw_overview_plot() -> None:
     instance_names = [tsp_instance.name for tsp_instance in tsp_instances]
     baseline_fitness = [tsp_instance.baseline_fitness for tsp_instance in tsp_instances]
     solver_fitness = [tsp_instance.solver_fitness for tsp_instance in tsp_instances]
-    best_fitness = [tsp_instance.best_fitness for tsp_instance in tsp_instances]
+    #best_fitness = [tsp_instance.best_fitness for tsp_instance in tsp_instances]
     
     plt.figure(figsize=(12, 6))
     plt.plot(instance_names, baseline_fitness, 'o-', label='Random Solver (Baseline)', color='blue')
     plt.plot(instance_names, solver_fitness, 'o-', label='GA Solver', color='green')
-    plt.plot(instance_names, best_fitness, 'o-', label='Best Known Solution', color='red')
+    #plt.plot(instance_names, best_fitness, 'o-', label='Best Known Solution', color='red')
 
     plt.xticks(rotation=90)  # Rotate instance names for better readability
     plt.xlabel("TSP Problem Instances")
