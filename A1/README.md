@@ -2,14 +2,14 @@
 
 ## Overview
 
-This project provides a tool to solve the Travelling Salesman Problem (TSP) using a Genetic Algorithm (GA). It includes functionalities to load native TSP file(s), run the genetic algorithm, and output the solution(s). 
+This project provides a tool to solve the Travelling Salesman Problem (TSP) using a Genetic Algorithm (GA). It includes functionalities to load native TSP file(s), run the genetic algorithm, output the solution(s) and visualize the result(s) with random search (baseline) and best known solution (if available). 
 
-The project also includes an optimizer to fine-tune GA parameters (turned off and use pre-set hyper-parameters by default); as well as a scorer to score the solution based on input `best solution` file.
+The project also includes an optimizer to fine-tune GA parameters (turned off and use pre-set hyper-parameters by default).
 
 ## Structure
 
 1. **main.py**: The entry point to load TSP file(s), optionally optimize parameters, solve and output instance(s).
-2. **tsp_loader.py**: Handles loading and validation of TSP file(s); Validates the solution against known best solutions and provides a score ratio.
+2. **tsp_loader.py**: Handles loading and validation of TSP file(s).
 3. **tsp_solver.py**: Implements the genetic algorithm and parameter optimizer.
 
 ## How to Run
@@ -18,8 +18,8 @@ The project also includes an optimizer to fine-tune GA parameters (turned off an
 
 - Python 3.10.0 or later.
 - Coded & Tested under Windows system.
-- Required internal libraries: `argparse`, `csv`, `os`, `tkinter`, `concurrent.futures`.
 - Required external libraries: `None`.
+- Required external libraries (debug): `matplotlib`, `numpy`.
 
 ### Steps
 
@@ -41,7 +41,7 @@ The project also includes an optimizer to fine-tune GA parameters (turned off an
 - **Command Line Arguments**: Supports loading TSP file(s) through command line or file dialog.
 - **Genetic Algorithm**: Uses `tsp_solver.py` to run GA with parameters like population size, mutation rate, generations, and tournament size.
 - **Hyperparameter Optimization**: Optionally optimizes GA parameters using the `GAOptimizer` class in `tsp_solver.py`.
-- **Solution Scorer**: Validates the solution against known best solutions using `tsp_loader.py` and provides a ratio to measure performance.
+- **Solution Visualizer**: Visualize the solution against random search solution and known best solutions to measure performance.
 - **Solution Export**: Saves the best-found tour to a CSV file for each TSP instance.
 
 ## Logging
@@ -57,7 +57,7 @@ The project also includes an optimizer to fine-tune GA parameters (turned off an
 
 - To use the hyperparameter optimizer: uncomment corresponding session in `main.py` -> `if __name__ == '__main__'` block 
 
-- To output full results (print only) as well as scoring ratio: change `main.py` -> `debug` to `True`; rename and put solution file as `Assets/tsplib/solutions`
+- To output full results (print only): change `main.py` -> `debug` to `True`; rename and put solution file as `Assets/tsplib/solutions`
 
 ## Default Params & Run Time
 

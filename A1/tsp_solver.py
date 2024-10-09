@@ -10,7 +10,7 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 
 
 Path = (os.path.split(os.path.realpath(__file__))[0] + "/").replace("\\\\", "/").replace("\\", "/")
-debug = False
+debug = True
 
 
 def euclidean_distance(city1: tuple, city2: tuple) -> float:
@@ -103,7 +103,7 @@ class GeneticAlgorithm:
     
     Methods:
     - __clr(): Clear the genetic algorithm attributes.
-    - solve(node_coords): Run the genetic algorithm on the provided cities.
+    - solve(tsp_instance): Run the genetic algorithm on the provided tsp instance.
     - _assess_fitness(tour): Calculate the total distance for a given tour.
     - __initialize_population(): Initialize the population with random tours.
     - __evaluate_population(): Evaluate the fitness of the population and update the best solution.
@@ -141,20 +141,22 @@ class GeneticAlgorithm:
         self.cities = []
 
 
-    def solve(self, node_coords: list) -> tuple:
+    def solve(self, tsp_instance) -> tuple:
         """ 
         Run the genetic algorithm, evolving the population over generations, 
         and return the best solution.
 
         Parameters:
-        - node_coords (list): A list of tuples containing the city indices and coordinates; e.g., [(0, (x0, y0)), (1, (x1, y1)), ...].
+        - tsp_instance: The TSP instance to solve.
 
         Returns:
         - tuple: The best solution (list of city indices), the total distance of the best solution, and a tuple indicating the validation result.
         """
+        if debug: print(f'\tRunning GA solver on {tsp_instance.name} with {tsp_instance.dimension} cities...')
+        
         self.__clr()  # Clear the genetic algorithm attributes
 
-        self.cities = node_coords
+        self.cities = tsp_instance.node_coords
         self.__initialize_population()  # Initial population of random tours
         self.__evaluate_population()  # Assess the fitness of the initial population
         
@@ -449,19 +451,21 @@ class RandomSearchAlgorithm:
         self.best_fitness = float('inf')
     
 
-    def solve(self, node_coords: list) -> tuple:
+    def solve(self, tsp_instance) -> tuple:
         """
         Run the random search to find the best solution.
 
         Parameters:
-        - node_coords (list): A list of tuples containing the city indices and coordinates.
+        - tsp_instance: The TSP instance to solve.
 
         Returns:
         - tuple: The best solution (list of city indices) and the total distance of the best solution.
         """
+        if debug: print(f'\tRunning GA solver on {tsp_instance.name} with {tsp_instance.dimension} cities...')
+        
         self.__clr()  # Clear the random search algorithm attributes
         
-        self.cities = node_coords
+        self.cities = tsp_instance.node_coords
         num_cities = len(self.cities)
 
         for i in range(self.iterations):
