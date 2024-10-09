@@ -17,7 +17,7 @@ os.chdir(Path)
 tsp_instances = []
 debug = True
 iterations = 500     # 500, as recommended by best common practice
-max_workers = 15
+max_workers = 20
 
 
 if debug:
