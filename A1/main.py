@@ -6,6 +6,8 @@
 """
 
 import argparse, logging, os, time
+from concurrent.futures import ProcessPoolExecutor, as_completed
+
 import tsp_loader, tsp_solver
 
 
@@ -15,6 +17,7 @@ os.chdir(Path)
 tsp_instances = []
 debug = True
 iterations = 500     # 500, as recommended by best common practice
+max_workers = 25
 
 
 if debug:
@@ -24,27 +27,41 @@ else:
     import csv
 
 
-def setup_logger(logger_name: str, log_file_path: str):
+def setup_logger(logger_name: str, log_file_path: str, *, level = logging.INFO, streamline: bool = True) -> logging.Logger:
     """
     Setup the logger to write to a specified file.
 
     Parameters:
+    - logger_name (str): The name of the logger.
     - log_file_path (str): The path to the log file.
+    - level (int): The logging level.
+    - streamline (bool): Whether to output the log to the CLI interface.
+    
+    Returns:
+    - logger (logging.Logger): The logger object.
     """
-    if not os.path.exists(os.path.dirname(log_file_path)): os.makedirs(os.path.dirname(log_file_path))
-    
-    logger = logging.getLogger(logger_name)
-    logger.setLevel(logging.INFO)
-    
-    # Create a file handler for logging
-    file_handler = logging.FileHandler(log_file_path)
-    file_handler.setLevel(logging.INFO)
-    
-    # Create a logging format
+
     formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+    
+    # Create a logger
+    logger = logging.getLogger(logger_name)
+    logger.setLevel(level)
+
+    # Create a file handler
+    if not os.path.exists(os.path.dirname(log_file_path)): os.makedirs(os.path.dirname(log_file_path))
+    file_handler = logging.FileHandler(log_file_path)
+    #file_handler.setLevel(level)
     file_handler.setFormatter(formatter)
     
+    # Create a stream handler
+    cmd_handler = logging.StreamHandler()
+    #cmd_handler.setLevel(level)
+    cmd_handler.setFormatter(formatter)
+    
+    # Add the handlers to the logger
     logger.addHandler(file_handler)
+    logger.addHandler(cmd_handler)
+    
     return logger
 
 
@@ -71,6 +88,26 @@ def load_best_known_solutions(filepath) -> dict:
         return False, f"Error reading the file: {str(e)}"
     
     return best_known_solutions
+
+
+def solve(tsp_instance, ga_instance, random_instance):
+    """
+    Helper function to run both GA solver and Random Search on a single TSP instance
+    """
+    # GA solver
+    start_time = time.time()
+    best_tour, validate, ga_total_cost, ga_cost_list = ga_instance.solve(tsp_instance)
+    tsp_instance.solution = best_tour
+    tsp_instance.solver_fitness = ga_total_cost
+    tsp_instance.solution_validation = validate
+    tsp_instance.duration = time.time() - start_time
+    
+    # Random solver (baseline)
+    if debug:
+        best_tour, rd_total_cost, rd_cost_list = random_instance.solve(tsp_instance)
+        tsp_instance.baseline_fitness = rd_total_cost
+    
+    return tsp_instance, ga_cost_list, rd_cost_list
 
 
 def draw_overview_plot() -> None:
@@ -116,7 +153,7 @@ def save_solution_to_csv(tour: list, filename: str = 'solution.csv') -> None:
 
 if __name__ == '__main__':
     # Setup the logger for debugging
-    logger = setup_logger('Main', Path + 'log/main.log') if debug else None
+    logger = setup_logger('Main', Path + 'logs/main.log') if debug else None
 
     # Parse command line arguments
     parser = argparse.ArgumentParser(description='Load TSP files.')
@@ -147,16 +184,13 @@ if __name__ == '__main__':
     # best_params = {'popsize': 50, 'mutation_rate': 0.14, 'generations': 200, 'tournament_size': 10}   # Found by the optimizer
     
     
-    # Generate a genetic algorithm solver for the TSP instances
+    # Generate solver instances
     ga_instance = tsp_solver.GeneticAlgorithm(
         popsize=best_params['popsize'],
         mutation_rate=best_params['mutation_rate'],
         generations=best_params['generations'],
         tournament_size=best_params['tournament_size']
     )
-
-    
-    # Generate a random search algorithm solver for the TSP instances
     random_instance = tsp_solver.RandomSearchAlgorithm(iterations=iterations)  # make it same as GA for comparison
 
 
@@ -164,45 +198,43 @@ if __name__ == '__main__':
     best_known_solutions = load_best_known_solutions(Path + 'Assets/tsplib/solutions')
 
 
-    # Run the solvers on the TSP instances
-    for tsp_instance in tsp_instances: 
-        # GA solver
-        start_time = time.time()
-        best_tour, validate, ga_total_cost, ga_cost_list = ga_instance.solve(tsp_instance)
-        tsp_instance.solution = best_tour
-        tsp_instance.solver_fitness = ga_total_cost
-        tsp_instance.solution_validation = validate
-        tsp_instance.duration = time.time() - start_time
+    # Run solvers concurrently using ProcessPoolExecutor
+    with ProcessPoolExecutor(max_workers=5) as executor:
+        futures = [executor.submit(solve, tsp_instance, ga_instance, random_instance) for tsp_instance in tsp_instances]
         
-        # Random solver (baseline)
-        if debug:
-            best_tour, rd_total_cost, rd_cost_list = random_instance.solve(tsp_instance)
-            tsp_instance.baseline_fitness = rd_total_cost
+        for future in as_completed(futures):
+            updated_tsp_instance, ga_cost_list, rd_cost_list = future.result()
 
-        # Load the best known solution for the TSP instance, if available
-        tsp_instance.best_fitness = best_known_solutions.get(tsp_instance.name, None)
+            # Load the best known solution for the TSP instance, if available
+            updated_tsp_instance.best_fitness = best_known_solutions.get(updated_tsp_instance.name, None)
 
-        # Print and store the visualized result
-        if debug: 
-            logger.info(tsp_instance)
-            iteration_range = list(range(1, len(rd_cost_list) + 1))
+            # Update the corresponding tsp_instance in tsp_instances
+            for idx, instance in enumerate(tsp_instances):
+                if instance.name == updated_tsp_instance.name:
+                    tsp_instances[idx] = updated_tsp_instance
+                    break
 
-            plt.figure(figsize=(10, 5))
-            plt.plot(iteration_range, rd_cost_list, 'o-', label='Random/Baseline', color='blue')
-            plt.plot(iteration_range, ga_cost_list, 'o-', label='GA Solver', color='green')
+            # Print and store the visualized result
+            if debug: 
+                logger.info(updated_tsp_instance)
+                iteration_range = list(range(1, iterations + 1))
 
-            plt.xlabel("Iterations")
-            plt.ylabel("Fitness")
-            plt.title(f"Detailed Fitness Comparison for `{tsp_instance.name}.tsp`")
-            plt.legend()
+                plt.figure(figsize=(10, 5))
+                plt.plot(iteration_range, rd_cost_list, 'o-', label='Random/Baseline', color='blue')
+                plt.plot(iteration_range, ga_cost_list, 'o-', label='GA Solver', color='green')
 
-            plt.tight_layout()
-            #plt.show()
-            if not os.path.exists('Assets/plots'): os.makedirs('Assets/plots')
-            plt.savefig(f'Assets/plots/{tsp_instance.name}_fitness_comparison.png')
+                plt.xlabel("Iterations")
+                plt.ylabel("Fitness")
+                plt.title(f"Detailed Fitness Comparison for `{updated_tsp_instance.name}.tsp`")
+                plt.legend()
 
-            # Draw an overview plot of the fitness for different TSP problem instances
-            draw_overview_plot()
+                plt.tight_layout()
+                #plt.show()
+                if not os.path.exists('Assets/plots'): os.makedirs('Assets/plots')
+                plt.savefig(f'Assets/plots/{updated_tsp_instance.name}_fitness_comparison.png')
+
+                # Draw an overview plot of the fitness for different TSP problem instances
+                draw_overview_plot()
 
     
     # Print and save according to this assignment's requirement
