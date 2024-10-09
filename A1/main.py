@@ -13,8 +13,8 @@ Path = (os.path.split(os.path.realpath(__file__))[0] + "/").replace("\\\\", "/")
 os.chdir(Path)
 
 tsp_instances = []
-debug = True
-iterations = 100     # 500, as recommended by best common practice
+debug = False
+iterations = 500     # 500, as recommended by best common practice
 
 
 if debug:
