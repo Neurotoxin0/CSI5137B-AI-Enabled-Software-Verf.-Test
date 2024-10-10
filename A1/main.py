@@ -15,7 +15,7 @@ Path = (os.path.split(os.path.realpath(__file__))[0] + "/").replace("\\\\", "/")
 os.chdir(Path)
 
 tsp_instances = []
-debug = True
+debug = False
 iterations = 500     # 500, as recommended by best common practice
 max_workers = 20
 
@@ -214,47 +214,50 @@ if __name__ == '__main__':
 
     # Run solvers concurrently using ProcessPoolExecutor
     with ProcessPoolExecutor(max_workers=max_workers) as executor:
-        with tqdm(total=len(tsp_instances), desc="Solving TSP Instances", position=0, leave=True) as main_progress_bar:
-            futures = []
+        main_progress_bar = tqdm(total=len(tsp_instances), desc="Solving TSP Instances", position=0, leave=True) if debug else None
+        futures = []
             
-            for idx, tsp_instance in enumerate(tsp_instances):
-                # Submit the task to the executor, with different progress bar index for each task
-                futures.append(executor.submit(solve, tsp_instance, ga_instance, random_instance, progress_bar_index=idx+1))
-            
-            # Collect results
-            for future in as_completed(futures):
-                updated_tsp_instance, ga_cost_list, rd_cost_list = future.result()
+        for idx, tsp_instance in enumerate(tsp_instances):
+            # Submit the task to the executor, with different progress bar index for each task
+            futures.append(executor.submit(solve, tsp_instance, ga_instance, random_instance, progress_bar_index=idx+1))
+        
+        # Collect results
+        for future in as_completed(futures):
+            updated_tsp_instance, ga_cost_list, rd_cost_list = future.result()
 
-                # Load the best known solution for the TSP instance, if available
-                updated_tsp_instance.best_fitness = best_known_solutions.get(updated_tsp_instance.name, None)
+            # Load the best known solution for the TSP instance, if available
+            updated_tsp_instance.best_fitness = best_known_solutions.get(updated_tsp_instance.name, None)
 
-                # Update the corresponding tsp_instance in tsp_instances
-                for idx, instance in enumerate(tsp_instances):
-                    if instance.name == updated_tsp_instance.name:
-                        tsp_instances[idx] = updated_tsp_instance
-                        break
+            # Update the corresponding tsp_instance in tsp_instances
+            for idx, instance in enumerate(tsp_instances):
+                if instance.name == updated_tsp_instance.name:
+                    tsp_instances[idx] = updated_tsp_instance
+                    break
 
-                # Print and store the visualized result (detailed fitness comparison)
-                if debug: 
-                    logger.info(updated_tsp_instance)
-                    iteration_range = list(range(1, iterations + 1))
+            # Print and store the visualized result (detailed fitness comparison)
+            if debug: 
+                main_progress_bar.update(1)
 
-                    plt.figure(figsize=(10, 5))
-                    plt.plot(iteration_range, ga_cost_list, 'o-', label='GA Solver', color='green')
-                    if len(rd_cost_list) > 0: plt.plot(iteration_range, rd_cost_list, 'o-', label='Random/Baseline', color='blue')
-                    
-                    plt.xlabel("Iterations")
-                    plt.ylabel("Fitness")
-                    plt.title(f"Detailed Fitness Comparison for `{updated_tsp_instance.name}.tsp`")
-                    plt.legend()
+                logger.info(updated_tsp_instance)
+                iteration_range = list(range(1, iterations + 1))
 
-                    plt.tight_layout()
-                    #plt.show()
-                    if not os.path.exists('Assets/plots'): os.makedirs('Assets/plots')
-                    plt.savefig(f'Assets/plots/{updated_tsp_instance.name}_fitness_comparison.png')
+                plt.figure(figsize=(10, 5))
+                plt.plot(iteration_range, ga_cost_list, 'o-', label='GA Solver', color='green')
+                if len(rd_cost_list) > 0: plt.plot(iteration_range, rd_cost_list, 'o-', label='Random/Baseline', color='blue')
+                
+                plt.xlabel("Iterations")
+                plt.ylabel("Fitness")
+                plt.title(f"Detailed Fitness Comparison for `{updated_tsp_instance.name}.tsp`")
+                plt.legend()
 
-                    # Draw / Update the overview plot for all TSP instances
-                    draw_overview_plot()    
+                plt.tight_layout()
+                #plt.show()
+                if not os.path.exists('Assets/plots'): os.makedirs('Assets/plots')
+                plt.savefig(f'Assets/plots/{updated_tsp_instance.name}_fitness_comparison.png')
+
+                # Draw / Update the overview plot for all TSP instances
+                draw_overview_plot()   
+        if debug: main_progress_bar.close() 
 
     
     # Print and save according to this assignment's requirement
@@ -265,5 +268,5 @@ if __name__ == '__main__':
             save_solution_to_csv(tsp_instance.solution, f'solution.csv')
         else:
             for tsp_instance in tsp_instances: 
-                print(f"{tsp_instance.name}: {tsp_instance.total_cost:.2f}")
+                print(f"{tsp_instance.name}: {tsp_instance.solver_fitness:.2f}")
                 save_solution_to_csv(tsp_instance.solution, f'{tsp_instance.name}_solution.csv')
