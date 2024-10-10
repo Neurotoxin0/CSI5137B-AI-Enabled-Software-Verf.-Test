@@ -1,0 +1,1248 @@
+2024-10-09 03:06:49,745 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/eil51.tsp 
+ Name: eil51 
+ Type: TSP 
+ Comment: 51-city problem (Christofides/Eilon) 
+ Dimension: 51 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 37.0, 52.0), (2, 49.0, 49.0), (3, 52.0, 64.0), (4, 20.0, 26.0), (5, 40.0, 30.0)] ... 
+  
+ Duration: 70.99452543258667 
+ Baseline Fitness: 1267.715033844828 
+ Solver Fitness: 385.96915364519054 
+ Best Fitness: 426.0 
+ -------------------------------------------------- 
+
+2024-10-09 03:06:51,493 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/berlin52.tsp 
+ Name: berlin52 
+ Type: TSP 
+ Comment: 52 locations in Berlin (Groetschel) 
+ Dimension: 52 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 565.0, 575.0), (2, 25.0, 185.0), (3, 345.0, 750.0), (4, 945.0, 685.0), (5, 845.0, 655.0)] ... 
+  
+ Duration: 73.23384690284729 
+ Baseline Fitness: 17341.424940467936 
+ Solver Fitness: 3676.8881667235114 
+ Best Fitness: 7542.0 
+ -------------------------------------------------- 
+
+2024-10-09 03:08:36,636 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/eil76.tsp 
+ Name: eil76 
+ Type: TSP 
+ Comment: 76-city problem (Christofides/Eilon) 
+ Dimension: 76 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 22.0, 22.0), (2, 36.0, 26.0), (3, 21.0, 45.0), (4, 45.0, 35.0), (5, 55.0, 20.0)] ... 
+  
+ Duration: 106.7758321762085 
+ Baseline Fitness: 2311.2117129207577 
+ Solver Fitness: 611.8793247651791 
+ Best Fitness: 538.0 
+ -------------------------------------------------- 
+
+2024-10-09 03:08:37,660 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/bier127.tsp 
+ Name: bier127 
+ Type: TSP 
+ Comment: 127 Biergaerten in Augsburg (Juenger/Reinelt) 
+ Dimension: 127 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 9860.0, 14152.0), (2, 9396.0, 14616.0), (3, 11252.0, 14848.0), (4, 11020.0, 13456.0), (5, 9512.0, 15776.0)] ... 
+  
+ Duration: 179.23516488075256 
+ Baseline Fitness: 342843.01830983773 
+ Solver Fitness: 56785.54478855928 
+ Best Fitness: 118282.0 
+ -------------------------------------------------- 
+
+2024-10-09 03:08:42,994 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/ch130.tsp 
+ Name: ch130 
+ Type: TSP 
+ Comment: 130 city problem (Churritz) 
+ Dimension: 130 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 334.5909245845, 161.7809319139), (2, 397.6446634067, 262.8165330708), (3, 503.8741827107, 172.8741151168), (4, 444.0479403502, 384.6491809647), (5, 311.6137146746, 2.0091699828)] ... 
+  
+ Duration: 184.47594618797302 
+ Baseline Fitness: 26616.10002889155 
+ Solver Fitness: 5637.7016055473805 
+ Best Fitness: 6110.0 
+ -------------------------------------------------- 
+
+2024-10-09 03:09:10,973 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/ch150.tsp 
+ Name: ch150 
+ Type: TSP 
+ Comment: 150 city Problem (churritz) 
+ Dimension: 150 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 37.4393516691, 541.2090699418), (2, 612.1759508571, 494.3166877396), (3, 38.1312338227, 353.1484581781), (4, 53.4418081065, 131.484901365), (5, 143.0606355347, 631.7200953923)] ... 
+  
+ Duration: 212.30993747711182 
+ Baseline Fitness: 32796.47557961704 
+ Solver Fitness: 7032.729849443551 
+ Best Fitness: 6528.0 
+ -------------------------------------------------- 
+
+2024-10-09 03:09:12,935 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/eil101.tsp 
+ Name: eil101 
+ Type: TSP 
+ Comment: 101-city problem (Christofides/Eilon) 
+ Dimension: 101 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 41.0, 49.0), (2, 35.0, 17.0), (3, 55.0, 45.0), (4, 55.0, 20.0), (5, 15.0, 30.0)] ... 
+  
+ Duration: 141.24536299705505 
+ Baseline Fitness: 3870.3667811945297 
+ Solver Fitness: 980.6677569785194 
+ Best Fitness: 629.0 
+ -------------------------------------------------- 
+
+2024-10-09 03:10:23,049 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/d198.tsp 
+ Name: d198 
+ Type: TSP 
+ Comment: Drilling problem (Reinelt) 
+ Dimension: 198 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 0.0, 0.0), (2, 551.2, 996.4), (3, 627.4, 996.4), (4, 703.6, 996.4), (5, 703.6, 1047.2)] ... 
+  
+ Duration: 284.2735331058502 
+ Baseline Fitness: 144236.15462765045 
+ Solver Fitness: 20748.006022169113 
+ Best Fitness: 15780.0 
+ -------------------------------------------------- 
+
+2024-10-09 03:12:28,400 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/a280.tsp 
+ Name: a280 
+ Type: TSP 
+ Comment: drilling problem (Ludwig) 
+ Dimension: 280 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 288.0, 149.0), (2, 288.0, 129.0), (3, 270.0, 133.0), (4, 256.0, 141.0), (5, 256.0, 157.0)] ... 
+  
+ Duration: 409.89828062057495 
+ Baseline Fitness: 35842.589536435735 
+ Solver Fitness: 10171.672390784197 
+ Best Fitness: 2579.0 
+ -------------------------------------------------- 
+
+2024-10-09 03:14:50,045 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/kroA100.tsp 
+ Name: kroA100 
+ Type: TSP 
+ Comment: 100-city problem A (Krolak/Felts/Nelson) 
+ Dimension: 100 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 1380.0, 939.0), (2, 2848.0, 96.0), (3, 3510.0, 1671.0), (4, 457.0, 334.0), (5, 3888.0, 666.0)] ... 
+  
+ Duration: 141.47879242897034 
+ Baseline Fitness: 115111.03495853601 
+ Solver Fitness: 12804.133428057256 
+ Best Fitness: 21282.0 
+ -------------------------------------------------- 
+
+2024-10-09 03:16:48,829 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/gil262.tsp 
+ Name: gil262 
+ Type: TSP 
+ Comment: 262-city problem (Gillet/Johnson) 
+ Dimension: 262 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, -99.0, -97.0), (2, -59.0, 50.0), (3, 0.0, 14.0), (4, -17.0, -66.0), (5, -69.0, -19.0)] ... 
+  
+ Duration: 385.3200557231903 
+ Baseline Fitness: 28954.96473700285 
+ Solver Fitness: 10673.227760878275 
+ Best Fitness: 2378.0 
+ -------------------------------------------------- 
+
+2024-10-09 03:18:22,954 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/kroA150.tsp 
+ Name: kroA150 
+ Type: TSP 
+ Comment: 150-city problem A (Krolak/Felts/Nelson) 
+ Dimension: 150 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 1380.0, 939.0), (2, 2848.0, 96.0), (3, 3510.0, 1671.0), (4, 457.0, 334.0), (5, 3888.0, 666.0)] ... 
+  
+ Duration: 212.6737630367279 
+ Baseline Fitness: 174996.2508401151 
+ Solver Fitness: 20746.5315300091 
+ Best Fitness: 26524.0 
+ -------------------------------------------------- 
+
+2024-10-09 03:18:23,921 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/d493.tsp 
+ Name: d493 
+ Type: TSP 
+ Comment: Drilling problem (Reinelt) 
+ Dimension: 493 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 0.0, 0.0), (2, 1116.3, 1555.2), (3, 1357.6, 1479.0), (4, 1148.1, 1771.1), (5, 1186.2, 1796.5)] ... 
+  
+ Duration: 764.400426864624 
+ Baseline Fitness: 286940.5711263898 
+ Solver Fitness: 87557.37739194054 
+ Best Fitness: 35002.0 
+ -------------------------------------------------- 
+
+2024-10-09 03:19:10,858 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/fl417.tsp 
+ Name: fl417 
+ Type: TSP 
+ Comment: Drilling problem (Reinelt) 
+ Dimension: 417 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 1025.7, 1971.3), (2, 1161.67, 1965.39), (3, 1191.23, 1959.49), (4, 1167.59, 1959.49), (5, 1096.64, 1959.49)] ... 
+  
+ Duration: 633.5659663677216 
+ Baseline Fitness: 213811.00802426005 
+ Solver Fitness: 50763.49899494013 
+ Best Fitness: 11861.0 
+ -------------------------------------------------- 
+
+2024-10-09 03:20:42,359 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/kroB100.tsp 
+ Name: kroB100 
+ Type: TSP 
+ Comment: 100-city problem B (Krolak/Felts/Nelson) 
+ Dimension: 100 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 3140.0, 1401.0), (2, 556.0, 1056.0), (3, 3675.0, 1522.0), (4, 1182.0, 1853.0), (5, 3595.0, 111.0)] ... 
+  
+ Duration: 139.22932243347168 
+ Baseline Fitness: 111477.93892869122 
+ Solver Fitness: 13175.528881187052 
+ Best Fitness: 22141.0 
+ -------------------------------------------------- 
+
+2024-10-09 03:21:32,749 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/kroA200.tsp 
+ Name: kroA200 
+ Type: TSP 
+ Comment: 200-city problem A (Krolak/Felts/Nelson) 
+ Dimension: 200 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 1357.0, 1905.0), (2, 2650.0, 802.0), (3, 1774.0, 107.0), (4, 1307.0, 964.0), (5, 3806.0, 746.0)] ... 
+  
+ Duration: 283.6063323020935 
+ Baseline Fitness: 247501.4783127221 
+ Solver Fitness: 39315.19572230204 
+ Best Fitness: 29368.0 
+ -------------------------------------------------- 
+
+2024-10-09 03:21:52,693 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/kroB150.tsp 
+ Name: kroB150 
+ Type: TSP 
+ Comment: 150-city problem B (Krolak/Felts/Nelson) 
+ Dimension: 150 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 1357.0, 1905.0), (2, 2650.0, 802.0), (3, 1774.0, 107.0), (4, 1307.0, 964.0), (5, 3806.0, 746.0)] ... 
+  
+ Duration: 208.74133682250977 
+ Baseline Fitness: 178955.31204039272 
+ Solver Fitness: 23823.489929530348 
+ Best Fitness: 26130.0 
+ -------------------------------------------------- 
+
+2024-10-09 03:22:59,830 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/kroC100.tsp 
+ Name: kroC100 
+ Type: TSP 
+ Comment: 100-city problem C (Krolak/Felts/Nelson) 
+ Dimension: 100 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 1357.0, 1905.0), (2, 2650.0, 802.0), (3, 1774.0, 107.0), (4, 1307.0, 964.0), (5, 3806.0, 746.0)] ... 
+  
+ Duration: 137.31013202667236 
+ Baseline Fitness: 113506.59972838558 
+ Solver Fitness: 12398.928470234368 
+ Best Fitness: 20749.0 
+ -------------------------------------------------- 
+
+2024-10-09 03:23:10,879 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/d657.tsp 
+ Name: d657 
+ Type: TSP 
+ Comment: Drilling problem (Reinelt) 
+ Dimension: 657 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 0.0, 0.0), (2, 875.1, 983.7), (3, 887.8, 1040.9), (4, 875.1, 1136.1), (5, 887.8, 1275.8)] ... 
+  
+ Duration: 1051.3127598762512 
+ Baseline Fitness: 605022.2609363667 
+ Solver Fitness: 188287.74122952987 
+ Best Fitness: 48912.0 
+ -------------------------------------------------- 
+
+2024-10-09 03:23:48,969 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/kroB200.tsp 
+ Name: kroB200 
+ Type: TSP 
+ Comment: 200-city problem B (Krolak/Felts/Nelson) 
+ Dimension: 200 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 3140.0, 1401.0), (2, 556.0, 1056.0), (3, 3675.0, 1522.0), (4, 1182.0, 1853.0), (5, 3595.0, 111.0)] ... 
+  
+ Duration: 277.7952244281769 
+ Baseline Fitness: 240356.18780909711 
+ Solver Fitness: 40258.79153592117 
+ Best Fitness: 29437.0 
+ -------------------------------------------------- 
+
+2024-10-09 03:23:51,132 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/kroD100.tsp 
+ Name: kroD100 
+ Type: TSP 
+ Comment: 100-city problem D (Krolak/Felts/Nelson) 
+ Dimension: 100 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 2995.0, 264.0), (2, 202.0, 233.0), (3, 981.0, 848.0), (4, 1346.0, 408.0), (5, 781.0, 670.0)] ... 
+  
+ Duration: 138.2145299911499 
+ Baseline Fitness: 110425.14606014687 
+ Solver Fitness: 13277.038990842084 
+ Best Fitness: 21294.0 
+ -------------------------------------------------- 
+
+2024-10-09 03:24:09,638 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/kroE100.tsp 
+ Name: kroE100 
+ Type: TSP 
+ Comment: 100-city problem E (Krolak/Felts/Nelson) 
+ Dimension: 100 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 3477.0, 949.0), (2, 91.0, 1732.0), (3, 3972.0, 329.0), (4, 198.0, 1632.0), (5, 1806.0, 733.0)] ... 
+  
+ Duration: 136.7698357105255 
+ Baseline Fitness: 113527.63564113478 
+ Solver Fitness: 12092.938001917164 
+ Best Fitness: 22068.0 
+ -------------------------------------------------- 
+
+2024-10-09 03:25:22,162 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/lin105.tsp 
+ Name: lin105 
+ Type: TSP 
+ Comment: 105-city problem (Subproblem of lin318) 
+ Dimension: 105 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 63.0, 71.0), (2, 94.0, 71.0), (3, 142.0, 370.0), (4, 173.0, 1276.0), (5, 205.0, 1213.0)] ... 
+  
+ Duration: 142.18161749839783 
+ Baseline Fitness: 90331.83809550243 
+ Solver Fitness: 8241.266262484502 
+ Best Fitness: 14379.0 
+ -------------------------------------------------- 
+
+2024-10-09 03:30:44,587 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/lin318.tsp 
+ Name: lin318 
+ Type: TSP 
+ Comment: 318-city problem (Lin/Kernighan) 
+ Dimension: 318 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 63.0, 71.0), (2, 94.0, 71.0), (3, 142.0, 370.0), (4, 173.0, 1276.0), (5, 205.0, 1213.0)] ... 
+  
+ Duration: 453.237877368927 
+ Baseline Fitness: 291509.20270210766 
+ Solver Fitness: 75951.49152182433 
+ Best Fitness: 42029.0 
+ -------------------------------------------------- 
+
+2024-10-09 03:31:22,789 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/linhp318.tsp 
+ Name: lin318 
+ Type: TSP 
+ Comment: Original 318-city problem (Lin/Kernighan) 
+ Dimension: 318 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 63.0, 71.0), (2, 94.0, 71.0), (3, 142.0, 370.0), (4, 173.0, 1276.0), (5, 205.0, 1213.0)] ... 
+  
+ Duration: 453.2924020290375 
+ Baseline Fitness: 292934.6131012105 
+ Solver Fitness: 64774.179593675406 
+ Best Fitness: 42029.0 
+ -------------------------------------------------- 
+
+2024-10-09 03:36:08,892 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/pcb442.tsp 
+ Name: pcb442 
+ Type: TSP 
+ Comment: Drilling problem (Groetschel/Juenger/Reinelt) 
+ Dimension: 442 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 200.0, 400.0), (2, 200.0, 500.0), (3, 200.0, 600.0), (4, 200.0, 700.0), (5, 200.0, 800.0)] ... 
+  
+ Duration: 646.0325546264648 
+ Baseline Fitness: 439025.4498014979 
+ Solver Fitness: 102766.86677089307 
+ Best Fitness: 50778.0 
+ -------------------------------------------------- 
+
+2024-10-09 03:37:50,131 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/pr76.tsp 
+ Name: pr76 
+ Type: TSP 
+ Comment: 76-city problem (Padberg/Rinaldi) 
+ Dimension: 76 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 3600.0, 2300.0), (2, 3100.0, 3300.0), (3, 4700.0, 5750.0), (4, 5400.0, 5750.0), (5, 5608.0, 7103.0)] ... 
+  
+ Duration: 101.11621046066284 
+ Baseline Fitness: 354663.6325927615 
+ Solver Fitness: 40637.21145977119 
+ Best Fitness: 108159.0 
+ -------------------------------------------------- 
+
+2024-10-09 03:40:10,234 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/pr107.tsp 
+ Name: pr107 
+ Type: TSP 
+ Comment: 107-city problem (Padberg/Rinaldi) 
+ Dimension: 107 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 8375.0, 4700.0), (2, 8775.0, 4700.0), (3, 8375.0, 4900.0), (4, 8175.0, 4900.0), (5, 8775.0, 4900.0)] ... 
+  
+ Duration: 139.92800211906433 
+ Baseline Fitness: 321075.19239125133 
+ Solver Fitness: 17701.473739535057 
+ Best Fitness: 44303.0 
+ -------------------------------------------------- 
+
+2024-10-09 03:40:58,679 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/p654.tsp 
+ Name: p654 
+ Type: TSP 
+ Comment: Drilling problem (Reinelt) 
+ Dimension: 654 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 1245.0, 1255.0), (2, 1807.5, 2192.5), (3, 1822.5, 2207.5), (4, 1867.5, 2732.5), (5, 2377.5, 2612.5)] ... 
+  
+ Duration: 1008.035915851593 
+ Baseline Fitness: 1401163.0359312193 
+ Solver Fitness: 183524.6678389032 
+ Best Fitness: 34643.0 
+ -------------------------------------------------- 
+
+2024-10-09 03:42:58,398 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/pr124.tsp 
+ Name: pr124 
+ Type: TSP 
+ Comment: 124-city problem (Padberg/Rinaldi) 
+ Dimension: 124 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 4475.0, 8657.0), (2, 4475.0, 8969.0), (3, 4475.0, 9407.0), (4, 4475.0, 9719.0), (5, 5450.0, 10475.0)] ... 
+  
+ Duration: 167.97105765342712 
+ Baseline Fitness: 345150.04385593167 
+ Solver Fitness: 30041.390615301807 
+ Best Fitness: 59030.0 
+ -------------------------------------------------- 
+
+2024-10-09 03:44:01,249 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/pr136.tsp 
+ Name: pr136 
+ Type: TSP 
+ Comment: 136-city problem (Padberg/Rinaldi) 
+ Dimension: 136 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 5300.0, 1965.0), (2, 7275.0, 1965.0), (3, 12450.0, 1965.0), (4, 14425.0, 1965.0), (5, 4118.0, 2275.0)] ... 
+  
+ Duration: 182.36237406730652 
+ Baseline Fitness: 461065.12938751216 
+ Solver Fitness: 38278.31212453726 
+ Best Fitness: 96772.0 
+ -------------------------------------------------- 
+
+2024-10-09 03:44:48,427 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/d1291.tsp 
+ Name: d1291 
+ Type: TSP 
+ Comment: Drilling problem (Reinelt) 
+ Dimension: 1291 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 0.0, 0.0), (2, 837.0, 958.3), (3, 862.4, 958.3), (4, 887.8, 958.3), (5, 913.2, 958.3)] ... 
+  
+ Duration: 2347.761200904846 
+ Baseline Fitness: 1316648.5853210688 
+ Solver Fitness: 560397.1551136783 
+ Best Fitness: 50801.0 
+ -------------------------------------------------- 
+
+2024-10-09 03:46:11,798 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/pr144.tsp 
+ Name: pr144 
+ Type: TSP 
+ Comment: 144-city problem (Padberg/Rinaldi) 
+ Dimension: 144 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 4350.0, 4425.0), (2, 4500.0, 4425.0), (3, 4300.0, 4725.0), (4, 4300.0, 4825.0), (5, 4300.0, 4950.0)] ... 
+  
+ Duration: 193.17982172966003 
+ Baseline Fitness: 510207.9240125233 
+ Solver Fitness: 31421.025240946383 
+ Best Fitness: 58537.0 
+ -------------------------------------------------- 
+
+2024-10-09 03:47:25,617 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/pr152.tsp 
+ Name: pr152 
+ Type: TSP 
+ Comment: 152-city problem (Padberg/Rinaldi) 
+ Dimension: 152 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 2100.0, 1850.0), (2, 2100.0, 3000.0), (3, 2100.0, 4400.0), (4, 2100.0, 5550.0), (5, 2100.0, 6950.0)] ... 
+  
+ Duration: 204.13555455207825 
+ Baseline Fitness: 609609.9142856359 
+ Solver Fitness: 34003.27568395776 
+ Best Fitness: 73682.0 
+ -------------------------------------------------- 
+
+2024-10-09 03:50:01,499 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/pr226.tsp 
+ Name: pr226 
+ Type: TSP 
+ Comment: 226-city problem (Padberg/Rinaldi) 
+ Dimension: 226 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 15625.0, 1150.0), (2, 14625.0, 1200.0), (3, 14525.0, 1200.0), (4, 14425.0, 1200.0), (5, 14125.0, 1200.0)] ... 
+  
+ Duration: 312.72203183174133 
+ Baseline Fitness: 919417.6617158327 
+ Solver Fitness: 107622.32653998329 
+ Best Fitness: 80369.0 
+ -------------------------------------------------- 
+
+2024-10-09 03:51:50,461 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/fl1400.tsp 
+ Name: fl1400 
+ Type: TSP 
+ Comment: Drilling problem (Reinelt) 
+ Dimension: 1400 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 2104.61, 1968.35), (2, 2104.61, 232.264), (3, 295.591, 1968.35), (4, 295.591, 232.264), (5, 1025.7, 1971.3)] ... 
+  
+ Duration: 2590.660710334778 
+ Baseline Fitness: 1041353.6744623687 
+ Solver Fitness: 443701.53808150673 
+ Best Fitness: 20127.0 
+ -------------------------------------------------- 
+
+2024-10-09 03:52:21,310 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/pr264.tsp 
+ Name: pr264 
+ Type: TSP 
+ Comment: 264-city problem (Padberg/Rinaldi) 
+ Dimension: 264 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 3425.0, 6450.0), (2, 3625.0, 3200.0), (3, 3525.0, 3200.0), (4, 3525.0, 3350.0), (5, 3625.0, 3350.0)] ... 
+  
+ Duration: 369.09230756759644 
+ Baseline Fitness: 711764.9398903528 
+ Solver Fitness: 34017.46716808798 
+ Best Fitness: 49135.0 
+ -------------------------------------------------- 
+
+2024-10-09 03:54:30,841 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/pr299.tsp 
+ Name: pr299 
+ Type: TSP 
+ Comment: 299-city problem (Padberg/Rinaldi) 
+ Dimension: 299 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 2156.0, 1639.0), (2, 2456.0, 1639.0), (3, 2355.0, 1640.0), (4, 2256.0, 1640.0), (5, 2656.0, 1640.0)] ... 
+  
+ Duration: 424.7667896747589 
+ Baseline Fitness: 589641.0696380947 
+ Solver Fitness: 111692.11357361593 
+ Best Fitness: 48191.0 
+ -------------------------------------------------- 
+
+2024-10-09 03:56:44,200 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/rat99.tsp 
+ Name: rat99 
+ Type: TSP 
+ Comment: Rattled grid (Pulleyblank) 
+ Dimension: 99 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 6.0, 4.0), (2, 15.0, 15.0), (3, 24.0, 18.0), (4, 33.0, 12.0), (5, 48.0, 12.0)] ... 
+  
+ Duration: 133.21271753311157 
+ Baseline Fitness: 4384.6986188354795 
+ Solver Fitness: 1329.9568640669893 
+ Best Fitness: 1211.0 
+ -------------------------------------------------- 
+
+2024-10-09 03:58:51,986 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/fl1577.tsp 
+ Name: fl1577 
+ Type: TSP 
+ Comment: Drilling problem (Reinelt) 
+ Dimension: 1577 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 1214.88, 1959.49), (2, 1226.7, 1959.49), (3, 1238.53, 1959.49), (4, 1250.35, 1959.49), (5, 1262.18, 1959.49)] ... 
+  
+ Duration: 3006.4961247444153 
+ Baseline Fitness: 1166447.1307515907 
+ Solver Fitness: 585134.812561557 
+ Best Fitness: 22249.0 
+ -------------------------------------------------- 
+
+2024-10-09 03:59:14,739 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/d1655.tsp 
+ Name: d1655 
+ Type: TSP 
+ Comment: Drilling problem (Reinelt) 
+ Dimension: 1655 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 0.0, 0.0), (2, 1224.3, 945.6), (3, 1325.9, 945.6), (4, 1325.9, 971.0), (5, 1224.3, 971.0)] ... 
+  
+ Duration: 3213.539802789688 
+ Baseline Fitness: 1721619.5722728549 
+ Solver Fitness: 754297.1109960023 
+ Best Fitness: 62128.0 
+ -------------------------------------------------- 
+
+2024-10-09 04:00:54,061 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/pr439.tsp 
+ Name: pr439 
+ Type: TSP 
+ Comment: 439-city problem (Padberg/Rinaldi) 
+ Dimension: 439 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 7125.0, 11300.0), (2, 7225.0, 11050.0), (3, 7225.0, 11150.0), (4, 7375.0, 11300.0), (5, 7500.0, 11200.0)] ... 
+  
+ Duration: 651.9036366939545 
+ Baseline Fitness: 1247694.814723638 
+ Solver Fitness: 272113.3025558654 
+ Best Fitness: 107217.0 
+ -------------------------------------------------- 
+
+2024-10-09 04:01:13,019 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/rat195.tsp 
+ Name: rat195 
+ Type: TSP 
+ Comment: Rattled grid (Pulleyblank) 
+ Dimension: 195 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 3.0, 12.0), (2, 17.0, 12.0), (3, 23.0, 9.0), (4, 34.0, 11.0), (5, 47.0, 11.0)] ... 
+  
+ Duration: 268.4980778694153 
+ Baseline Fitness: 15165.233548903092 
+ Solver Fitness: 4939.6317111970175 
+ Best Fitness: 2323.0 
+ -------------------------------------------------- 
+
+2024-10-09 04:03:10,879 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/rd100.tsp 
+ Name: rd100 
+ Type: TSP 
+ Comment: 100-city random TSP (Reinelt) 
+ Dimension: 100 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 143.775, 862.63), (2, 881.78, 1.18319), (3, 545.244, 735.005), (4, 502.813, 876.001), (5, 204.876, 345.225)] ... 
+  
+ Duration: 136.66832542419434 
+ Baseline Fitness: 27948.63006683552 
+ Solver Fitness: 4552.72376632204 
+ Best Fitness: 7910.0 
+ -------------------------------------------------- 
+
+2024-10-09 04:04:45,235 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/pcb1173.tsp 
+ Name: pcb1173 
+ Type: TSP 
+ Comment: Drilling problem (Juenger/Reinelt) 
+ Dimension: 1173 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 2017.0, 663.0), (2, 2017.0, 703.0), (3, 2018.0, 741.0), (4, 2017.0, 779.0), (5, 2016.0, 817.0)] ... 
+  
+ Duration: 2038.876485824585 
+ Baseline Fitness: 861757.9994066261 
+ Solver Fitness: 375251.0205438241 
+ Best Fitness: 56892.0 
+ -------------------------------------------------- 
+
+2024-10-09 04:05:46,569 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/nrw1379.tsp 
+ Name: nrw1379 
+ Type: TSP 
+ Comment: 1379 Orte in Nordrhein-Westfalen (Bachem/Wottawa) 
+ Dimension: 1379 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 2918.0, 6528.0), (2, 2925.0, 6597.0), (3, 2926.0, 6609.0), (4, 2927.0, 6312.0), (5, 2930.0, 6328.0)] ... 
+  
+ Duration: 2513.331027507782 
+ Baseline Fitness: 1095172.7625553769 
+ Solver Fitness: 379500.96559481975 
+ Best Fitness: 56638.0 
+ -------------------------------------------------- 
+
+2024-10-09 04:10:57,928 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/rd400.tsp 
+ Name: rd400 
+ Type: TSP 
+ Comment: 400-city random TSP (Reinelt) 
+ Dimension: 400 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 435.841, 587.522), (2, 602.539, 801.704), (3, 861.563, 954.019), (4, 444.217, 553.301), (5, 796.042, 796.519)] ... 
+  
+ Duration: 584.296046257019 
+ Baseline Fitness: 139147.64140070972 
+ Solver Fitness: 53665.975091269116 
+ Best Fitness: 15281.0 
+ -------------------------------------------------- 
+
+2024-10-09 04:13:31,685 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/rat575.tsp 
+ Name: rat575 
+ Type: TSP 
+ Comment: Rattled grid (Pulleyblank) 
+ Dimension: 575 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 6.0, 18.0), (2, 11.0, 0.0), (3, 24.0, 6.0), (4, 36.0, 13.0), (5, 41.0, 19.0)] ... 
+  
+ Duration: 878.8267805576324 
+ Baseline Fitness: 117547.17205806836 
+ Solver Fitness: 48153.62181900489 
+ Best Fitness: 6773.0 
+ -------------------------------------------------- 
+
+2024-10-09 04:18:59,436 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/d2103.tsp 
+ Name: d2103 
+ Type: TSP 
+ Comment: Drilling problem (Reinelt) 
+ Dimension: 2103 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 0.0, 0.0), (2, 691.1, 856.7), (3, 741.9, 856.7), (4, 792.7, 856.7), (5, 868.9, 863.1)] ... 
+  
+ Duration: 4397.341256380081 
+ Baseline Fitness: 2789462.4945592177 
+ Solver Fitness: 1320460.3769371153 
+ Best Fitness: 80450.0 
+ -------------------------------------------------- 
+
+2024-10-09 04:20:01,407 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/pr1002.tsp 
+ Name: pr1002 
+ Type: TSP 
+ Comment: 1002-city problem (Padberg/Rinaldi) 
+ Dimension: 1002 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 1150.0, 4000.0), (2, 1050.0, 2750.0), (3, 1150.0, 2250.0), (4, 1250.0, 2050.0), (5, 1350.0, 2350.0)] ... 
+  
+ Duration: 1689.3533444404602 
+ Baseline Fitness: 4443249.117803834 
+ Solver Fitness: 1279512.3364604064 
+ Best Fitness: 259045.0 
+ -------------------------------------------------- 
+
+2024-10-09 04:20:20,513 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/rat783.tsp 
+ Name: rat783 
+ Type: TSP 
+ Comment: Rattled grid (Pulleyblank) 
+ Dimension: 783 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 13.0, 6.0), (2, 49.0, 6.0), (3, 105.0, 6.0), (4, 239.0, 6.0), (5, 110.0, 7.0)] ... 
+  
+ Duration: 1264.5373237133026 
+ Baseline Fitness: 216759.46896130932 
+ Solver Fitness: 87895.13610732237 
+ Best Fitness: 8806.0 
+ -------------------------------------------------- 
+
+2024-10-09 04:21:36,018 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/st70.tsp 
+ Name: st70 
+ Type: TSP 
+ Comment: 70-city problem (Smith/Thompson) 
+ Dimension: 70 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 64.0, 96.0), (2, 80.0, 39.0), (3, 69.0, 23.0), (4, 72.0, 42.0), (5, 48.0, 67.0)] ... 
+  
+ Duration: 94.48136305809021 
+ Baseline Fitness: 2587.0889822976183 
+ Solver Fitness: 725.5396081575615 
+ Best Fitness: 675.0 
+ -------------------------------------------------- 
+
+2024-10-09 04:25:30,507 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/ts225.tsp 
+ Name: ts225 
+ Type: TSP 
+ Comment: 225-city problem (Juenger,Raecke,Tschoecke) 
+ Dimension: 225 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 4000.0, 4000.0), (2, 4000.0, 4500.0), (3, 4000.0, 5000.0), (4, 4000.0, 5500.0), (5, 4000.0, 6000.0)] ... 
+  
+ Duration: 309.6768386363983 
+ Baseline Fitness: 895617.232362237 
+ Solver Fitness: 115414.91343555419 
+ Best Fitness: 126643.0 
+ -------------------------------------------------- 
+
+2024-10-09 04:26:47,414 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/tsp225.tsp 
+ Name: tsp225 
+ Type: TSP 
+ Comment: A TSP problem (Reinelt) 
+ Dimension: 225 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 155.42, 150.65), (2, 375.92, 164.65), (3, 183.92, 150.65), (4, 205.42, 150.65), (5, 205.42, 171.65)] ... 
+  
+ Duration: 311.0789852142334 
+ Baseline Fitness: 34503.29855285014 
+ Solver Fitness: 8883.591354217304 
+ Best Fitness: 3916.0 
+ -------------------------------------------------- 
+
+2024-10-09 04:29:06,256 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/u159.tsp 
+ Name: u159 
+ Type: TSP 
+ Comment: Drilling problem (Reinelt) 
+ Dimension: 159 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 3300.0, 2200.0), (2, 3500.0, 2900.0), (3, 3300.0, 2900.0), (4, 3500.0, 3100.0), (5, 3500.0, 3300.0)] ... 
+  
+ Duration: 215.4875898361206 
+ Baseline Fitness: 294567.0717845129 
+ Solver Fitness: 26075.96353088533 
+ Best Fitness: 42080.0 
+ -------------------------------------------------- 
+
+2024-10-09 04:41:25,650 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/u574.tsp 
+ Name: u574 
+ Type: TSP 
+ Comment: Drilling problem (Reinelt) 
+ Dimension: 574 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 629.57, 680.86), (2, 756.5, 772.7), (3, 781.89, 772.7), (4, 807.3, 772.7), (5, 1010.51, 899.71)] ... 
+  
+ Duration: 877.3176870346069 
+ Baseline Fitness: 536242.409277767 
+ Solver Fitness: 157641.88982659634 
+ Best Fitness: 36905.0 
+ -------------------------------------------------- 
+
+2024-10-09 04:42:17,037 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/rl1304.tsp 
+ Name: rl1304 
+ Type: TSP 
+ Comment: 1304-city TSP (Reinelt) 
+ Dimension: 1304 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 15440.0, 8888.0), (2, 15440.0, 9328.0), (3, 15440.0, 9768.0), (4, 15440.0, 11264.0), (5, 15440.0, 13288.0)] ... 
+  
+ Duration: 2344.0810689926147 
+ Baseline Fitness: 6961472.841696094 
+ Solver Fitness: 2503262.9019875387 
+ Best Fitness: 252948.0 
+ -------------------------------------------------- 
+
+2024-10-09 04:44:21,577 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/rl1323.tsp 
+ Name: rl1323 
+ Type: TSP 
+ Comment: 1323-city TSP (Reinelt) 
+ Dimension: 1323 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 18192.0, 8954.0), (2, 18192.0, 9856.0), (3, 18192.0, 11319.0), (4, 18272.0, 8624.0), (5, 18416.0, 7348.0)] ... 
+  
+ Duration: 2374.2619919776917 
+ Baseline Fitness: 7073014.877494118 
+ Solver Fitness: 2614110.7988609923 
+ Best Fitness: 270199.0 
+ -------------------------------------------------- 
+
+2024-10-09 04:48:16,505 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/u724.tsp 
+ Name: u724 
+ Type: TSP 
+ Comment: Drilling problem (Reinelt) 
+ Dimension: 724 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 605.61, 796.6), (2, 681.8, 1025.2), (3, 605.61, 1152.21), (4, 605.61, 1253.81), (5, 656.41, 1736.41)] ... 
+  
+ Duration: 1149.1073725223541 
+ Baseline Fitness: 702080.0546015607 
+ Solver Fitness: 231978.67684023659 
+ Best Fitness: 41910.0 
+ -------------------------------------------------- 
+
+2024-10-09 05:08:56,114 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/rl1889.tsp 
+ Name: rl1889 
+ Type: TSP 
+ Comment: 1889-city TSP (Reinelt) 
+ Dimension: 1889 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 1488.0, 14146.0), (2, 1520.0, 4180.0), (3, 1520.0, 8404.0), (4, 1520.0, 9262.0), (5, 1520.0, 11792.0)] ... 
+  
+ Duration: 3786.400766849518 
+ Baseline Fitness: 11251122.597924523 
+ Solver Fitness: 4722089.890830106 
+ Best Fitness: 316536.0 
+ -------------------------------------------------- 
+
+2024-10-09 05:11:32,146 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/u1060.tsp 
+ Name: u1060 
+ Type: TSP 
+ Comment: Drilling problem problem (Reinelt) 
+ Dimension: 1060 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 4003.2, 2997.9), (2, 3602.88, 2498.25), (3, 3953.16, 2848.0), (4, 4153.31, 2947.93), (5, 4353.48, 2748.07)] ... 
+  
+ Duration: 1804.7739396095276 
+ Baseline Fitness: 5553001.036512106 
+ Solver Fitness: 1735971.3415606425 
+ Best Fitness: 224094.0 
+ -------------------------------------------------- 
+
+2024-10-09 05:19:10,298 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/pr2392.tsp 
+ Name: pr2392 
+ Type: TSP 
+ Comment: 2392-city problem (Padberg/Rinaldi) 
+ Dimension: 2392 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 1639.0, 2156.0), (2, 1875.0, 2925.0), (3, 2150.0, 2925.0), (4, 2425.0, 2925.0), (5, 2525.0, 2675.0)] ... 
+  
+ Duration: 5205.199978351593 
+ Baseline Fitness: 8062611.395289973 
+ Solver Fitness: 3611210.2446400556 
+ Best Fitness: 378032.0 
+ -------------------------------------------------- 
+
+2024-10-09 05:26:23,906 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/u1432.tsp 
+ Name: u1432 
+ Type: TSP 
+ Comment: Drilling problem (Reinelt) 
+ Dimension: 1432 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 3900.0, 5500.0), (2, 4000.0, 5400.0), (3, 3900.0, 5300.0), (4, 3900.0, 5400.0), (5, 3800.0, 5500.0)] ... 
+  
+ Duration: 2644.5906834602356 
+ Baseline Fitness: 2821402.102036396 
+ Solver Fitness: 1069048.210135543 
+ Best Fitness: 152970.0 
+ -------------------------------------------------- 
+
+2024-10-09 05:32:22,310 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/pcb3038.tsp 
+ Name: pcb3038 
+ Type: TSP 
+ Comment: Drilling problem (Junger/Reinelt) 
+ Dimension: 3038 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 2830.0, 40.0), (2, 2830.0, 77.0), (3, 2830.0, 114.0), (4, 2831.0, 155.0), (5, 2830.0, 194.0)] ... 
+  
+ Duration: 7254.77685213089 
+ Baseline Fitness: 4233518.9516796 
+ Solver Fitness: 2105285.093214014 
+ Best Fitness: 137694.0 
+ -------------------------------------------------- 
+
+2024-10-09 05:43:32,961 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/u1817.tsp 
+ Name: u1817 
+ Type: TSP 
+ Comment: Drilling problem (Reinelt) 
+ Dimension: 1817 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 651.19, 2244.39), (2, 676.6, 2168.2), (3, 701.99, 2168.2), (4, 727.4, 2168.2), (5, 752.79, 2168.2)] ... 
+  
+ Duration: 3548.624481678009 
+ Baseline Fitness: 2070691.5811654367 
+ Solver Fitness: 932386.078735103 
+ Best Fitness: 57201.0 
+ -------------------------------------------------- 
+
+2024-10-09 05:49:42,050 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/vm1084.tsp 
+ Name: vm1084 
+ Type: TSP 
+ Comment: 1084-city problem (Reinelt) 
+ Dimension: 1084 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 4080.0, 5236.0), (2, 4688.0, 6468.0), (3, 5296.0, 9218.0), (4, 9392.0, 10956.0), (5, 9536.0, 9944.0)] ... 
+  
+ Duration: 1830.0803935527802 
+ Baseline Fitness: 6340213.111876631 
+ Solver Fitness: 2076660.3484178134 
+ Best Fitness: 239297.0 
+ -------------------------------------------------- 
+
+2024-10-09 05:55:27,371 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/fl3795.tsp 
+ Name: fl3795 
+ Type: TSP 
+ Comment: Drilling problem (Reinelt) 
+ Dimension: 3795 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 2104.61, 1968.35), (2, 1401.1, 1968.35), (3, 295.591, 1968.35), (4, 1235.57, 1956.54), (5, 1347.9, 1962.44)] ... 
+  
+ Duration: 9970.716495275497 
+ Baseline Fitness: 5289704.65586775 
+ Solver Fitness: 3281270.9992771354 
+ Best Fitness: 28772.0 
+ -------------------------------------------------- 
+
+2024-10-09 06:01:48,659 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/u2152.tsp 
+ Name: u2152 
+ Type: TSP 
+ Comment: Drilling problem (Reinelt) 
+ Dimension: 2152 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 719.9, 733.11), (2, 719.9, 707.7), (3, 758.01, 707.7), (4, 758.01, 733.11), (5, 808.81, 796.6)] ... 
+  
+ Duration: 4409.07510137558 
+ Baseline Fitness: 2613499.305851627 
+ Solver Fitness: 1225393.4110835332 
+ Best Fitness: 64253.0 
+ -------------------------------------------------- 
+
+2024-10-09 06:19:30,492 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/vm1748.tsp 
+ Name: vm1748 
+ Type: TSP 
+ Comment: 1784-city problem (Reinelt) 
+ Dimension: 1748 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 15440.0, 11286.0), (2, 16688.0, 8228.0), (3, 17936.0, 6116.0), (4, 6320.0, 12144.0), (5, 6400.0, 9680.0)] ... 
+  
+ Duration: 3184.135464668274 
+ Baseline Fitness: 10572665.739240807 
+ Solver Fitness: 4292899.300614937 
+ Best Fitness: 336556.0 
+ -------------------------------------------------- 
+
+2024-10-09 06:26:59,583 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/u2319.tsp 
+ Name: u2319 
+ Type: TSP 
+ Comment: Drilling problem (Reinelt) 
+ Dimension: 2319 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 3400.0, 2500.0), (2, 3500.0, 2500.0), (3, 3600.0, 2400.0), (4, 3700.0, 2500.0), (5, 3700.0, 2400.0)] ... 
+  
+ Duration: 4680.222069263458 
+ Baseline Fitness: 4521646.018875276 
+ Solver Fitness: 2309618.7592367204 
+ Best Fitness: 234256.0 
+ -------------------------------------------------- 
+
+2024-10-09 06:36:37,952 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/fnl4461.tsp 
+ Name: fnl4461 
+ Type: TSP 
+ Comment: Die 5 neuen Laender Deutschlands (Ex-DDR) (Bachem/Wottawa) 
+ Dimension: 4461 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 5639.0, 6909.0), (2, 5652.0, 6142.0), (3, 5654.0, 6101.0), (4, 5659.0, 6910.0), (5, 5659.0, 6920.0)] ... 
+  
+ Duration: 12438.804860830307 
+ Baseline Fitness: 7669922.949191971 
+ Solver Fitness: 4247991.291624671 
+ Best Fitness: 182566.0 
+ -------------------------------------------------- 
+
+2024-10-09 09:07:17,889 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/rl5915.tsp 
+ Name: rl5915 
+ Type: TSP 
+ Comment: 5915-city TSP (Reinelt) 
+ Dimension: 5915 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 18192.0, 8954.0), (2, 18192.0, 9856.0), (3, 18192.0, 11319.0), (4, 18272.0, 8624.0), (5, 18416.0, 7348.0)] ... 
+  
+ Duration: 17771.855132818222 
+ Baseline Fitness: 34911055.73437708 
+ Solver Fitness: 24592618.68226117 
+ Best Fitness: 565530.0 
+ -------------------------------------------------- 
+
+2024-10-09 09:11:27,832 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/rl5934.tsp 
+ Name: rl5934 
+ Type: TSP 
+ Comment: 5934-city TSP (Reinelt) 
+ Dimension: 5934 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 1488.0, 14146.0), (2, 1520.0, 4180.0), (3, 1520.0, 8404.0), (4, 1520.0, 9262.0), (5, 1520.0, 11792.0)] ... 
+  
+ Duration: 17868.20071363449 
+ Baseline Fitness: 36211515.59430895 
+ Solver Fitness: 25150578.516194932 
+ Best Fitness: 556045.0 
+ -------------------------------------------------- 
+
+2024-10-09 20:33:22,733 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/rl11849.tsp 
+ Name: rl11849 
+ Type: TSP 
+ Comment: 11849-city TSP (Reinelt) 
+ Dimension: 11849 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 7840.0, 4708.0), (2, 15408.0, 7876.0), (3, 11915.0, 4774.0), (4, 3280.0, 12826.0), (5, 9552.0, 9614.0)] ... 
+  
+ Duration: 58444.40727496147 
+ Baseline Fitness: 86545237.36301312 
+ Solver Fitness: 72713947.92429131 
+ Best Fitness: 923288.0 
+ -------------------------------------------------- 
+
+2024-10-10 01:02:01,238 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/brd14051.tsp 
+ Name: brd14051 
+ Type: TSP 
+ Comment: BR Deutschland in den Grenzen von 1989 (Bachem/Wottawa) 
+ Dimension: 14051 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 2918.0, 6528.0), (2, 2925.0, 6597.0), (3, 2926.0, 6609.0), (4, 2927.0, 6312.0), (5, 2930.0, 6328.0)] ... 
+  
+ Duration: 78955.38699555397 
+ Baseline Fitness: 67689643.3648872 
+ Solver Fitness: 53494780.17606337 
+ Best Fitness: 469385.0 
+ -------------------------------------------------- 
+
+2024-10-10 01:22:04,192 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/usa13509.tsp 
+ Name: usa13509 
+ Type: TSP 
+ Comment: The file US.lat-long.Z can be found in the directory /doc/geography. 
+ Dimension: 13509 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 245552.778, 817827.778), (2, 247133.333, 810905.556), (3, 247205.556, 810188.889), (4, 249238.889, 806280.556), (5, 250111.111, 805152.778)] ... 
+  
+ Duration: 72611.15135574341 
+ Baseline Fitness: 704083663.2751288 
+ Solver Fitness: 559427987.7239467 
+ Best Fitness: 19982859.0 
+ -------------------------------------------------- 
+
+2024-10-10 04:09:11,434 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/d15112.tsp 
+ Name: d15112 
+ Type: TSP 
+ Comment: Deutschland-Problem (A.Rohe) 
+ Dimension: 15112 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 5826.0, 1350.0), (2, 413.0, 10751.0), (3, 8419.0, 4442.0), (4, 4317.0, 8968.0), (5, 7196.0, 20891.0)] ... 
+  
+ Duration: 90192.25481200218 
+ Baseline Fitness: 116264484.49240102 
+ Solver Fitness: 100280683.98610495 
+ Best Fitness: 1573084.0 
+ -------------------------------------------------- 
+
+2024-10-10 14:17:56,331 - INFO - 
+ -------------------------------------------------- 
+ File: D:/CloudFile/SynologyDrive/Don/GitHub Source Code/CSI5137B-AI-Enabled-Software-Verf.-Test/A1/Assets/tsplib/d18512.tsp 
+ Name: d18512 
+ Type: TSP 
+ Comment: Bundesrepublik Deutschland (mit Ex-DDR) (Bachem/Wottawa) 
+ Dimension: 18512 
+ Edge Weight Type: EUC_2D 
+ Node Coordinates: [(1, 2918.0, 6528.0), (2, 2925.0, 6597.0), (3, 2926.0, 6609.0), (4, 2927.0, 6312.0), (5, 2930.0, 6328.0)] ... 
+  
+ Duration: 126711.38962459564 
+ Baseline Fitness: 117321408.8462232 
+ Solver Fitness: 97572228.73336558 
+ Best Fitness: 645238.0 
+ -------------------------------------------------- 
+
