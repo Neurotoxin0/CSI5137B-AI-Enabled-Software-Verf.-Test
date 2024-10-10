@@ -264,7 +264,7 @@ if __name__ == '__main__':
     if not debug:   
         if len(tsp_instances) == 1:
             tsp_instance = tsp_instances[0]
-            print(f"{tsp_instance.total_cost:.2f}")
+            print(f"{tsp_instance.solver_fitness:.2f}")
             save_solution_to_csv(tsp_instance.solution, f'solution.csv')
         else:
             for tsp_instance in tsp_instances: 
