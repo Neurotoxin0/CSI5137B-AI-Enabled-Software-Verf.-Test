@@ -2,15 +2,15 @@
 
 ## Overview
 
-This project provides a tool to solve the Travelling Salesman Problem (TSP) using a Genetic Algorithm (GA). It includes functionalities to load native TSP file(s), run the genetic algorithm, output the solution(s) and visualize the result(s) with random search (baseline) and best known solution (if available). 
+This project provides a tool to solve the Travelling Salesman Problem (TSP) using a Genetic Algorithm (GA). It includes functionalities to load native TSP file(s), run the genetic algorithm with concurrent support, output the solution(s) and visualize the result(s) with random search (baseline) and best known solution (if available). 
 
 The project also includes an optimizer to fine-tune GA parameters (turned off and use pre-set hyper-parameters by default).
 
 ## Structure
 
-1. **main.py**: The entry point to load TSP file(s), optionally optimize parameters, solve and output instance(s).
+1. **main.py**: The entry point to load TSP file(s), optionally optimize parameters, solve and output result(s).
 2. **tsp_loader.py**: Handles loading and validation of TSP file(s).
-3. **tsp_solver.py**: Implements the genetic algorithm and parameter optimizer.
+3. **tsp_solver.py**: Implements the genetic algorithm and its parameter optimizer, as well as random search algorithm.
 
 ## How to Run
 
@@ -46,7 +46,7 @@ The project also includes an optimizer to fine-tune GA parameters (turned off an
 
 ## Logging
 
-- The optimizer logs its progress to `ga_optimizer.log`.
+- The optimizer and debug mode logs its progress to `ga_optimizer.log` and `main.log`.
 
 ## Example
 
@@ -63,4 +63,4 @@ The project also includes an optimizer to fine-tune GA parameters (turned off an
 
 - `best_params = {'popsize': 100, 'mutation_rate': 0.05, 'generations': 500, 'tournament_size': 7}`   
    - Manually set based on common practice.
-   - Estimated Run Time: `303.37` seconds (based on the `a280.tsp` file, which has 280 nodes (DIMENSION)).
+   - Estimated Run Time: ~300 seconds (based on the `a280.tsp` file, which has 280 nodes (DIMENSION)).
