@@ -3,6 +3,7 @@ package org.avmframework.examples;
 import org.apache.commons.math3.random.MersenneTwister;
 import org.apache.commons.math3.random.RandomGenerator;
 import org.avmframework.AlternatingVariableMethod;
+import org.avmframework.HillClimbing;
 import org.avmframework.Monitor;
 import org.avmframework.TerminationPolicy;
 import org.avmframework.Vector;
@@ -57,12 +58,19 @@ public class GenerateInputData {
     RandomGenerator randomGenerator = new MersenneTwister();
     Initializer initializer = new RandomInitializer(randomGenerator);
 
+    /*
     // set up the AlternatingVariableMethod
     AlternatingVariableMethod avm = new AlternatingVariableMethod(
         localSearch, terminationPolicy, initializer);
 
     // perform the search
     Monitor monitor = avm.search(vector, objFun);
+    */
+
+    // set up the HillClimbing Method
+    HillClimbing hillClimbing = new HillClimbing(localSearch, terminationPolicy, initializer);
+    Monitor monitor = hillClimbing.search(vector, objFun);
+
 
     // output the results
     System.out.println("Best solution: " + monitor.getBestVector());
