@@ -8,7 +8,7 @@ import org.avmframework.objective.ObjectiveValue;
 public class HillClimbingSearch extends LocalSearch {
 
     @Override
-    protected void performSearch(Vector vector, ObjectiveFunction objFun) throws TerminationException {
+    protected void performSearch() throws TerminationException {
         ObjectiveValue currentValue = objFun.evaluate(vector);
         ObjectiveValue bestValue = currentValue;
         int maxIterations = 100; // Set a maximum iteration limit
@@ -33,9 +33,9 @@ public class HillClimbingSearch extends LocalSearch {
 
     // Method to generate a neighboring solution by making a small change to the current solution
     private Vector generateNeighbor(Vector vector) {
-        Vector neighbor = new Vector(vector); // Create a copy of the current vector
+        Vector neighbor = vector.deepCopy(); // Create a copy of the current vector
         int indexToModify = (int) (Math.random() * vector.size()); // Randomly pick an index to modify
-        neighbor.getVariable(indexToModify).randomlyMutate(); // Apply a small mutation at the chosen index
+        neighbor.getVariable(indexToModify).mutate(); // Apply a small mutation at the chosen index
         return neighbor;
     }
 }
