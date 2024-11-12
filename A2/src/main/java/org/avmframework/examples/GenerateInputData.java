@@ -3,7 +3,6 @@ package org.avmframework.examples;
 import org.apache.commons.math3.random.MersenneTwister;
 import org.apache.commons.math3.random.RandomGenerator;
 import org.avmframework.AlternatingVariableMethod;
-import org.avmframework.HillClimbing;
 import org.avmframework.Monitor;
 import org.avmframework.TerminationPolicy;
 import org.avmframework.Vector;
@@ -14,6 +13,12 @@ import org.avmframework.initialization.Initializer;
 import org.avmframework.initialization.RandomInitializer;
 import org.avmframework.localsearch.LocalSearch;
 import org.avmframework.objective.ObjectiveFunction;
+
+import org.avmframework.localsearch.GeometricSearch;
+import org.avmframework.localsearch.HillClimbingSearch;
+import org.avmframework.localsearch.IteratedPatternSearch;
+import org.avmframework.localsearch.LatticeSearch;
+
 
 public class GenerateInputData {
 
@@ -28,7 +33,7 @@ public class GenerateInputData {
 
   // CHANGE THE FOLLOWING CONSTANTS TO EXPLORE THEIR EFFECT ON THE SEARCH:
   // - search constants
-  static final String SEARCH_NAME = "IteratedPatternSearch"; // can also be set at the command line
+  static final String SEARCH_NAME = "HillClimbingSearch"; // can also be set at the command line
   static final int MAX_EVALUATIONS = 100000;
 
   public static void main(String[] args) {
@@ -58,19 +63,12 @@ public class GenerateInputData {
     RandomGenerator randomGenerator = new MersenneTwister();
     Initializer initializer = new RandomInitializer(randomGenerator);
 
-    /*
     // set up the AlternatingVariableMethod
     AlternatingVariableMethod avm = new AlternatingVariableMethod(
         localSearch, terminationPolicy, initializer);
 
     // perform the search
     Monitor monitor = avm.search(vector, objFun);
-    */
-
-    // set up the HillClimbing Method
-    HillClimbing hillClimbing = new HillClimbing(localSearch, terminationPolicy, initializer);
-    Monitor monitor = hillClimbing.search(vector, objFun);
-
 
     // output the results
     System.out.println("Best solution: " + monitor.getBestVector());
@@ -140,7 +138,20 @@ public class GenerateInputData {
     }
 
     public LocalSearch parseSearchParam(String defaultSearch) {
-      return super.parseSearchParam(SEARCH_PARAM_INDEX, defaultSearch);
+      String searchName = defaultSearch;
+      if (args.length > SEARCH_PARAM_INDEX) {
+        searchName = args[SEARCH_PARAM_INDEX];
+      }
+
+      switch (searchName)
+      {
+        case "GeometricSearch":       return new GeometricSearch();
+        case "HillClimbing":          return new HillClimbingSearch();
+        case "IteratedPatternSearch": return new IteratedPatternSearch();
+        case "LatticeSearch":         return new LatticeSearch();
+
+        default:                      return new HillClimbingSearch();
+      }
     }
 
     void wrongNumberOfArgumentsError() {
