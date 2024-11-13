@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="LatticeSearch" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="org.avmframework.examples.GenerateInputData" />
+    <module name="avmf" />
+    <option name="PROGRAM_PARAMETERS" value="Calendar 1T LatticeSearch" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="org.avmframework.examples.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
