@@ -33,7 +33,7 @@ public class GenerateInputData {
 
   // CHANGE THE FOLLOWING CONSTANTS TO EXPLORE THEIR EFFECT ON THE SEARCH:
   // - search constants
-  static final String SEARCH_NAME = "HillClimbingSearch"; // can also be set at the command line
+  static final String SEARCH_NAME = "HillClimbingSearch"; // Set HillClimbingSearch as default
   static final int MAX_EVALUATIONS = 100000;
 
   public static void main(String[] args) {
@@ -80,6 +80,7 @@ public class GenerateInputData {
             + monitor.getNumUniqueEvaluations()
             + ")");
     System.out.println("Running time: " + monitor.getRunningTime() + "ms");
+    System.out.println("Search: " + localSearch.getClass().getSimpleName());
   }
 
   static class GenerateInputDataArgsParser extends ArgsParser {
@@ -137,11 +138,10 @@ public class GenerateInputData {
       return branch;
     }
 
-    public LocalSearch parseSearchParam(String defaultSearch) {
+    public LocalSearch parseSearchParam(String defaultSearch)
+    {
       String searchName = defaultSearch;
-      if (args.length > SEARCH_PARAM_INDEX) {
-        searchName = args[SEARCH_PARAM_INDEX];
-      }
+      if (args.length > SEARCH_PARAM_INDEX) { searchName = args[SEARCH_PARAM_INDEX]; }
 
       switch (searchName)
       {
