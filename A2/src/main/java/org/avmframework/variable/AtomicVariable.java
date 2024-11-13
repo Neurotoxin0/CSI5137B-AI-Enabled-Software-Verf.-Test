@@ -83,4 +83,10 @@ public abstract class AtomicVariable implements Variable {
     result = 31 * result + value;
     return result;
   }
+
+  public void mutate() {
+    int mutationRange = Math.max(1, (max - min) / 10); // Adjust mutation range as needed
+    int mutation = (int) (Math.random() * (2 * mutationRange + 1)) - mutationRange; // Random mutation within range
+    setValue(value + mutation); // Ensure it respects min/max bounds with setValue
+  }
 }

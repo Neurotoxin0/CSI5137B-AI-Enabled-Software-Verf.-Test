@@ -121,4 +121,12 @@ public class StringVariable extends VectorVariable {
   public String toString() {
     return "\"" + asString() + "\"";
   }
+
+  @Override
+  public void mutate() {
+    if (size > 0) {
+      int indexToMutate = (int) (Math.random() * size); // Pick a random character position
+      getVariable(indexToMutate).mutate(); // Call mutate() on the CharacterVariable at that position
+    }
+  }
 }

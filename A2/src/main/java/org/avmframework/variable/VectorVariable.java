@@ -62,4 +62,12 @@ public abstract class VectorVariable extends AbstractVector implements Variable 
     result = 31 * result + size;
     return result;
   }
+
+  @Override
+  public void mutate() {
+    if (variables.size() > 0) {
+      int indexToMutate = (int) (Math.random() * variables.size());
+      variables.get(indexToMutate).mutate(); // Call mutate() on the randomly chosen Variable
+    }
+  }
 }

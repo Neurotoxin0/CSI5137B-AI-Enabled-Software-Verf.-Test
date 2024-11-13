@@ -8,5 +8,7 @@ public interface Variable {
 
   void setValueToRandom(RandomGenerator randomGenerator);
 
+  void mutate();
+
   Variable deepCopy();
 }

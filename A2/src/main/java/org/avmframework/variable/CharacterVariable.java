@@ -32,4 +32,9 @@ public class CharacterVariable extends AtomicVariable {
   public String toString() {
     return "" + asChar();
   }
+
+  @Override
+  public void mutate() {
+    super.mutate(); // Use the base class mutation
+  }
 }
