@@ -1,0 +1,4 @@
+Truck Type (length in m),Inner Size (m^2),Weight Capacity (kg),Cost Per KM,Speed (km/h)
+16.5,16.1*2.5,10000,3,40
+12.5,12.1*2.5,5000,2,40
+9.6,9.1*2.3,2000,1,40
