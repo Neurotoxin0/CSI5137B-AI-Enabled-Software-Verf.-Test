@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from general import *
+from models.general import *
 
 
 # SearchAlgorithm class (abstract base class)

@@ -1,5 +1,5 @@
-from general import *
-from prototype import SearchAlgorithm
+from models.general import *
+from models.prototype import SearchAlgorithm
 
 
 # HillClimbing Class (inherits from SearchAlgorithm)
