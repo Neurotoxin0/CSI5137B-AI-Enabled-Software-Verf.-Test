@@ -531,18 +531,18 @@ class DeliveryProblem:
             # First, try to assign this order to an existing truck
             for truck in self.trucks:
                 if truck.can_load(order):
-                    self.assign_order_to_truck(truck, order)
+                    self.__assign_order_to_truck(truck, order)
                     assigned = True
                     break
 
             # If no truck can carry the order, select the appropriate truck type
             if not assigned:
-                selected_truck = self.select_appropriate_truck_for_order(order)
-                self.assign_order_to_truck(selected_truck, order)
+                selected_truck = self.__select_truck_for_order(order)
+                self.__assign_order_to_truck(selected_truck, order)
                 self.trucks.append(selected_truck)
     
     
-    def assign_order_to_truck(self, truck: 'Truck', order: 'Order') -> None:
+    def __assign_order_to_truck(self, truck: 'Truck', order: 'Order') -> None:
         """
         Assign the order to a truck and create a route for it.
 
@@ -558,10 +558,11 @@ class DeliveryProblem:
         self.routes.append(route)
 
 
-    def select_appropriate_truck_for_order(self, order: 'Order') -> 'Truck':
+    def __select_truck_for_order(self, order: 'Order') -> 'Truck':
         """
-        Select the appropriate truck type from the available options to carry the order.
-        The truck type is selected based on the order's weight and area.
+        Select a truck type from the available options to carry the order.
+        No optimization is done here, just a simple selection based on the order's weight and area.
+        Further algorithms will handle the optimization.
 
         Parameters:
         order (Order): The order to assign to a truck.
@@ -569,16 +570,14 @@ class DeliveryProblem:
         Returns:
         Truck: The selected truck for the order.
         """
-        # TODO: Implement a better selection algorithm
         for truck in self.truck_types:
-            if truck.truck_capacity >= order.weight and truck.truck_size >= order.area:
-                return truck
+            if truck.can_load(order): return truck
 
         # If no truck can carry the order (shouldn't happen ideally), raise an error
         raise ValueError(f"No truck available to carry order {order.order_id}.")
 
 
-    def calculate_total_distance(self) -> float:
+    def __calculate_total_distance(self) -> float:
         """
         Calculate the total distance for all routes.
 
@@ -591,7 +590,7 @@ class DeliveryProblem:
         return sum(route.total_distance for route in self.routes)
 
     
-    def total_cost(self) -> float:
+    def __calculate_total_cost(self) -> float:
         """
         Calculate the total cost for all routes.
 
@@ -602,6 +601,44 @@ class DeliveryProblem:
         float: The total cost for all trucks.
         """
         return sum(route.total_cost for route in self.routes)
+    
+
+    def __calculate_capacity_utilization(self):
+        """
+        Generate a list of truck types with their respective capacity utilization percentage.
+
+        Returns:
+        list of dicts: Each dictionary contains the truck type and its utilization percentage.
+        """
+        utilization_data = []
+
+        # Iterate through all trucks and calculate utilization for each
+        for truck in self.trucks:
+            utilization_percentage = ((truck.truck_capacity - truck.remaining_capacity) / truck.truck_capacity) * 100
+            utilization_data.append({
+                #'Truck ID': truck.truck_id,
+                'Truck Type': truck.truck_type,
+                'Utilization Percentage': round(utilization_percentage, 2)
+            })
+        
+        return utilization_data
+    
+
+    def get_metrics(self) -> dict:
+        """
+        Get the metrics for the delivery problem, including total distance, cost, and number of trucks.
+
+        Parameters:
+        None
+
+        Returns:
+        dict: A dictionary containing the metrics.
+        """
+        return {
+            'Total Distance': self.__calculate_total_distance(),
+            'Total Cost': self.__calculate_total_cost(),
+            'Capacity Utilization': self.__calculate_capacity_utilization()
+        }
     
 
     def save_to_excel(self, filename: str) -> None:
