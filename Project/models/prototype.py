@@ -11,7 +11,7 @@ class SearchAlgorithm(ABC):
 
         Parameters:
         problem_instance (DeliveryProblem): The problem instance to be solved by the algorithm.
-
+        
         Returns:
         None
         """
@@ -20,70 +20,45 @@ class SearchAlgorithm(ABC):
 
 
     @abstractmethod
-    def initialize_population(self) -> None:
+    def search(self) -> 'DeliveryProblem':
         """
-        Initialize the population for the algorithm (for population-based algorithms).
+        Execute the algorithm to find the best solution.
 
         Parameters:
         None
 
         Returns:
-        None
+        DeliveryProblem: The best solution found by the algorithm.
         """
+        #return self.problem_instance
         pass
 
 
-    @abstractmethod
-    def select_parents(self) -> None:
-        """
-        Select the parents from the current population (for genetic algorithms).
-
-        Parameters:
-        None
-
-        Returns:
-        None
-        """
-        pass
-
-
-    @abstractmethod
-    def mutate(self) -> None:
-        """
-        Perform mutation on the selected individuals (for genetic algorithms).
-
-        Parameters:
-        None
-
-        Returns:
-        None
-        """
-        pass
-
-
-    @abstractmethod
-    def crossover(self) -> None:
-        """
-        Perform crossover between selected individuals (for genetic algorithms).
-
-        Parameters:
-        None
-
-        Returns:
-        None
-        """
-        pass
-
-
-    @abstractmethod
-    def evaluate_solution(self) -> float:
+    def _evaluate_solution(self, solution: 'DeliveryProblem') -> float:
         """
         Evaluate the quality of a solution.
 
         Parameters:
-        None
+        solution (DeliveryProblem): The solution to evaluate.
 
         Returns:
-        float: The fitness or cost associated with the solution.
+        float: The evaluation score (lower is better, typically cost, distance, or fuel).
+        """
+        total_cost = 0
+        for route in solution.routes:
+            total_cost += route.total_cost  # Assuming each route has a `total_cost` property
+        return total_cost
+
+
+    @abstractmethod
+    def _is_optimal(self, solution: 'DeliveryProblem') -> bool:
+        """
+        Check if the solution is optimal (based on some stopping condition).
+
+        Parameters:
+        solution (DeliveryProblem): The solution to check.
+
+        Returns:
+        bool: True if the solution is optimal, False otherwise.
         """
         pass
