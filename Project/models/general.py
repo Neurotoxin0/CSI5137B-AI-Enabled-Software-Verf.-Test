@@ -1,4 +1,4 @@
-import re, os, sys, uuid
+import copy, re, os, sys, uuid
 import pandas as pd
 from datetime import datetime
 from openpyxl.utils import get_column_letter
@@ -31,7 +31,7 @@ class DataLoader:
         self.distance_path = distance_path
 
         self.city_manager: 'CityManager' = self.__load_distances()
-        self.truck_types: list['Truck'] = self.__load_trucks()   # list of Truck objects examples that can be created for the problem
+        self.truck_types: list['Truck'] = frozenset(self.__load_trucks())   # list of Truck objects examples that can be created for the problem; frozen set to prevent modifications
         self.orders: list['Order'] = self.__load_orders()
 
     
@@ -304,6 +304,7 @@ class Truck:
         self.current_location = None
         self.cargo = []  # list of orders being carried
         self.remaining_capacity = self.truck_capacity
+        self.remaining_area = self.truck_size
 
     
     def __generate_truck_id(self) -> str:
@@ -332,6 +333,7 @@ class Truck:
         if self.can_load(order):
             self.cargo.append(order)
             self.remaining_capacity -= order.weight
+            self.remaining_area -= order.area
             return True
         return False
     
@@ -349,6 +351,7 @@ class Truck:
         if order in self.cargo:
             self.cargo.remove(order)
             self.remaining_capacity += order.weight
+            self.remaining_area += order.area
             return True
         return False
     
@@ -363,7 +366,7 @@ class Truck:
         Returns:
         bool: True if the truck can load the order, False otherwise.
         """
-        return (order.weight <= self.remaining_capacity) and (order.area <= self.truck_size)
+        return (order.weight <= self.remaining_capacity) and (order.area <= self.remaining_area)
 
 
 
@@ -445,14 +448,22 @@ class Route:
         self.orders = orders
         self.city_manager = city_manager
 
+        self.calculate_route_details()
+
+    
+    def __clr(self):
+        """
+        Clear the route details, used when change order of self.orders and recalculating the route.
+
+        Returns:
+        None
+        """
         self.total_distance = 0
         self.total_cost = 0
-        self.route = []  # Will hold the route from city to city
-
-        self.__calculate_route_details()
+        self.route = []
 
 
-    def __calculate_route_details(self) -> None:
+    def calculate_route_details(self) -> None:
         """
         Calculate the details of the route, including total distance, cost, and delivery time.
 
@@ -462,7 +473,10 @@ class Route:
         Returns:
         None
         """
-        if self.truck.current_location is not None: self.route.append(self.truck.current_location)  # Add the starting city
+        self.__clr()    # Clear the route details before recalculating
+        
+        # Add the current location of the truck to the route if it's not None
+        if self.truck.current_location is not None: self.route.append(self.truck.current_location)  
 
         # Add distances based on orders and calculate total details
         for order in self.orders:
@@ -472,7 +486,6 @@ class Route:
                 if self.truck.current_location != order.start_city:
                     distance_to_start = self.city_manager.distance_between_cities(city1=self.truck.current_location, city2=order.start_city)
                     self.total_distance += distance_to_start
-                    self.truck.current_location = order.start_city
                     self.route.append(order.start_city)
                 else:   # Truck is already at the start city
                     pass
@@ -480,7 +493,7 @@ class Route:
             # Now calculate the distance for the order's route
             distance_to_end = self.city_manager.distance_between_cities(city1=order.start_city, city2=order.end_city)
             self.total_distance += distance_to_end
-            self.truck.current_location = order.end_city
+            #self.truck.current_location = order.end_city  # ONLY CHANGE THE TRUCK LOCATION AFTER DELIVERY IS DONE
             self.route.append(order.end_city)
 
         # Calculate total cost and delivery time
@@ -508,7 +521,6 @@ class DeliveryProblem:
         self.truck_types = truck_types
         self.city_manager = city_manager
 
-        self.trucks = []
         self.routes = []
 
         self.__assign_orders_to_trucks()
@@ -529,33 +541,39 @@ class DeliveryProblem:
         for order in self.orders:
             assigned = False
             # First, try to assign this order to an existing truck
-            for truck in self.trucks:
-                if truck.can_load(order):
-                    self.__assign_order_to_truck(truck, order)
+            for route in self.routes:
+                if route.truck.can_load(order):
+                    self.__assign_order_to_truck(order, route=route)
                     assigned = True
                     break
 
             # If no truck can carry the order, select the appropriate truck type
             if not assigned:
                 selected_truck = self.__select_truck_for_order(order)
-                self.__assign_order_to_truck(selected_truck, order)
-                self.trucks.append(selected_truck)
+                self.__assign_order_to_truck(order, truck=selected_truck)
     
     
-    def __assign_order_to_truck(self, truck: 'Truck', order: 'Order') -> None:
+    def __assign_order_to_truck(self,  order: 'Order', *, route: 'Route' = None, truck: 'Truck' = None) -> None:
         """
         Assign the order to a truck and create a route for it.
+        Make sure to check if the truck can carry the order before calling this method.
 
         Parameters:
-        truck (Truck): The truck to assign the order to.
         order (Order): The order to assign.
+        route (Route): The route to add the order to, if not provided, a new route will be created.
+        truck (Truck): The truck to assign the order to, no need to provide if route is provided.
 
         Returns:
         None
         """
-        truck.load_cargo(order)
-        route = Route(truck, [order], self.city_manager)
-        self.routes.append(route)
+        if route is None:
+            truck.load_cargo(order)
+            route = Route(truck, [order], self.city_manager)
+            self.routes.append(route)
+        else:
+            route.orders.append(order)
+            route.truck.load_cargo(order)
+            route.calculate_route_details()
 
 
     def __select_truck_for_order(self, order: 'Order') -> 'Truck':
@@ -571,7 +589,7 @@ class DeliveryProblem:
         Truck: The selected truck for the order.
         """
         for truck in self.truck_types:
-            if truck.can_load(order): return truck
+            if truck.can_load(order): return copy.deepcopy(truck)
 
         # If no truck can carry the order (shouldn't happen ideally), raise an error
         raise ValueError(f"No truck available to carry order {order.order_id}.")
@@ -613,7 +631,8 @@ class DeliveryProblem:
         utilization_data = []
 
         # Iterate through all trucks and calculate utilization for each
-        for truck in self.trucks:
+        for route in self.routes:
+            truck = route.truck
             utilization_percentage = ((truck.truck_capacity - truck.remaining_capacity) / truck.truck_capacity) * 100
             utilization_data.append({
                 #'Truck ID': truck.truck_id,
@@ -700,4 +719,3 @@ class DeliveryProblem:
                 adjusted_width = (max_length + 2)  # Add some padding to make it look nicer
                 sheet.column_dimensions[column].width = adjusted_width
 
-        print(f"Data saved to {filename}")
