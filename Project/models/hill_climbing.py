@@ -5,6 +5,21 @@ from models.prototype import SearchAlgorithm
 
 
 class HillClimbing(SearchAlgorithm):
+    def __init__(self, problem_instance: 'DeliveryProblem', *, truck_types: list['Truck']) -> None:
+        """
+        Initialize the hill climbing search algorithm with the given problem instance.
+
+        Parameters:
+        problem_instance (DeliveryProblem): The problem instance to be solved by the algorithm.
+        truck_types (list): List of truck types available for the delivery problem.
+
+        Returns:
+        None
+        """
+        super().__init__(problem_instance)
+        self.truck_types = truck_types
+    
+    
     def search(self) -> None:
         """
         Perform the hill climbing search to find the best solution.
@@ -45,91 +60,64 @@ class HillClimbing(SearchAlgorithm):
         # Create a deep copy of the current solution to generate the neighbor
         neighbor_solution = copy.deepcopy(current_solution)
 
-        # Step 1: Optimize truck assignments (reassign some orders to different trucks)
-        self.__modify_truck_assignments(neighbor_solution)
-
-        # Step 2: Optimize routes for all trucks (minimize the distance and cost)
-        self.__optimize_routes(neighbor_solution)
+        # randomly perform one of the following operations
+        #decision = random.randint(0, 1)
+        decision = 1    # Each route only has one order now as partial or multiple load is not implemented
+        
+        if decision == 0:
+            # Step 1: Optimize routes order for a random route.truck
+            self.__optimize_order_assignments(neighbor_solution)
+        else:
+            
+            # Step 2: Optimize truck assignments for a random route
+            self.__modify_truck_assignments(neighbor_solution)
 
         return neighbor_solution
 
 
+    def __optimize_order_assignments(self, solution: 'DeliveryProblem') -> None:
+        
+        # Select a random route to modify its order
+        chosen_route = random.choice(solution.routes)
+        route_orders = chosen_route.orders
+
+        # Randomly swap a pair of orders in the route
+        random.shuffle(route_orders)
+        i, j = random.sample(range(0, len(route_orders)), 2)
+        route_orders[i], route_orders[j] = route_orders[j], route_orders[i]
+
+        # Update the route in the solution
+        chosen_route.orders = route_orders
+        chosen_route.calculate_route_details()
+
+
     def __modify_truck_assignments(self, solution: 'DeliveryProblem') -> None:
-        """
-        Modify the truck assignments by reassigning orders to different trucks.
 
-        Parameters:
-        solution (DeliveryProblem): The solution to modify.
+        # Select a random truck to modify its type
+        chosen_route = random.choice(solution.routes)
+        chosen_truck = chosen_route.truck
+        cargos = chosen_truck.cargo
+        if len(cargos) <= 1: return # Skip if the truck has only one order
 
-        Returns:
-        None
-        """
-        # Randomly swap orders between two trucks
-        truck1, truck2 = random.sample(solution.trucks, 2)
+        # Try to find a truck of a different type that can carry all the orders / cargos
+        available_trucks = [t for t in self.truck_types if t.truck_type != chosen_truck.truck_type]  # Exclude the current truck type
+        random.shuffle(available_trucks)
 
-        if truck1.cargo and truck2.cargo:
-            order1 = random.choice(truck1.cargo)
-            order2 = random.choice(truck2.cargo)
+        for candidate_truck in available_trucks:
+            # Check if the candidate truck can carry all the orders from the current truck
+            total_weight = sum(cargo.weight for cargo in cargos)
+            total_area = sum(cargo.area for cargo in cargos)
 
-            # Swap orders between trucks
-            truck1.unload_cargo(order1)
-            truck2.unload_cargo(order2)
-
-            truck1.load_cargo(order2)
-            truck2.load_cargo(order1)
-        
-
-        ''' # Randomly reassign an order to a different truck
-        truck = random.choice(solution.trucks)
-
-        if truck.cargo:
-            order = random.choice(truck.cargo)
-            
-            pass'''
-
-
-    def __optimize_routes(self, solution: 'DeliveryProblem') -> None:
-        """
-        Optimize the route for each truck in the solution by minimizing the travel distance.
-
-        Parameters:
-        solution (DeliveryProblem): The solution with truck assignments to optimize.
-
-        Returns:
-        None
-        """
-        # For each truck, optimize the route (e.g., use a greedy approach or 2-opt)
-        for truck in solution.trucks:
-            orders = truck.cargo
-            optimized_route = self.__find_optimal_route(truck, orders, solution.city_manager)
-            truck.route = optimized_route
-
-
-    def __find_optimal_route(self, truck: 'Truck', orders: list['Order'], city_manager: 'CityManager') -> list['City']:
-        """
-        Find the optimal route for the truck by optimizing the order of cities to minimize distance.
-
-        Parameters:
-        truck (Truck): The truck to optimize the route for.
-        orders (list): List of orders assigned to the truck.
-        city_manager (CityManager): The CityManager instance to get distances between cities.
-
-        Returns:
-        list: The optimized route (list of City objects).
-        """
-        route = [truck.current_location]  # Start from the truck's current location
-        unvisited_orders = orders[:]
-        
-        while unvisited_orders:
-            # Find the closest unvisited order's start city
-            nearest_order = min(unvisited_orders, key=lambda order: city_manager.distance_between_cities(city1=route[-1], city2=order.start_city))
-            unvisited_orders.remove(nearest_order)
-            
-            # Add the start city and destination city of the nearest order to the route
-            route.append(nearest_order.start_city)
-            route.append(nearest_order.end_city)
-
-        return route
+            if candidate_truck.truck_capacity >= total_weight and candidate_truck.truck_size >= total_area:
+                # If the candidate truck can carry all the orders, swap the entire cargo
+                new_truck = copy.deepcopy(candidate_truck)
+                for cargo in cargos:
+                    new_truck.load_cargo(cargo)
+                
+                # Replace the current truck with the new truck in the solution.route
+                chosen_route.truck = new_truck
+                chosen_route.calculate_route_details()
+                break
 
 
     def _is_optimal(self, solution: 'DeliveryProblem', iter_count: int) -> bool:
@@ -144,4 +132,4 @@ class HillClimbing(SearchAlgorithm):
         bool: True if the solution is optimal, False otherwise.
         """
         # TODO: define a more sophisticated stopping condition
-        return iter_count >= 100
+        return iter_count >= 10
