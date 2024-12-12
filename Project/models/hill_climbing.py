@@ -1,4 +1,5 @@
 import copy, random
+from tqdm import tqdm
 
 from models.general import *
 from models.prototype import SearchAlgorithm
@@ -20,7 +21,7 @@ class HillClimbing(SearchAlgorithm):
         self.truck_types = truck_types
     
     
-    def search(self) -> None:
+    def search(self) -> 'DeliveryProblem':
         """
         Perform the hill climbing search to find the best solution.
 
@@ -32,16 +33,12 @@ class HillClimbing(SearchAlgorithm):
         """
         current_solution = self.problem_instance  # Assume this is an initial solution, generated when init the DeliveryProblem
         best_solution = current_solution
-        iter_count = 0
         
-        while True:
-            iter_count += 1
+        for _ in tqdm(range(config.iterations), desc='Hill Climbing'):
             neighbor = self.__generate_neighbor(current_solution)
             if self._evaluate_solution(neighbor) < self._evaluate_solution(best_solution):
                 best_solution = neighbor
             current_solution = neighbor
-            if self._is_optimal(current_solution, iter_count):
-                break
 
         return best_solution
 
@@ -76,7 +73,15 @@ class HillClimbing(SearchAlgorithm):
 
 
     def __optimize_order_assignments(self, solution: 'DeliveryProblem') -> None:
-        
+        """
+        Try to optimize the order of a random route by swapping a pair of orders.
+
+        Parameters:
+        solution (DeliveryProblem): The current solution to modify.
+
+        Returns:
+        None
+        """
         # Select a random route to modify its order
         chosen_route = random.choice(solution.routes)
         route_orders = chosen_route.orders
@@ -92,7 +97,15 @@ class HillClimbing(SearchAlgorithm):
 
 
     def __modify_truck_assignments(self, solution: 'DeliveryProblem') -> None:
+        """
+        Try to swap the truck type of a random truck with another truck type that can carry all the orders.
 
+        Parameters:
+        solution (DeliveryProblem): The current solution to modify.
+
+        Returns:
+        None
+        """
         # Select a random truck to modify its type
         chosen_route = random.choice(solution.routes)
         chosen_truck = chosen_route.truck
@@ -110,7 +123,7 @@ class HillClimbing(SearchAlgorithm):
 
             if candidate_truck.truck_capacity >= total_weight and candidate_truck.truck_size >= total_area:
                 # If the candidate truck can carry all the orders, swap the entire cargo
-                new_truck = copy.deepcopy(candidate_truck)
+                new_truck = candidate_truck.copy()
                 for cargo in cargos:
                     new_truck.load_cargo(cargo)
                 
@@ -118,18 +131,3 @@ class HillClimbing(SearchAlgorithm):
                 chosen_route.truck = new_truck
                 chosen_route.calculate_route_details()
                 break
-
-
-    def _is_optimal(self, solution: 'DeliveryProblem', iter_count: int) -> bool:
-        """
-        Check if the solution is optimal (based on some stopping condition).
-
-        Parameters:
-        solution (DeliveryProblem): The solution to check.
-        iter_count (int): The current iteration count.
-
-        Returns:
-        bool: True if the solution is optimal, False otherwise.
-        """
-        # TODO: define a more sophisticated stopping condition
-        return iter_count >= 10
