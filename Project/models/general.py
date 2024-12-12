@@ -318,6 +318,20 @@ class Truck:
         str: The unique truck identifier.
         """
         return str(uuid.uuid4())
+    
+
+    def copy(self) -> 'Truck':
+        """
+        Create a copy of the truck object with a new UUID.
+
+        Returns:
+        Truck: A new truck object with the same properties but a different UUID.
+        """
+        # Create a copy of the truck, excluding the truck_id (to generate a new one)
+        copied_truck = copy.deepcopy(self)
+        copied_truck.truck_id = self.__generate_truck_id()  # Assign a new truck ID
+        return copied_truck
+        
 
     
     def load_cargo(self, order: 'Order') -> bool:
@@ -589,7 +603,7 @@ class DeliveryProblem:
         Truck: The selected truck for the order.
         """
         for truck in self.truck_types:
-            if truck.can_load(order): return copy.deepcopy(truck)
+            if truck.can_load(order): return truck.copy()
 
         # If no truck can carry the order (shouldn't happen ideally), raise an error
         raise ValueError(f"No truck available to carry order {order.order_id}.")
@@ -621,25 +635,36 @@ class DeliveryProblem:
         return sum(route.total_cost for route in self.routes)
     
 
-    def __calculate_capacity_utilization(self):
+    def __calculate_capacity_utilization(self, truck: 'Truck' = None) -> list[dict]:
         """
         Generate a list of truck types with their respective capacity utilization percentage.
+
+        Parameters:
+        truck (Truck): The truck to calculate the utilization for, if not provided, calculate for all trucks.
 
         Returns:
         list of dicts: Each dictionary contains the truck type and its utilization percentage.
         """
         utilization_data = []
-
-        # Iterate through all trucks and calculate utilization for each
-        for route in self.routes:
-            truck = route.truck
+        
+        if truck:
             utilization_percentage = ((truck.truck_capacity - truck.remaining_capacity) / truck.truck_capacity) * 100
             utilization_data.append({
                 #'Truck ID': truck.truck_id,
                 'Truck Type': truck.truck_type,
                 'Utilization Percentage': round(utilization_percentage, 2)
             })
-        
+        else:
+            # Iterate through all trucks and calculate utilization for each
+            for route in self.routes:
+                truck = route.truck
+                utilization_percentage = ((truck.truck_capacity - truck.remaining_capacity) / truck.truck_capacity) * 100
+                utilization_data.append({
+                    #'Truck ID': truck.truck_id,
+                    'Truck Type': truck.truck_type,
+                    'Utilization Percentage': round(utilization_percentage, 2)
+                })
+            
         return utilization_data
     
 
@@ -656,6 +681,7 @@ class DeliveryProblem:
         return {
             'Total Distance': self.__calculate_total_distance(),
             'Total Cost': self.__calculate_total_cost(),
+            'Number of Trucks': len(self.routes),
             'Capacity Utilization': self.__calculate_capacity_utilization()
         }
     
@@ -682,16 +708,17 @@ class DeliveryProblem:
                     'Truck_ID': truck.truck_id,
                     'Truck_Route': f"{order.start_city.city_name}->{order.end_city.city_name}",
                     'Order_ID': order.order_id,
-                    'Material_ID': order.mat_id,
-                    'Item_ID': order.item_id,
-                    'Danger_Type': order.danger_type,
+                    #'Material_ID': order.mat_id,
+                    #'Item_ID': order.item_id,
+                    #'Danger_Type': order.danger_type,
                     'Source': order.start_city.city_name,
                     'Destination': order.end_city.city_name,
-                    'Start_Time': order.start_time,
-                    'Arrival_Time': 'N/A', # TODO: Assuming no arrival time for now
-                    'Deadline': order.end_time,
-                    'Shared_Truck': 'N',  # TODO: Assuming no shared trucks for now
-                    'Truck_Type': truck.truck_type
+                    #'Start_Time': order.start_time,
+                    #'Arrival_Time': 'N/A', # TODO: Assuming no arrival time for now
+                    #'Deadline': order.end_time,
+                    #'Shared_Truck': 'N',  # TODO: Assuming no shared trucks for now
+                    'Truck Type': truck.truck_type,
+                    'Truck Capacity Utilization': self.__calculate_capacity_utilization(truck=truck)[0]['Utilization Percentage']
                 }
                 data.append(row)
 
