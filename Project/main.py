@@ -72,7 +72,7 @@ if __name__ == "__main__":
 
 
     # Initialize the HillClimbing algorithm with the problem instance
-    hill_climbing = HillClimbing(problem_instance=delivery_problem)
+    hill_climbing = HillClimbing(delivery_problem, truck_types=data_loader.truck_types)
     hill_optimized = hill_climbing.search()
     hill_result = hill_optimized.get_metrics()
     logger.info(f"Hill climbing result: {hill_result}")
