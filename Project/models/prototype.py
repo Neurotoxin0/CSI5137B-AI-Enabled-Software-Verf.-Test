@@ -47,17 +47,3 @@ class SearchAlgorithm(ABC):
         for route in solution.routes:
             total_cost += route.total_cost  # Assuming each route has a `total_cost` property
         return total_cost
-
-
-    @abstractmethod
-    def _is_optimal(self, solution: 'DeliveryProblem') -> bool:
-        """
-        Check if the solution is optimal (based on some stopping condition).
-
-        Parameters:
-        solution (DeliveryProblem): The solution to check.
-
-        Returns:
-        bool: True if the solution is optimal, False otherwise.
-        """
-        pass
