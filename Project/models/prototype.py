@@ -16,7 +16,6 @@ class SearchAlgorithm(ABC):
         None
         """
         self.problem_instance = problem_instance
-        self.best_solution = None  # Will hold the best solution found
 
 
     @abstractmethod
