@@ -1,8 +1,6 @@
 import logging, os, sys
 import matplotlib.pyplot as plt
-import numpy as np
 from concurrent.futures import ProcessPoolExecutor, as_completed
-from tqdm import tqdm
 
 Path = (os.path.split(os.path.realpath(__file__))[0] + "/").replace("\\\\", "/").replace("\\", "/")
 os.chdir(Path)
@@ -68,7 +66,7 @@ if __name__ == "__main__":
     delivery_problem = DeliveryProblem(data_loader.orders, data_loader.truck_types, data_loader.city_manager)
     raw_result = delivery_problem.get_metrics()
     logger.info(f"Raw result: {raw_result}")
-    #delivery_problem.save_to_excel(Path + "Assets/output/originl.xlsx")
+    delivery_problem.save_to_excel(Path + "Assets/output/originl.xlsx")
 
 
     # Initialize the HillClimbing algorithm with the problem instance
@@ -76,9 +74,10 @@ if __name__ == "__main__":
     hill_optimized = hill_climbing.search()
     hill_result = hill_optimized.get_metrics()
     logger.info(f"Hill climbing result: {hill_result}")
+    hill_optimized.save_to_excel(Path + "Assets/output/hill_climbing.xlsx")
 
 
-    input("Press Enter to continue...")
+    print("Done!")
 
 
     '''data_loader.city_manager.get_city(city_id=1212)
