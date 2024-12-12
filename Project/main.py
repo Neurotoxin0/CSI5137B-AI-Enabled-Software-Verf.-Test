@@ -54,19 +54,43 @@ def setup_logger(logger_name: str, log_file_path: str, *, level = logging.INFO, 
 if __name__ == "__main__":
     # Setup the logger for debugging
     logger = setup_logger('Main', Path + 'logs/main.log') if config.debug else None
-
+    logger.info('\n----------------------------------------\nStarting the program...\n----------------------------------------\n')
     
+
     # Create a DataLoader instance
     data_loader = DataLoader(order_small_path = Path + "Assets/dataset/order_small.csv", 
                              #order_large_path = Path + "Assets/dataset/order_large.csv", 
                              truck_types_path = Path + "Assets/dataset/truck_types.csv",
                              distance_path = Path + "Assets/dataset/distance.csv")
     
-    # Find optimal route for orders
-    ## data_loader.orders get processed into optimal order, based on delivery window
-    pass
-    
+
     # Create a DeliveryProblem instance
     delivery_problem = DeliveryProblem(data_loader.orders, data_loader.truck_types, data_loader.city_manager)
-    delivery_problem.save_to_excel(Path + "Assets/output/test.xlsx")
+    raw_result = delivery_problem.get_metrics()
+    logger.info(f"Raw result: {raw_result}")
+    #delivery_problem.save_to_excel(Path + "Assets/output/originl.xlsx")
+
+
+    # Initialize the HillClimbing algorithm with the problem instance
+    hill_climbing = HillClimbing(problem_instance=delivery_problem)
+    hill_optimized = hill_climbing.search()
+    hill_result = hill_optimized.get_metrics()
+    logger.info(f"Hill climbing result: {hill_result}")
+
+
     input("Press Enter to continue...")
+
+
+    '''data_loader.city_manager.get_city(city_id=1212)
+    data_loader.city_manager.get_city(city_name='namename')
+
+    data_loader.city_manager.distance_between_cities(city1=, city2=)
+    data_loader.city_manager.distance_between_cities(city1_id=123, city2_id=456)
+    data_loader.city_manager.distance_between_cities(city1_name='city1', city2_name='city2')
+
+    data_loader.truck_types[0].can_load(order)'''
+
+
+
+
+
