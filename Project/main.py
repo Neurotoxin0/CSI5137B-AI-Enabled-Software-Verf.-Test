@@ -9,6 +9,7 @@ sys.path.append(Path)
 import config
 from models.general import *
 from models.hill_climbing import HillClimbing
+from utility.plot import *
 
 
 def setup_logger(logger_name: str, log_file_path: str, *, level = logging.INFO, streamline: bool = False) -> logging.Logger:
@@ -66,7 +67,9 @@ if __name__ == "__main__":
     delivery_problem = DeliveryProblem(data_loader.orders, data_loader.truck_types, data_loader.city_manager)
     raw_result = delivery_problem.get_metrics()
     logger.info(f"Raw result: {raw_result}")
-    delivery_problem.save_to_excel(Path + "Assets/output/originl.xlsx")
+    
+    delivery_problem.save(Path + "Assets/output/original.pkl")
+    delivery_problem.save_to_excel(Path + "Assets/output/original.xlsx")
 
 
     # Initialize the HillClimbing algorithm with the problem instance
@@ -74,10 +77,23 @@ if __name__ == "__main__":
     hill_optimized = hill_climbing.search()
     hill_result = hill_optimized.get_metrics()
     logger.info(f"Hill climbing result: {hill_result}")
+
+    hill_optimized.save(Path + "Assets/output/hill_climbing.pkl")
     hill_optimized.save_to_excel(Path + "Assets/output/hill_climbing.xlsx")
 
 
-    print("Done!")
+    # Plot the results
+    data = {
+        'Initial Solution': raw_data.get_metrics(),
+        'Hill Climbing': hill_data.get_metrics()
+    }
+
+    draw_overall_comparation(data)
+    draw_truck_type_distribution(data)
+
+
+    logger.info('\n----------------------------------------\nProgram completed successfully.\n----------------------------------------\n')
+
 
 
     '''data_loader.city_manager.get_city(city_id=1212)
