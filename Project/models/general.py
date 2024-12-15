@@ -1,4 +1,4 @@
-import copy, re, os, sys, uuid
+import copy, pickle, re, os, sys, uuid
 import pandas as pd
 from datetime import datetime
 from openpyxl.utils import get_column_letter
@@ -686,6 +686,20 @@ class DeliveryProblem:
         }
     
 
+    def save(self, filename: str) -> None:
+        """
+        Save the DeliveryProblem object to a file using pickle.
+
+        Parameters:
+        filename (str): The path to the file where the object will be saved.
+
+        Returns:
+        None
+        """
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
+        with open(filename, 'wb') as file: pickle.dump(self, file)
+
+    
     def save_to_excel(self, filename: str) -> None:
         """
         Save the route assignments, truck details, and orders to an Excel file.
