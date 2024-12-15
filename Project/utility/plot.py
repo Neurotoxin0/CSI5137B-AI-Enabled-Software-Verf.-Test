@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+
 def draw_overall_comparation(data: dict):
     """
     Draws a comparison of the overall performance based on total cost and truck utilization.
@@ -14,8 +15,8 @@ def draw_overall_comparation(data: dict):
     """
     algorithms = list(data.keys())
     
-    # Total cost
-    total_costs = [data[algorithm]['Total Cost'] for algorithm in algorithms]
+    # Total cost (in thousands)
+    total_costs = [data[algorithm]['Total Cost'] / 1000 for algorithm in algorithms]  # Convert to thousands
     
     # Number of trucks used
     num_trucks_used = [len(data[algorithm]['Capacity Utilization']) for algorithm in algorithms]
@@ -39,20 +40,29 @@ def draw_overall_comparation(data: dict):
     fig, axes = plt.subplots(1, 2)
 
     # Plot 1 : Total Cost Comparison
-    axes[0,].bar(algorithms, total_costs, color=['blue', 'green'], label='Total Cost')
+    axes[0].bar(algorithms, total_costs, color=['blue', 'green'], label='Total Cost')
     axes[0].set_title('Total Cost Comparison')
-    axes[0].set_ylabel('Cost')
+    axes[0].set_ylabel('Cost (Thousands)')
     axes[0].set_xlabel('Algorithms')
+
+    # Label the bars with the actual value
+    for i, v in enumerate(total_costs):
+        axes[0].text(i, v + 0.1, f"${v:.2f}k", ha='center', va='bottom')  # Adjust positioning if needed
 
     # Plot 2: Average Truck Utilization Comparison
     avg_utilizations = [np.mean([util['Utilization Percentage'] for util in data[algorithm]['Capacity Utilization']]) for algorithm in algorithms]
     axes[1].bar(algorithms, avg_utilizations, color=['blue', 'green'])
-    axes[1].set_title('Average Truck Utilization Comparison')
+    axes[1].set_title('Truck Utilization Comparison')
     axes[1].set_ylabel('Average Utilization (%)')
     axes[1].set_xlabel('Algorithms')
 
+    # Label the bars with the actual value
+    for i, v in enumerate(avg_utilizations):
+        axes[1].text(i, v + 0.5, f"{v:.1f}%", ha='center', va='bottom')  # Adjust positioning if needed
+
     # Final adjustment to the layout
     plt.tight_layout()
+    plt.subplots_adjust(wspace=0.4)  # Adjust space between subplots
     plt.savefig('Assets/output/overall_comparison.png')
 
 
@@ -71,8 +81,8 @@ def draw_truck_type_distribution(data):
     num_plots = len(algorithms)  # Number of algorithms to plot
 
     # Dynamically calculate the number of rows and columns for the subplots
-    num_columns = 2  # Set the number of columns (you can adjust this as needed)
-    num_rows = (num_plots // num_columns) + (1 if num_plots % num_columns != 0 else 0)  # Calculate rows needed
+    num_columns = 2
+    num_rows = (num_plots // num_columns) + (1 if num_plots % num_columns != 0 else 0)
 
     # Create the subplots dynamically
     fig, axes = plt.subplots(num_rows, num_columns, figsize=(12, num_rows * 6))
@@ -81,9 +91,25 @@ def draw_truck_type_distribution(data):
     # Plot Truck Type Distribution for each algorithm
     for i, algorithm in enumerate(algorithms):
         truck_type_data = data[algorithm]['Capacity Utilization']  # Extract truck type data for the algorithm
-        truck_types = [val['Truck Type'] for val in truck_type_data]
-        utilization_percentages = [val['Utilization Percentage'] for val in truck_type_data]
+        
+        # Aggregating the truck types and their utilization percentages
+        truck_type_counts = {}
+        total_utilization = sum([util['Utilization Percentage'] for util in truck_type_data])
 
+        # Group the same truck types and sum their utilization percentages
+        for util in truck_type_data:
+            truck_type = util['Truck Type']
+            utilization_percentage = (util['Utilization Percentage'] / total_utilization) * 100
+            if truck_type in truck_type_counts:
+                truck_type_counts[truck_type] += utilization_percentage
+            else:
+                truck_type_counts[truck_type] = utilization_percentage
+
+        # Prepare the truck type distribution for pie chart
+        truck_types = list(truck_type_counts.keys())
+        utilization_percentages = list(truck_type_counts.values())
+
+        # Plot the pie chart for truck type distribution
         axes[i].pie(utilization_percentages, labels=truck_types, autopct='%1.1f%%', startangle=90)
         axes[i].set_title(f'Truck Type Distribution for {algorithm}')
 
@@ -92,7 +118,8 @@ def draw_truck_type_distribution(data):
         axes[j].axis('off')
 
     # Final adjustment to layout and display
-    plt.tight_layout()
+    plt.tight_layout(pad=4.0)  # Adjust the padding between subplots
+    plt.subplots_adjust(hspace=0.4, wspace=0.4)  # Increase space between plots
     plt.savefig('Assets/output/truck_type_comparation.png')
 
 
@@ -113,5 +140,5 @@ if __name__ == "__main__":
         'Hill Climbing': hill_data.get_metrics()
     }
 
-    #draw_overall_comparation(data)
+    draw_overall_comparation(data)
     draw_truck_type_distribution(data)
