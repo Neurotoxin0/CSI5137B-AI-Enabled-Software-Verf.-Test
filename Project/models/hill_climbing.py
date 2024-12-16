@@ -22,7 +22,7 @@ class HillClimbing(SearchAlgorithm):
         
         # Step 1: Optimize truck assignments
         if self.debug: print("Optimizing truck assignments...")
-        for _ in tqdm(range(config.iterations), desc='Hill Climbing Process (Track Opt)', position=3, leave=False):
+        for _ in tqdm(range(config.iterations), desc='Hill Climbing Process (Track Opt)', position=1, leave=False):
             neighbor = self.__generate_neighbor(current_solution, optimize_truck=True)
             if self._evaluate_solution(neighbor) < self._evaluate_solution(best_solution):
                 best_solution = neighbor
@@ -30,7 +30,7 @@ class HillClimbing(SearchAlgorithm):
 
         # Step 2: Optimize route assignments
         if self.debug: print("Optimizing route assignments...")
-        for _ in tqdm(range(config.iterations), desc='Hill Climbing Process (Route Opt)', position=3, leave=False):
+        for _ in tqdm(range(config.iterations), desc='Hill Climbing Process (Route Opt)', position=1, leave=False):
             neighbor = self.__generate_neighbor(current_solution, optimize_truck=False)
             if self._evaluate_solution(neighbor) < self._evaluate_solution(best_solution):
                 best_solution = neighbor

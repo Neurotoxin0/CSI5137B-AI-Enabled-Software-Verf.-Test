@@ -1,5 +1,4 @@
 import logging, os, sys
-from concurrent.futures import ProcessPoolExecutor, as_completed
 
 Path = (os.path.split(os.path.realpath(__file__))[0] + "/").replace("\\\\", "/").replace("\\", "/")
 os.chdir(Path)
@@ -88,24 +87,6 @@ def _run_algorithm(algorithm_name: str, algorithm_instance: 'SearchAlgorithm', s
     return metrics
 
 
-def process_algorithm(algorithm_name, algorithm_instance, save: bool = True, save_path: str = None):
-    """
-    Function to process and run the algorithm in parallel.
-
-    Parameters:
-    - algorithm_name (str): The name of the algorithm.
-    - algorithm_instance (SearchAlgorithm): The instance of the algorithm to run.
-    - save (bool): Whether to save the results to file.
-    - save_path (str): The path to save the results.
-
-    Returns:
-    - algorithm_name (str): The name of the algorithm.
-    - _run_algorithm (dict): The metrics of the optimized solution.
-    """
-    return algorithm_name, _run_algorithm(algorithm_name, algorithm_instance, save=save, save_path=save_path)
-
-
-
 
 if __name__ == "__main__":
     loading_path = Path + "Assets/dataset/"
@@ -156,20 +137,11 @@ if __name__ == "__main__":
     }
     results = {}
 
-    '''# Run all algorithms concurrently using ProcessPoolExecutor
-    with ProcessPoolExecutor(max_workers=config.max_workers) as executor:
-        futures = []
-        for algorithm_name, algorithm_instance in algorithms.items():
-            futures.append(executor.submit(process_algorithm, algorithm_name, algorithm_instance, save = True, save_path = saving_path))
-        
-        # Collect results
-        for future in as_completed(futures):
-            algorithm_name, result = future.result()
-            results[algorithm_name] = result'''
     
     # Run all algorithms sequentially
     for algorithm_name, algorithm_instance in algorithms.items():
         results[algorithm_name] = _run_algorithm(algorithm_name, algorithm_instance, save=True, save_path=saving_path)
+
 
     # Plot the results
     results['Initial Solution'] = raw_result  # Add the raw result to the comparison

@@ -1,7 +1,7 @@
 # --------------------------------------------------
 debug = True
 iterations = 1000
-max_workers = 20
+max_workers = 25     # Maximum number of workers for concurrent processing
 
 distance_scale = 0.001   # Convert distance (distance.csv) from meters to kilometers
 weight_scale = 0.0001    # Convert weight (order_small.csv / order_large.csv) from 0.1 grams to kilograms

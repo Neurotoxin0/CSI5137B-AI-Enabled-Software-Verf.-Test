@@ -26,9 +26,9 @@ class GeneticAlgorithm(SearchAlgorithm):
 
         if self.debug: print("Running Genetic Algorithm...")
 
-        with ProcessPoolExecutor(max_workers= config.max_workers) as executor:
+        with ProcessPoolExecutor(max_workers=config.max_workers) as executor:
             futures = {}
-            main_progress_bar = tqdm(total=self.generations, desc="Genetic Algorithm Progress", position=0, leave=True)
+            main_progress_bar = tqdm(total=self.generations, desc="Genetic Algorithm Progress", position=3, leave=True)
 
             # Submit tasks for each generation to the executor
             for generation in range(self.generations):
@@ -42,13 +42,14 @@ class GeneticAlgorithm(SearchAlgorithm):
                     best_solution = current_best
                     best_cost = current_best_cost
 
+                del population  # Delete old population to free memory
                 main_progress_bar.update(1)  # Update progress bar
-                
+
                 if self.debug and generation % 10 == 0:
                     print(f"Generation {generation + 1}: Best Cost = {best_cost}")
 
             main_progress_bar.close()
-                
+
         return best_solution
     
 
