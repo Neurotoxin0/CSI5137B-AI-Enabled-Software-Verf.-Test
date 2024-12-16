@@ -1,6 +1,7 @@
-import random
-import copy
+import copy, random
+from concurrent.futures import ProcessPoolExecutor, as_completed
 from tqdm import tqdm
+
 from models.general import *
 from models.prototype import SearchAlgorithm
 
@@ -14,6 +15,7 @@ class GeneticAlgorithm(SearchAlgorithm):
         self.mutation_rate = mutation_rate
         self.crossover_rate = crossover_rate
 
+    
     def search(self) -> 'DeliveryProblem':
         """
         Perform the Genetic Algorithm to find the best solution.
@@ -23,24 +25,49 @@ class GeneticAlgorithm(SearchAlgorithm):
         best_cost = self._evaluate_solution(best_solution)
 
         if self.debug: print("Running Genetic Algorithm...")
-        for generation in tqdm(range(self.generations), desc="Genetic Algorithm Progress", position=1, leave=False):
-            fitness_scores = [(individual, self._evaluate_solution(individual)) for individual in population]
-            parents = self.__select_parents(fitness_scores)
-            offspring = self.__generate_offspring(parents)
-            population = self.__select_next_generation(fitness_scores, offspring)
 
-            current_best = min(population, key=self._evaluate_solution)
-            current_best_cost = self._evaluate_solution(current_best)
+        with ProcessPoolExecutor(max_workers= config.max_workers) as executor:
+            futures = {}
+            main_progress_bar = tqdm(total=self.generations, desc="Genetic Algorithm Progress", position=0, leave=True)
 
-            if current_best_cost < best_cost:
-                best_solution = current_best
-                best_cost = current_best_cost
+            # Submit tasks for each generation to the executor
+            for generation in range(self.generations):
+                futures[executor.submit(self._run_generation, population, generation)] = generation
 
-            if generation % 10 == 0 and self.debug:
-                print(f"Generation {generation + 1}: Best Cost = {best_cost}")
+            # Collect results
+            for future in as_completed(futures):
+                generation_result = future.result()
+                population, current_best_cost, current_best = generation_result
+                if current_best_cost < best_cost:
+                    best_solution = current_best
+                    best_cost = current_best_cost
 
+                main_progress_bar.update(1)  # Update progress bar
+                
+                if self.debug and generation % 10 == 0:
+                    print(f"Generation {generation + 1}: Best Cost = {best_cost}")
+
+            main_progress_bar.close()
+                
         return best_solution
+    
 
+    def _run_generation(self, population, generation):
+        """
+        Perform the genetic algorithm operations for one generation concurrently.
+        """
+        fitness_scores = [(individual, self._evaluate_solution(individual)) for individual in population]
+        parents = self.__select_parents(fitness_scores)
+        offspring = self.__generate_offspring(parents)
+        population = self.__select_next_generation(fitness_scores, offspring)
+
+        # Get the best solution for the generation
+        current_best = min(population, key=self._evaluate_solution)
+        current_best_cost = self._evaluate_solution(current_best)
+
+        return population, current_best_cost, current_best
+
+    
     def __initialize_population(self) -> list:
         return [self.__generate_random_solution() for _ in range(self.population_size)]
 

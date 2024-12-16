@@ -1,5 +1,4 @@
 import logging, os, sys
-import matplotlib.pyplot as plt
 from concurrent.futures import ProcessPoolExecutor, as_completed
 
 Path = (os.path.split(os.path.realpath(__file__))[0] + "/").replace("\\\\", "/").replace("\\", "/")
@@ -8,8 +7,15 @@ sys.path.append(Path)
 
 import config
 from models.general import *
+from models.prototype import SearchAlgorithm
+from models.ant_colony_optimization import AntColonyOptimization
 from models.hill_climbing import HillClimbing
+from models.random_search import RandomSearch
+from models.genetic_algorithm import GeneticAlgorithm
 from utility.plot import *
+
+
+logger = None
 
 
 def setup_logger(logger_name: str, log_file_path: str, *, level = logging.INFO, streamline: bool = False) -> logging.Logger:
@@ -49,67 +55,96 @@ def setup_logger(logger_name: str, log_file_path: str, *, level = logging.INFO, 
     return logger
 
 
+def _run_algorithm(algorithm_name: str, algorithm_instance: 'SearchAlgorithm', save: bool = True, save_path: str = None) -> dict:
+    """
+    Run a specified algorithm and return its metrics.
+    Should be called within a ProcessPoolExecutor.
+
+    Parameters:
+    - algorithm_name (str): The name of the algorithm.
+    - algorithm_instance (SearchAlgorithm): The instance of the algorithm to run.
+    - save (bool): Whether to save the results to file.
+    - save_path (str): The path to save the results.
+
+    Returns:
+    - metrics (dict): The metrics of the optimized solution.
+    """
+    global logger
+
+    if save and save_path is None:
+        raise ValueError("save_path must be provided if save is True.")
+
+    #print(f"\nRunning {algorithm_name}...\n")
+    optimized_solution = algorithm_instance.search()
+    metrics = optimized_solution.get_metrics()
+
+    logger.info(f"{algorithm_name}: {metrics}")
+
+    # Save results
+    if save:
+        optimized_solution.save(save_path + f"{algorithm_name.replace(' ', '_')}.pkl")
+        optimized_solution.save_to_excel(save_path + f"{algorithm_name.replace(' ', '_')}.xlsx")
+
+    return metrics
+
+
+def process_algorithm(algorithm_name, algorithm_instance, save: bool = True, save_path: str = None):
+    """
+    Function to process and run the algorithm in parallel.
+
+    Parameters:
+    - algorithm_name (str): The name of the algorithm.
+    - algorithm_instance (SearchAlgorithm): The instance of the algorithm to run.
+    - save (bool): Whether to save the results to file.
+    - save_path (str): The path to save the results.
+
+    Returns:
+    - algorithm_name (str): The name of the algorithm.
+    - _run_algorithm (dict): The metrics of the optimized solution.
+    """
+    return algorithm_name, _run_algorithm(algorithm_name, algorithm_instance, save=save, save_path=save_path)
+
+
+
 
 if __name__ == "__main__":
+    loading_path = Path + "Assets/dataset/"
+    saving_path = Path + "Assets/output/"
+
     # Setup the logger for debugging
     logger = setup_logger('Main', Path + 'logs/main.log') if config.debug else None
     logger.info('\n----------------------------------------\nStarting the program...\n----------------------------------------\n')
     
 
     # Create a DataLoader instance
-    data_loader = DataLoader(order_small_path = Path + "Assets/dataset/order_small.csv", 
-                             #order_large_path = Path + "Assets/dataset/order_large.csv", 
-                             truck_types_path = Path + "Assets/dataset/truck_types.csv",
-                             distance_path = Path + "Assets/dataset/distance.csv")
+    data_loader = DataLoader(order_small_path = loading_path + "order_small.csv", 
+                             #order_large_path = loading_path + "order_large.csv", 
+                             truck_types_path = loading_path + "truck_types.csv",
+                             distance_path = loading_path + "distance.csv")
     
 
-    # Create a DeliveryProblem instance
-    delivery_problem = DeliveryProblem(data_loader.orders, data_loader.truck_types, data_loader.city_manager)
+    # Create or Load a DeliveryProblem instance
+    delivery_problem = pickle.load(open(saving_path + "Original.pkl", "rb")) if os.path.exists(saving_path + "Original.pkl") else DeliveryProblem(data_loader.orders, data_loader.truck_types, data_loader.city_manager)
     raw_result = delivery_problem.get_metrics()
-    logger.info(f"Raw result: {raw_result}")
+    logger.info(f"Raw Result: {raw_result}")
     
-    delivery_problem.save(Path + "Assets/output/original.pkl")
-    delivery_problem.save_to_excel(Path + "Assets/output/original.xlsx")
+    delivery_problem.save(saving_path + "Original.pkl")
+    delivery_problem.save_to_excel(saving_path + "Original.xlsx")
 
 
-    # Initialize the HillClimbing algorithm with the problem instance
-    hill_climbing = HillClimbing(delivery_problem, truck_types=data_loader.truck_types)
-    hill_optimized = hill_climbing.search()
-    hill_result = hill_optimized.get_metrics()
-    logger.info(f"Hill climbing result: {hill_result}")
-
-    hill_optimized.save(Path + "Assets/output/hill_climbing.pkl")
-    hill_optimized.save_to_excel(Path + "Assets/output/hill_climbing.xlsx")
-
-
-    # Plot the results
-    data = {
-        'Initial Solution': raw_data.get_metrics(),
-        'Hill Climbing': hill_data.get_metrics()
-    }
-
-    draw_overall_comparation(data)
-    draw_truck_type_distribution(data)
-
-
-    logger.info('\n----------------------------------------\nProgram completed successfully.\n----------------------------------------\n')
-
-
-
-    '''data_loader.city_manager.get_city(city_id=1212)
-    data_loader.city_manager.get_city(city_name='namename')
-
-    data_loader.city_manager.distance_between_cities(city1=, city2=)
-    data_loader.city_manager.distance_between_cities(city1_id=123, city2_id=456)
-    data_loader.city_manager.distance_between_cities(city1_name='city1', city2_name='city2')
-
-    data_loader.truck_types[0].can_load(order)'''
-    
-    '''
-    # Run all algorithms
+    # Gather the algorithms to run
     algorithms = {
-        "Hill Climbing": HillClimbing(delivery_problem, truck_types=data_loader.truck_types),
         "Random Search": RandomSearch(delivery_problem, truck_types=data_loader.truck_types),
+        "Hill Climbing": HillClimbing(delivery_problem, truck_types=data_loader.truck_types),
+        "Ant Colony Optimization": AntColonyOptimization(
+            delivery_problem,
+            truck_types=data_loader.truck_types,
+            num_ants=50,    # Number of ants in the colony, must be less than config.iterations
+            alpha=1.0,
+            beta=2.0,
+            evaporation_rate=0.1,
+            pheromone_deposit=1.0
+        ),
         "Genetic Algorithm": GeneticAlgorithm(
             delivery_problem,
             truck_types=data_loader.truck_types,
@@ -117,15 +152,29 @@ if __name__ == "__main__":
             mutation_rate=0.3,
             crossover_rate=0.7
         ),
-        "Ant Colony Optimization": AntColonyOptimization(
-            delivery_problem,
-            truck_types=data_loader.truck_types,
-            num_ants=50,
-            generations=20,
-            alpha=1.0,
-            beta=2.0,
-            evaporation_rate=0.1,
-            pheromone_deposit=1.0
-        )
+        
     }
-    '''
+    results = {}
+
+    '''# Run all algorithms concurrently using ProcessPoolExecutor
+    with ProcessPoolExecutor(max_workers=config.max_workers) as executor:
+        futures = []
+        for algorithm_name, algorithm_instance in algorithms.items():
+            futures.append(executor.submit(process_algorithm, algorithm_name, algorithm_instance, save = True, save_path = saving_path))
+        
+        # Collect results
+        for future in as_completed(futures):
+            algorithm_name, result = future.result()
+            results[algorithm_name] = result'''
+    
+    # Run all algorithms sequentially
+    for algorithm_name, algorithm_instance in algorithms.items():
+        results[algorithm_name] = _run_algorithm(algorithm_name, algorithm_instance, save=True, save_path=saving_path)
+
+    # Plot the results
+    results['Initial Solution'] = raw_result  # Add the raw result to the comparison
+    draw_overall_comparation(results)
+    draw_truck_type_distribution(results)
+
+
+    logger.info('\n----------------------------------------\nProgram completed successfully.\n----------------------------------------\n')
