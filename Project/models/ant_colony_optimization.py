@@ -22,7 +22,7 @@ class AntColonyOptimization(SearchAlgorithm):
         - alpha (float): Weight of pheromone importance.
         - beta (float): Weight of heuristic importance.
         """
-        super().__init__(problem_instance)
+        super().__init__(problem_instance, truck_types=truck_types)
         self.truck_types = list(truck_types)  # Ensure truck types are a list
         self.num_ants = num_ants
         self.generations = generations
@@ -42,8 +42,8 @@ class AntColonyOptimization(SearchAlgorithm):
         best_solution = None
         best_cost = float('inf')
 
-        print("Running Ant Colony Optimization...")
-        for generation in tqdm(range(self.generations), desc="ACO Progress"):
+        if self.debug: print("Running Ant Colony Optimization...")
+        for generation in tqdm(range(self.generations), desc="ACO Progress", position=2, leave=False):
             solutions = []
 
             # Each ant constructs a solution
@@ -60,7 +60,7 @@ class AntColonyOptimization(SearchAlgorithm):
             self.__update_pheromones(solutions)
 
             # Log progress
-            if generation % 5 == 0:
+            if generation % 5 == 0 and self.debug:
                 print(f"Generation {generation + 1}: Best Cost = {best_cost}")
 
         return best_solution

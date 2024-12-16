@@ -1,21 +1,31 @@
+import os, sys
 from abc import ABC, abstractmethod
 
-from models.general import *
+Path = (os.path.split(os.path.realpath(__file__))[0] + "/").replace("\\\\", "/").replace("\\", "/")
+Path = Path.replace("models/", "")
+sys.path.append(Path)
 
+import config
+from models.general import *
 
 # SearchAlgorithm class (abstract base class)
 class SearchAlgorithm(ABC):
-    def __init__(self, problem_instance: 'DeliveryProblem') -> None:
+    def __init__(self, problem_instance: 'DeliveryProblem', *, truck_types: list['Truck']) -> None:
         """
         Initialize the search algorithm with the given problem instance.
 
         Parameters:
         problem_instance (DeliveryProblem): The problem instance to be solved by the algorithm.
+        truck_types (list): List of truck types available for the delivery problem.
         
         Returns:
         None
         """
-        self.problem_instance = problem_instance
+        self.problem_instance = problem_instance.copy()
+        self.truck_types = truck_types
+        
+        #self.debug = config.debug
+        self.debug = False
 
 
     @abstractmethod

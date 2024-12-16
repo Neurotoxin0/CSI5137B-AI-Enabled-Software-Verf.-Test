@@ -6,20 +6,6 @@ from models.prototype import SearchAlgorithm
 
 
 class HillClimbing(SearchAlgorithm):
-    def __init__(self, problem_instance: 'DeliveryProblem', *, truck_types: list['Truck']) -> None:
-        """
-        Initialize the hill climbing search algorithm with the given problem instance.
-
-        Parameters:
-        problem_instance (DeliveryProblem): The problem instance to be solved by the algorithm.
-        truck_types (list): List of truck types available for the delivery problem.
-
-        Returns:
-        None
-        """
-        super().__init__(problem_instance)
-        self.truck_types = truck_types
-    
     def search(self) -> 'DeliveryProblem':
         """
         Perform the hill climbing search to find the best solution, starting with truck assignment optimization.
@@ -35,16 +21,16 @@ class HillClimbing(SearchAlgorithm):
         best_solution = current_solution
         
         # Step 1: Optimize truck assignments
-        print("Optimizing truck assignments...")
-        for _ in tqdm(range(config.iterations), desc='Truck Assignment Optimization'):
+        if self.debug: print("Optimizing truck assignments...")
+        for _ in tqdm(range(config.iterations), desc='Truck Assignment Optimization', position=3, leave=False):
             neighbor = self.__generate_neighbor(current_solution, optimize_truck=True)
             if self._evaluate_solution(neighbor) < self._evaluate_solution(best_solution):
                 best_solution = neighbor
             current_solution = neighbor
 
         # Step 2: Optimize route assignments
-        print("Optimizing route assignments...")
-        for _ in tqdm(range(config.iterations), desc='Route Assignment Optimization'):
+        if self.debug: print("Optimizing route assignments...")
+        for _ in tqdm(range(config.iterations), desc='Route Assignment Optimization', position=3, leave=False):
             neighbor = self.__generate_neighbor(current_solution, optimize_truck=False)
             if self._evaluate_solution(neighbor) < self._evaluate_solution(best_solution):
                 best_solution = neighbor

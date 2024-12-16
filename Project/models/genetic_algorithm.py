@@ -8,8 +8,7 @@ from models.prototype import SearchAlgorithm
 class GeneticAlgorithm(SearchAlgorithm):
     def __init__(self, problem_instance: 'DeliveryProblem', *, truck_types: list['Truck'],
                  population_size: int = 50, mutation_rate: float = 0.2, crossover_rate: float = 0.8) -> None:
-        super().__init__(problem_instance)
-        self.truck_types = truck_types
+        super().__init__(problem_instance, truck_types=truck_types)
         self.population_size = population_size
         self.generations = config.iterations
         self.mutation_rate = mutation_rate
@@ -23,8 +22,8 @@ class GeneticAlgorithm(SearchAlgorithm):
         best_solution = min(population, key=self._evaluate_solution)
         best_cost = self._evaluate_solution(best_solution)
 
-        print("Running Genetic Algorithm...")
-        for generation in tqdm(range(self.generations), desc="Genetic Algorithm Progress"):
+        if self.debug: print("Running Genetic Algorithm...")
+        for generation in tqdm(range(self.generations), desc="Genetic Algorithm Progress", position=1, leave=False):
             fitness_scores = [(individual, self._evaluate_solution(individual)) for individual in population]
             parents = self.__select_parents(fitness_scores)
             offspring = self.__generate_offspring(parents)
@@ -37,7 +36,7 @@ class GeneticAlgorithm(SearchAlgorithm):
                 best_solution = current_best
                 best_cost = current_best_cost
 
-            if generation % 10 == 0:
+            if generation % 10 == 0 and self.debug:
                 print(f"Generation {generation + 1}: Best Cost = {best_cost}")
 
         return best_solution
