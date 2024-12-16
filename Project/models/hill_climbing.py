@@ -52,6 +52,7 @@ class HillClimbing(SearchAlgorithm):
 
         return best_solution
 
+    '''
     def __generate_neighbor(self, current_solution: 'DeliveryProblem', optimize_truck: bool) -> 'DeliveryProblem':
         """
         Generate a neighboring solution by modifying either truck or route assignments based on the flag.
@@ -73,6 +74,18 @@ class HillClimbing(SearchAlgorithm):
             # Step 2: Optimize routes order for a random route
             self.__optimize_order_assignments(neighbor_solution)
 
+        return neighbor_solution
+    '''
+    def __generate_neighbor(self, current_solution: 'DeliveryProblem', optimize_truck: bool) -> 'DeliveryProblem':
+        """
+        Generate a neighboring solution by modifying either truck or route assignments.
+        """
+        neighbor_solution = copy.deepcopy(current_solution)
+
+        if random.random() < 0.5:
+            self.__modify_truck_assignments(neighbor_solution)
+        else:
+            self.__optimize_order_assignments(neighbor_solution)
         return neighbor_solution
 
     def __optimize_order_assignments(self, solution: 'DeliveryProblem') -> None:
