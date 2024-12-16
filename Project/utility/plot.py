@@ -131,13 +131,19 @@ if __name__ == "__main__":
     sys.path.append(Path)
 
     # Load the raw and hillclimbing result data
-    raw_data = pickle.load(open(Path + "Assets/output/original.pkl", "rb"))
-    hill_data = pickle.load(open(Path + "Assets/output/hill_climbing.pkl", "rb"))
+    raw_data = pickle.load(open(Path + "Assets/output/Original.pkl", "rb"))
+    hill_data = pickle.load(open(Path + "Assets/output/Hill_Climbing.pkl", "rb"))
+    ant_data = pickle.load(open(Path + "Assets/output/Ant_Colony_Optimization.pkl", "rb"))
+    ga_data = pickle.load(open(Path + "Assets/output/Genetic_Algorithm.pkl", "rb"))
+    random_data = pickle.load(open(Path + "Assets/output/Random_Search.pkl", "rb"))
     
     # Prepare the data in the required format for drawing comparison
     data = {
         'Initial Solution': raw_data.get_metrics(),
-        'Hill Climbing': hill_data.get_metrics()
+        'Hill Climbing': hill_data.get_metrics(),
+        'Ant Colony Optimization' : ant_data.get_metrics(),
+        'Genetic Algorithm': ga_data.get_metrics(),
+        'Random Search': random_data.get_metrics()
     }
 
     draw_overall_comparation(data)
