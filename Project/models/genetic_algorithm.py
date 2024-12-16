@@ -1,4 +1,6 @@
-import copy, random
+import copy
+import random
+from concurrent.futures import ProcessPoolExecutor, as_completed
 from tqdm import tqdm
 from models.general import *
 from models.prototype import SearchAlgorithm
@@ -33,23 +35,55 @@ class GeneticAlgorithm(SearchAlgorithm):
         # Step 1: Initialize the population
         population = self.__initialize_population()
         best_solution = min(population, key=self._evaluate_solution)  # Best individual in the population
+        best_cost = self._evaluate_solution(best_solution)
 
-        for generation in tqdm(range(self.generations), desc="GA Progress"):
-            # Step 2: Evaluate fitness scores
-            fitness_scores = [(ind, self._evaluate_solution(ind)) for ind in population]
-            # Step 3: Select parents using tournament selection
-            parents = self.__select_parents(fitness_scores)
-            # Step 4: Generate offspring using crossover and mutation
-            offspring = self.__generate_offspring(parents)
-            # Step 5: Form the next generation
-            population = self.__select_next_generation(fitness_scores, offspring)
+        # Thread pool to parallelize generation computation
+        with ProcessPoolExecutor(max_workers=config.max_workers) as executor:
+            progress_bar = tqdm(total=self.generations, desc="Genetic Algorithm Progress", position=0, leave=True)
 
-            # Track the best solution found so far
-            current_best = min(population, key=self._evaluate_solution)
-            if self._evaluate_solution(current_best) < self._evaluate_solution(best_solution):
-                best_solution = current_best
+            for generation in range(self.generations):
+                # Submit generation processing to the thread pool
+                future = executor.submit(self.__run_generation, population)
+                population, current_best_cost, current_best = future.result()
+
+                # Update best solution if improvement is found
+                if current_best_cost < best_cost:
+                    best_solution = current_best
+                    best_cost = current_best_cost
+
+                progress_bar.update(1)
+                if generation % 10 == 0:
+                    print(f"Generation {generation + 1}: Best Cost = {best_cost}")
+
+            progress_bar.close()
 
         return best_solution
+
+    def __run_generation(self, population):
+        """
+        Process a single generation: selection, crossover, mutation, and next-generation creation.
+
+        Parameters:
+        - population (list): The current generation's population.
+
+        Returns:
+        - tuple: Next generation population, best cost, and the best solution.
+        """
+        # Step 1: Evaluate fitness and select parents
+        fitness_scores = [(ind, self._evaluate_solution(ind)) for ind in population]
+        parents = self.__select_parents(fitness_scores)
+
+        # Step 2: Generate offspring
+        offspring = self.__generate_offspring(parents)
+
+        # Step 3: Form next generation
+        next_generation = self.__select_next_generation(fitness_scores, offspring)
+
+        # Step 4: Identify the best solution in this generation
+        best_solution = min(next_generation, key=self._evaluate_solution)
+        best_cost = self._evaluate_solution(best_solution)
+
+        return next_generation, best_cost, best_solution
 
     def __initialize_population(self) -> list:
         """
@@ -75,7 +109,7 @@ class GeneticAlgorithm(SearchAlgorithm):
             valid_trucks = [truck for truck in self.truck_types if truck.can_load(order)]
             if valid_trucks:
                 truck = random.choice(valid_trucks).copy()
-                # Generate a valid route for the truck
+                # Assign a valid route for the truck
                 route = self.__generate_valid_route(truck, [order], solution.city_manager)
                 if route:
                     solution.routes.append(route)
@@ -84,41 +118,41 @@ class GeneticAlgorithm(SearchAlgorithm):
 
     def __generate_valid_route(self, truck, orders, city_manager) -> Route or None:
         """
-        Generate a valid route for a truck and a set of orders, ensuring it meets the time constraints.
+        Generate a valid route for a truck and a set of orders, ensuring time constraints.
 
         Parameters:
-        - truck (Truck): The truck to assign orders to.
-        - orders (list): The list of orders to deliver.
-        - city_manager (CityManager): The city manager for distance calculations.
+        - truck (Truck): Truck to assign orders to.
+        - orders (list): List of orders to deliver.
+        - city_manager (CityManager): Manages city distances.
 
         Returns:
-        - Route or None: A valid Route instance or None if no valid route can be generated.
+        - Route or None: A valid Route instance or None if constraints cannot be met.
         """
         route_cities = [orders[0].start_city, orders[0].end_city]
-        random.shuffle(route_cities[1:-1])  # Shuffle intermediate cities without changing start and end
+        random.shuffle(route_cities[1:-1])  # Shuffle intermediate cities but keep start and end fixed
         if self.__is_route_valid(route_cities, truck, orders, city_manager):
             return Route(truck, orders, city_manager)
         return None
 
     def __is_route_valid(self, route, truck, orders, city_manager) -> bool:
         """
-        Check if a given route satisfies the time constraints.
+        Check if a route satisfies time constraints.
 
         Parameters:
-        - route (list): List of cities representing the route.
-        - truck (Truck): The truck assigned to deliver the orders.
-        - orders (list): The orders to be delivered along this route.
-        - city_manager (CityManager): Manages distances between cities.
+        - route (list): The list of cities forming the route.
+        - truck (Truck): Truck delivering the orders.
+        - orders (list): Orders to validate.
+        - city_manager (CityManager): Manages city distances.
 
         Returns:
-        - bool: True if the route is valid, False otherwise.
+        - bool: True if the route meets constraints, False otherwise.
         """
         total_time = 0
         for i in range(len(route) - 1):
             distance = city_manager.distance_between_cities(city1=route[i], city2=route[i + 1])
             total_time += distance / truck.truck_speed  # Time = Distance / Speed
             if total_time > (orders[0].end_time - orders[0].start_time).total_seconds() / 3600:
-                return False  # Route violates time constraints
+                return False  # Exceeds allowed delivery time
         return True
 
     def __select_parents(self, fitness_scores: list) -> list:
@@ -129,7 +163,7 @@ class GeneticAlgorithm(SearchAlgorithm):
         - fitness_scores (list): List of individuals and their fitness scores.
 
         Returns:
-        - list: Selected parents for the next generation.
+        - list: Selected parents.
         """
         return [min(random.sample(fitness_scores, 5), key=lambda x: x[1])[0] for _ in range(self.population_size)]
 
@@ -138,7 +172,7 @@ class GeneticAlgorithm(SearchAlgorithm):
         Generate offspring through crossover and mutation.
 
         Parameters:
-        - parents (list): The list of parent solutions.
+        - parents (list): The selected parents for reproduction.
 
         Returns:
         - list: The offspring population.
@@ -155,28 +189,23 @@ class GeneticAlgorithm(SearchAlgorithm):
 
     def __mutate(self, solution: 'DeliveryProblem') -> None:
         """
-        Apply mutation to a solution by swapping random orders.
+        Mutate a solution by reordering orders in the routes.
 
         Parameters:
-        - solution (DeliveryProblem): The solution to mutate.
+        - solution (DeliveryProblem): Solution to mutate.
         """
         for route in solution.routes:
             if random.random() < self.mutation_rate:
-                if len(route.orders) > 1:
-                    # Randomly shuffle orders in the route
-                    orders = route.orders[:]
-                    random.shuffle(orders)
-                    if self.__is_route_valid(orders, route.truck, route.orders, solution.city_manager):
-                        route.orders = orders
-                        route.calculate_route_details()
+                random.shuffle(route.orders)
+                route.calculate_route_details()
 
     def __select_next_generation(self, fitness_scores: list, offspring: list) -> list:
         """
         Select the next generation from the current population and offspring.
 
         Parameters:
-        - fitness_scores (list): List of individuals and their fitness scores.
-        - offspring (list): The offspring population.
+        - fitness_scores (list): Current population fitness scores.
+        - offspring (list): New offspring.
 
         Returns:
         - list: The next generation of individuals.
