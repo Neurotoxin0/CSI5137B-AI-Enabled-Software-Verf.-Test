@@ -1,6 +1,6 @@
-import random
-import copy
+import copy, random
 from tqdm import tqdm
+
 from models.general import *
 from models.prototype import SearchAlgorithm
 

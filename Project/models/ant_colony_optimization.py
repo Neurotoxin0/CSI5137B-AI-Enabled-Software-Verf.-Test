@@ -1,13 +1,13 @@
-import random
-import copy
+import copy, random
 from tqdm import tqdm
+
 from models.general import *
 from models.prototype import SearchAlgorithm
 
 
 class AntColonyOptimization(SearchAlgorithm):
     def __init__(self, problem_instance: 'DeliveryProblem', *, truck_types: list['Truck'],
-                 num_ants: int = 50, generations: int = 20, evaporation_rate: float = 0.1, pheromone_deposit: float = 1.0,
+                 num_ants: int = 50, evaporation_rate: float = 0.1, pheromone_deposit: float = 1.0,
                  alpha: float = 1.0, beta: float = 2.0) -> None:
         """
         Initialize the Ant Colony Optimization algorithm.
@@ -25,7 +25,7 @@ class AntColonyOptimization(SearchAlgorithm):
         super().__init__(problem_instance, truck_types=truck_types)
         self.truck_types = list(truck_types)  # Ensure truck types are a list
         self.num_ants = num_ants
-        self.generations = generations
+        self.generations = config.iterations // num_ants
         self.evaporation_rate = evaporation_rate
         self.pheromone_deposit = pheromone_deposit
         self.alpha = alpha
