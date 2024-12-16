@@ -5,11 +5,11 @@ import numpy as np
 def draw_overall_comparation(data: dict):
     """
     Draws a comparison of the overall performance based on total cost and truck utilization.
-    
+
     Parameters:
     data (dict): A dictionary containing solving algorithms (e.g., 'hillclimb', 'raw_result') as keys
                     and their respective result dictionaries as values.
-    
+
     Returns:
     None
     """
@@ -47,7 +47,10 @@ def draw_overall_comparation(data: dict):
 
     # Label the bars with the actual value
     for i, v in enumerate(total_costs):
-        axes[0].text(i, v + 0.1, f"${v:.2f}k", ha='center', va='bottom')  # Adjust positioning if needed
+        axes[0].text(i, v + 0.5, f"${v:.2f}k", ha='center', va='bottom')  # Adjust positioning if needed
+
+    # Apply logarithmic scale to focus on smaller values
+    axes[0].set_yscale('log')
 
     # Plot 2: Average Truck Utilization Comparison
     avg_utilizations = [np.mean([util['Utilization Percentage'] for util in data[algorithm]['Capacity Utilization']]) for algorithm in algorithms]
@@ -58,13 +61,16 @@ def draw_overall_comparation(data: dict):
 
     # Label the bars with the actual value
     for i, v in enumerate(avg_utilizations):
-        axes[1].text(i, v + 0.5, f"{v:.1f}%", ha='center', va='bottom')  # Adjust positioning if needed
+        axes[1].text(i, v + 1, f"{v:.1f}%", ha='center', va='bottom')  # Adjust positioning if needed
 
-    # Final adjustment to the layout
-    plt.tight_layout()
-    plt.subplots_adjust(wspace=0.4)  # Adjust space between subplots
+    # Set x-axis labels with rotation
+    for ax in axes:
+        ax.set_xticks(np.arange(len(algorithms)))  # Set positions for x-axis ticks
+        ax.set_xticklabels(algorithms, rotation=45, ha="right")  # Rotate labels by 45 degrees
+
+    # Adjust the layout and spacing
+    plt.tight_layout(pad=2.0)  # Increase padding between subplots
     plt.savefig('Assets/output/overall_comparison.png')
-
 
 
 def draw_truck_type_distribution(data):
@@ -118,8 +124,7 @@ def draw_truck_type_distribution(data):
         axes[j].axis('off')
 
     # Final adjustment to layout and display
-    plt.tight_layout(pad=4.0)  # Adjust the padding between subplots
-    plt.subplots_adjust(hspace=0.4, wspace=0.4)  # Increase space between plots
+    plt.tight_layout(pad=2.0)  # Adjust the padding between subplots
     plt.savefig('Assets/output/truck_type_comparation.png')
 
 
