@@ -1,7 +1,5 @@
 import copy, random
-from concurrent.futures import ProcessPoolExecutor, as_completed
 from tqdm import tqdm
-
 from models.general import *
 from models.prototype import SearchAlgorithm
 
@@ -9,153 +7,179 @@ from models.prototype import SearchAlgorithm
 class GeneticAlgorithm(SearchAlgorithm):
     def __init__(self, problem_instance: 'DeliveryProblem', *, truck_types: list['Truck'],
                  population_size: int = 50, mutation_rate: float = 0.2, crossover_rate: float = 0.8) -> None:
+        """
+        Initialize the Genetic Algorithm with parameters.
+
+        Parameters:
+        - problem_instance (DeliveryProblem): The initial problem instance to optimize.
+        - truck_types (list): List of available truck types.
+        - population_size (int): The number of individuals in the population.
+        - mutation_rate (float): The probability of mutation occurring for an individual.
+        - crossover_rate (float): The probability of crossover between two parents.
+        """
         super().__init__(problem_instance, truck_types=truck_types)
         self.population_size = population_size
-        self.generations = config.iterations
+        self.generations = config.iterations  # Number of generations (iterations)
         self.mutation_rate = mutation_rate
         self.crossover_rate = crossover_rate
 
-    
     def search(self) -> 'DeliveryProblem':
         """
-        Perform the Genetic Algorithm to find the best solution.
+        Perform the Genetic Algorithm to optimize the solution.
+
+        Returns:
+        - DeliveryProblem: The best solution found after running the algorithm.
         """
+        # Step 1: Initialize the population
         population = self.__initialize_population()
-        best_solution = min(population, key=self._evaluate_solution)
-        best_cost = self._evaluate_solution(best_solution)
+        best_solution = min(population, key=self._evaluate_solution)  # Best individual in the population
 
-        if self.debug: print("Running Genetic Algorithm...")
+        for generation in tqdm(range(self.generations), desc="GA Progress"):
+            # Step 2: Evaluate fitness scores
+            fitness_scores = [(ind, self._evaluate_solution(ind)) for ind in population]
+            # Step 3: Select parents using tournament selection
+            parents = self.__select_parents(fitness_scores)
+            # Step 4: Generate offspring using crossover and mutation
+            offspring = self.__generate_offspring(parents)
+            # Step 5: Form the next generation
+            population = self.__select_next_generation(fitness_scores, offspring)
 
-        with ProcessPoolExecutor(max_workers=config.max_workers) as executor:
-            futures = {}
-            main_progress_bar = tqdm(total=self.generations, desc="Genetic Algorithm Progress", position=3, leave=True)
-
-            # Submit tasks for each generation to the executor
-            for generation in range(self.generations):
-                futures[executor.submit(self._run_generation, population, generation)] = generation
-
-            # Collect results
-            for future in as_completed(futures):
-                generation_result = future.result()
-                population, current_best_cost, current_best = generation_result
-                if current_best_cost < best_cost:
-                    best_solution = current_best
-                    best_cost = current_best_cost
-
-                del population  # Delete old population to free memory
-                main_progress_bar.update(1)  # Update progress bar
-
-                if self.debug and generation % 10 == 0:
-                    print(f"Generation {generation + 1}: Best Cost = {best_cost}")
-
-            main_progress_bar.close()
+            # Track the best solution found so far
+            current_best = min(population, key=self._evaluate_solution)
+            if self._evaluate_solution(current_best) < self._evaluate_solution(best_solution):
+                best_solution = current_best
 
         return best_solution
-    
 
-    def _run_generation(self, population, generation):
-        """
-        Perform the genetic algorithm operations for one generation concurrently.
-        """
-        fitness_scores = [(individual, self._evaluate_solution(individual)) for individual in population]
-        parents = self.__select_parents(fitness_scores)
-        offspring = self.__generate_offspring(parents)
-        population = self.__select_next_generation(fitness_scores, offspring)
-
-        # Get the best solution for the generation
-        current_best = min(population, key=self._evaluate_solution)
-        current_best_cost = self._evaluate_solution(current_best)
-
-        return population, current_best_cost, current_best
-
-    
     def __initialize_population(self) -> list:
+        """
+        Initialize a population of solutions by randomly assigning trucks and routes.
+
+        Returns:
+        - list: A list of randomly generated DeliveryProblem instances.
+        """
         return [self.__generate_random_solution() for _ in range(self.population_size)]
 
     def __generate_random_solution(self) -> 'DeliveryProblem':
+        """
+        Generate a random solution by assigning orders to trucks and ensuring valid routes.
+
+        Returns:
+        - DeliveryProblem: A valid solution with orders assigned to trucks and routes.
+        """
         solution = copy.deepcopy(self.problem_instance)
         solution.routes = []
 
         for order in solution.orders:
+            # Select a truck that can load the order
             valid_trucks = [truck for truck in self.truck_types if truck.can_load(order)]
             if valid_trucks:
-                selected_truck = random.choice(valid_trucks).copy()
-                solution._DeliveryProblem__assign_order_to_truck(order, truck=selected_truck)
-
-        for route in solution.routes:
-            random.shuffle(route.orders)
-            route.calculate_route_details()
+                truck = random.choice(valid_trucks).copy()
+                # Generate a valid route for the truck
+                route = self.__generate_valid_route(truck, [order], solution.city_manager)
+                if route:
+                    solution.routes.append(route)
 
         return solution
 
+    def __generate_valid_route(self, truck, orders, city_manager) -> Route or None:
+        """
+        Generate a valid route for a truck and a set of orders, ensuring it meets the time constraints.
+
+        Parameters:
+        - truck (Truck): The truck to assign orders to.
+        - orders (list): The list of orders to deliver.
+        - city_manager (CityManager): The city manager for distance calculations.
+
+        Returns:
+        - Route or None: A valid Route instance or None if no valid route can be generated.
+        """
+        route_cities = [orders[0].start_city, orders[0].end_city]
+        random.shuffle(route_cities[1:-1])  # Shuffle intermediate cities without changing start and end
+        if self.__is_route_valid(route_cities, truck, orders, city_manager):
+            return Route(truck, orders, city_manager)
+        return None
+
+    def __is_route_valid(self, route, truck, orders, city_manager) -> bool:
+        """
+        Check if a given route satisfies the time constraints.
+
+        Parameters:
+        - route (list): List of cities representing the route.
+        - truck (Truck): The truck assigned to deliver the orders.
+        - orders (list): The orders to be delivered along this route.
+        - city_manager (CityManager): Manages distances between cities.
+
+        Returns:
+        - bool: True if the route is valid, False otherwise.
+        """
+        total_time = 0
+        for i in range(len(route) - 1):
+            distance = city_manager.distance_between_cities(city1=route[i], city2=route[i + 1])
+            total_time += distance / truck.truck_speed  # Time = Distance / Speed
+            if total_time > (orders[0].end_time - orders[0].start_time).total_seconds() / 3600:
+                return False  # Route violates time constraints
+        return True
+
     def __select_parents(self, fitness_scores: list) -> list:
+        """
+        Select parents using tournament selection.
+
+        Parameters:
+        - fitness_scores (list): List of individuals and their fitness scores.
+
+        Returns:
+        - list: Selected parents for the next generation.
+        """
         return [min(random.sample(fitness_scores, 5), key=lambda x: x[1])[0] for _ in range(self.population_size)]
 
     def __generate_offspring(self, parents: list) -> list:
+        """
+        Generate offspring through crossover and mutation.
+
+        Parameters:
+        - parents (list): The list of parent solutions.
+
+        Returns:
+        - list: The offspring population.
+        """
         offspring = []
         for _ in range(len(parents) // 2):
             if random.random() < self.crossover_rate:
-                parent1, parent2 = random.sample(parents, 2)
-                child1, child2 = self.__crossover(parent1, parent2)
-                offspring.extend([child1, child2])
-            else:
-                offspring.extend(random.sample(parents, 2))
-        return [self.__mutate(ind) for ind in offspring]
+                p1, p2 = random.sample(parents, 2)
+                c1, c2 = copy.deepcopy(p1), copy.deepcopy(p2)
+                self.__mutate(c1)
+                self.__mutate(c2)
+                offspring.extend([c1, c2])
+        return offspring
 
-    def __crossover(self, parent1: 'DeliveryProblem', parent2: 'DeliveryProblem') -> tuple:
+    def __mutate(self, solution: 'DeliveryProblem') -> None:
         """
-        Perform multi-point crossover between two parents.
+        Apply mutation to a solution by swapping random orders.
+
+        Parameters:
+        - solution (DeliveryProblem): The solution to mutate.
         """
-        child1 = copy.deepcopy(parent1)
-        child2 = copy.deepcopy(parent2)
-
-        # Multi-point crossover
-        for i in range(0, len(parent1.orders), 2):  # Swap orders at even indices
-            self.__swap_orders(child1, child2, parent1.orders[i], parent2.orders[i])
-
-        return child1, child2
-
-
-    def __mutate(self, individual: 'DeliveryProblem') -> 'DeliveryProblem':
-        """
-        Apply mutation by swapping random orders in a route.
-        """
-        mutated = copy.deepcopy(individual)
-
-        for route in mutated.routes:
+        for route in solution.routes:
             if random.random() < self.mutation_rate:
                 if len(route.orders) > 1:
-                    # Swap two random orders in the route
-                    i, j = random.sample(range(len(route.orders)), 2)
-                    route.orders[i], route.orders[j] = route.orders[j], route.orders[i]
-                    route.calculate_route_details()
-        return mutated
-
-
-    def __swap_orders(self, child1, child2, order1, order2):
-        for route in child1.routes:
-            if order1 in route.orders:
-                route.orders.remove(order1)
-                route.orders.append(order2)
-                break
-        for route in child2.routes:
-            if order2 in route.orders:
-                route.orders.remove(order2)
-                route.orders.append(order1)
-                break
+                    # Randomly shuffle orders in the route
+                    orders = route.orders[:]
+                    random.shuffle(orders)
+                    if self.__is_route_valid(orders, route.truck, route.orders, solution.city_manager):
+                        route.orders = orders
+                        route.calculate_route_details()
 
     def __select_next_generation(self, fitness_scores: list, offspring: list) -> list:
         """
         Select the next generation from the current population and offspring.
-        """
-        # Combine the current population and offspring
-        combined_population = [individual for individual, _ in fitness_scores] + offspring
-        
-        # Sort by fitness
-        combined_population.sort(key=self._evaluate_solution)
-        
-        # Retain the best individual (elite) and fill the rest
-        next_generation = [combined_population[0]]  # Elite individual
-        next_generation += random.sample(combined_population[1:], self.population_size - 1)
-        return next_generation
 
+        Parameters:
+        - fitness_scores (list): List of individuals and their fitness scores.
+        - offspring (list): The offspring population.
+
+        Returns:
+        - list: The next generation of individuals.
+        """
+        combined = [individual for individual, _ in fitness_scores] + offspring
+        return sorted(combined, key=self._evaluate_solution)[:self.population_size]
