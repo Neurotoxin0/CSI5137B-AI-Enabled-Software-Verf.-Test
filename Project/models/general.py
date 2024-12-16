@@ -538,6 +538,16 @@ class DeliveryProblem:
         self.routes = []
 
         self.__assign_orders_to_trucks()
+
+
+    def copy(self) -> 'DeliveryProblem':
+        """
+        Create a copy of the DeliveryProblem object.
+
+        Returns:
+        DeliveryProblem: A new DeliveryProblem object with the same properties.
+        """
+        return copy.deepcopy(self)
         
 
     def __assign_orders_to_trucks(self) -> None:
