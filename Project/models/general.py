@@ -573,7 +573,7 @@ class DeliveryProblem:
 
             # If no truck can carry the order, select the appropriate truck type
             if not assigned:
-                selected_truck = self.__select_truck_for_order(order)
+                selected_truck = self.__select_truck_for_order(order, use_dummy=True)
                 self.__assign_order_to_truck(order, truck=selected_truck)
     
     
@@ -600,7 +600,7 @@ class DeliveryProblem:
             route.calculate_route_details()
 
 
-    def __select_truck_for_order(self, order: 'Order') -> 'Truck':
+    def __select_truck_for_order(self, order: 'Order', *, use_dummy: bool = False) -> 'Truck':
         """
         Select a truck type from the available options to carry the order.
         No optimization is done here, just a simple selection based on the order's weight and area.
@@ -608,10 +608,17 @@ class DeliveryProblem:
 
         Parameters:
         order (Order): The order to assign to a truck.
+        use_dummy (bool): Whether to use a dummy truck as primary choice -> to verify the optimization algorithm.
 
         Returns:
         Truck: The selected truck for the order.
         """
+        if use_dummy:
+            for truck in self.truck_types:
+                if truck.truck_type == 'dummy': 
+                    if truck.can_load(order):
+                        return truck.copy()
+                    
         for truck in self.truck_types:
             if truck.can_load(order): return truck.copy()
 
