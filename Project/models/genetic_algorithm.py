@@ -1,5 +1,4 @@
-import copy
-import random
+import copy, random
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from tqdm import tqdm
 
@@ -29,13 +28,12 @@ class GeneticAlgorithm(SearchAlgorithm):
         best_cost = self._evaluate_solution(best_solution)
 
         with ProcessPoolExecutor(max_workers=config.max_workers) as executor:
-            progress_bar = tqdm(total=self.generations, desc="Genetic Algorithm Progress")
+            futures = []
+            progress_bar = tqdm(total=self.generations, desc="Genetic Algorithm Progress", leave=False)
 
-            for generation in range(self.generations):
-                # Submit generation tasks to thread pool
-                future = executor.submit(self._run_generation, population)
-                result = future.result()
-                population, generation_best_cost, generation_best_solution = result
+            for generation in range(self.generations): futures.append(executor.submit(self._run_generation, population))
+            for future in as_completed(futures):
+                _, generation_best_cost, generation_best_solution = future.result() # population, best_cost, best_solution
 
                 # Update best solution
                 if generation_best_cost < best_cost:
@@ -43,7 +41,7 @@ class GeneticAlgorithm(SearchAlgorithm):
                     best_cost = generation_best_cost
 
                 progress_bar.update(1)
-                if generation % 10 == 0:  # Optional: Log progress every 10 generations
+                if self.debug and generation % 10 == 0:  # Optional: Log progress every 10 generations
                     print(f"Generation {generation}: Best Cost = {best_cost}")
 
             progress_bar.close()
