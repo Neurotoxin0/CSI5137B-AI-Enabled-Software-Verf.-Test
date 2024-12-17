@@ -36,9 +36,8 @@ def draw_overall_comparation(data: dict):
             )
 
     
-    # Plotting the results
-    fig, axes = plt.subplots(1, 2)
 
+    fig, axes = plt.subplots(1, 3, figsize=(15, 6))
     # Plot 1 : Total Cost Comparison
     axes[0].bar(algorithms, total_costs, color=['blue', 'green'], label='Total Cost')
     axes[0].set_title('Total Cost Comparison')
@@ -52,6 +51,7 @@ def draw_overall_comparation(data: dict):
     # Apply logarithmic scale to focus on smaller values
     axes[0].set_yscale('log')
 
+    
     # Plot 2: Average Truck Utilization Comparison
     avg_utilizations = [np.mean([util['Utilization Percentage'] for util in data[algorithm]['Capacity Utilization']]) for algorithm in algorithms]
     axes[1].bar(algorithms, avg_utilizations, color=['blue', 'green'])
@@ -63,12 +63,22 @@ def draw_overall_comparation(data: dict):
     for i, v in enumerate(avg_utilizations):
         axes[1].text(i, v + 1, f"{v:.1f}%", ha='center', va='bottom')  # Adjust positioning if needed
 
-    # Set x-axis labels with rotation
-    for ax in axes:
+    
+    # Plot 3: Number of Trucks Comparison
+    axes[2].bar(algorithms, num_trucks_used, color=['blue', 'green'])
+    axes[2].set_title('Number of Trucks Comparison')
+    axes[2].set_ylabel('Number of Trucks')
+    axes[2].set_xlabel('Algorithms')
+
+    # Label the bars with the actual value
+    for i, v in enumerate(num_trucks_used):
+        axes[2].text(i, v + 0.1, f"{v}", ha='center', va='bottom')  # Adjust positioning if needed
+
+    
+    # Adjust the layout and spacing
+    for ax in axes: # Set x-axis labels with rotation
         ax.set_xticks(np.arange(len(algorithms)))  # Set positions for x-axis ticks
         ax.set_xticklabels(algorithms, rotation=45, ha="right")  # Rotate labels by 45 degrees
-
-    # Adjust the layout and spacing
     plt.tight_layout(pad=2.0)  # Increase padding between subplots
     plt.savefig('Assets/output/overall_comparison.png')
 
