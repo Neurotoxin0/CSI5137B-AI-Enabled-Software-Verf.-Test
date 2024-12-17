@@ -34,16 +34,16 @@ class HillClimbing(SearchAlgorithm):
         best_solution = current_solution
 
         # Step 1: Optimize truck assignments
-        print("Optimizing truck assignments...")
-        for _ in tqdm(range(config.iterations // 2), desc="Hill Climbing (Truck Opt)", leave=False):
+        if self.debug: print("Optimizing truck assignments...")
+        for _ in tqdm(range(config.iterations // 2), desc="Hill Climbing (Truck Opt)", position = 1, leave=False):
             neighbor = self.__generate_neighbor(current_solution, optimize_truck=True)
             if self._evaluate_solution(neighbor) < self._evaluate_solution(best_solution):
                 best_solution = neighbor
             current_solution = neighbor
 
         # Step 2: Optimize route assignments
-        print("Optimizing route assignments...")
-        for _ in tqdm(range(config.iterations // 2), desc="Hill Climbing (Route Opt)", leave=False):
+        if self.debug: print("Optimizing route assignments...")
+        for _ in tqdm(range(config.iterations // 2), desc="Hill Climbing (Route Opt)", position = 1, leave=False):
             neighbor = self.__generate_neighbor(current_solution, optimize_truck=False)
             if self._evaluate_solution(neighbor) < self._evaluate_solution(best_solution):
                 best_solution = neighbor

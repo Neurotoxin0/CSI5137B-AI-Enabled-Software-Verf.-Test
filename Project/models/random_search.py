@@ -30,7 +30,7 @@ class RandomSearch(SearchAlgorithm):
         best_cost = self._evaluate_solution(current_solution)
 
         print("Running Random Search...")
-        progress_bar = tqdm(range(self.iterations), desc="Random Search Progress", leave=False)
+        progress_bar = tqdm(range(self.iterations), desc="Random Search Progress", position = 0, leave=False)
 
         for i in progress_bar:
             # Generate a new neighbor solution

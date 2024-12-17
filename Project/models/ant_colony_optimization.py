@@ -42,7 +42,7 @@ class AntColonyOptimization(SearchAlgorithm):
         best_cost = float('inf')
 
         if self.debug: print("Running Ant Colony Optimization...")
-        for generation in tqdm(range(self.generations), desc="ACO Progress", leave=False):
+        for generation in tqdm(range(self.generations), desc="ACO Progress", position = 2, leave=False):
             solutions = []
 
             # Each ant constructs a solution
