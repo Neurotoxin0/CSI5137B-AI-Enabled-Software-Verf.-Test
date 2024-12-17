@@ -1,5 +1,6 @@
 import copy, random
 from tqdm import tqdm
+
 from models.general import *
 from models.prototype import SearchAlgorithm
 
@@ -41,7 +42,7 @@ class AntColonyOptimization(SearchAlgorithm):
         best_cost = float('inf')
 
         if self.debug: print("Running Ant Colony Optimization...")
-        for generation in tqdm(range(self.generations), desc="ACO Progress", position=2, leave=False):
+        for generation in tqdm(range(self.generations), desc="ACO Progress", leave=False):
             solutions = []
 
             # Each ant constructs a solution

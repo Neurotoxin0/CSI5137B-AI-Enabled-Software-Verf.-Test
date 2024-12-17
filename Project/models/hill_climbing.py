@@ -1,7 +1,5 @@
-import copy
-import random
+import copy, random
 from tqdm import tqdm
-from concurrent.futures import ThreadPoolExecutor
 
 from models.general import *
 from models.prototype import SearchAlgorithm
@@ -37,7 +35,7 @@ class HillClimbing(SearchAlgorithm):
 
         # Step 1: Optimize truck assignments
         print("Optimizing truck assignments...")
-        for _ in tqdm(range(config.iterations // 2), desc="Hill Climbing (Truck Opt)"):
+        for _ in tqdm(range(config.iterations // 2), desc="Hill Climbing (Truck Opt)", leave=False):
             neighbor = self.__generate_neighbor(current_solution, optimize_truck=True)
             if self._evaluate_solution(neighbor) < self._evaluate_solution(best_solution):
                 best_solution = neighbor
@@ -45,7 +43,7 @@ class HillClimbing(SearchAlgorithm):
 
         # Step 2: Optimize route assignments
         print("Optimizing route assignments...")
-        for _ in tqdm(range(config.iterations // 2), desc="Hill Climbing (Route Opt)"):
+        for _ in tqdm(range(config.iterations // 2), desc="Hill Climbing (Route Opt)", leave=False):
             neighbor = self.__generate_neighbor(current_solution, optimize_truck=False)
             if self._evaluate_solution(neighbor) < self._evaluate_solution(best_solution):
                 best_solution = neighbor
