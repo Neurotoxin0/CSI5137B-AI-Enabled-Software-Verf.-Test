@@ -1,0 +1,21 @@
+2024-12-16 18:59:04,180 - INFO - 
+----------------------------------------
+Starting the program...
+----------------------------------------
+
+2024-12-16 18:59:04,535 - INFO - Raw Result: {'Total Distance': 24512.745000000003, 'Total Cost': 24488232.255, 'Number of Trucks': 3, 'Capacity Utilization': [{'Truck Type': 'dummy', 'Utilization Percentage': 92.76}, {'Truck Type': 'dummy', 'Utilization Percentage': 92.4}, {'Truck Type': 'dummy', 'Utilization Percentage': 7.64}]}
+2024-12-16 18:59:32,483 - INFO - Random Search: {'Total Distance': 24512.744999999995, 'Total Cost': 44067.35299999999, 'Number of Trucks': 10, 'Capacity Utilization': [{'Truck Type': '16.5', 'Utilization Percentage': 30.92}, {'Truck Type': '12.5', 'Utilization Percentage': 61.84}, {'Truck Type': '12.5', 'Utilization Percentage': 61.84}, {'Truck Type': '16.5', 'Utilization Percentage': 30.92}, {'Truck Type': '16.5', 'Utilization Percentage': 30.92}, {'Truck Type': '9.6', 'Utilization Percentage': 38.2}, {'Truck Type': '9.6', 'Utilization Percentage': 38.2}, {'Truck Type': '9.6', 'Utilization Percentage': 38.2}, {'Truck Type': '9.6', 'Utilization Percentage': 38.2}, {'Truck Type': '9.6', 'Utilization Percentage': 38.2}]}
+2024-12-16 18:59:59,298 - INFO - Hill Climbing: {'Total Distance': 24512.745000000003, 'Total Cost': 46567.267, 'Number of Trucks': 3, 'Capacity Utilization': [{'Truck Type': '12.5', 'Utilization Percentage': 61.84}, {'Truck Type': '12.5', 'Utilization Percentage': 92.4}, {'Truck Type': '9.6', 'Utilization Percentage': 38.2}]}
+2024-12-16 19:00:28,397 - INFO - Ant Colony Optimization: {'Total Distance': 24512.744999999995, 'Total Cost': 24512.744999999995, 'Number of Trucks': 10, 'Capacity Utilization': [{'Truck Type': '9.6', 'Utilization Percentage': 0.0}, {'Truck Type': '9.6', 'Utilization Percentage': 0.0}, {'Truck Type': '9.6', 'Utilization Percentage': 0.0}, {'Truck Type': '9.6', 'Utilization Percentage': 0.0}, {'Truck Type': '9.6', 'Utilization Percentage': 0.0}, {'Truck Type': '9.6', 'Utilization Percentage': 38.2}, {'Truck Type': '9.6', 'Utilization Percentage': 38.2}, {'Truck Type': '9.6', 'Utilization Percentage': 38.2}, {'Truck Type': '9.6', 'Utilization Percentage': 38.2}, {'Truck Type': '9.6', 'Utilization Percentage': 38.2}]}
+2024-12-16 19:16:44,004 - INFO - 
+----------------------------------------
+Starting the program...
+----------------------------------------
+
+2024-12-16 19:16:44,335 - INFO - Raw Result: {'Total Distance': 24512.745000000003, 'Total Cost': 24488232.255, 'Number of Trucks': 3, 'Capacity Utilization': [{'Truck Type': 'dummy', 'Utilization Percentage': 92.76}, {'Truck Type': 'dummy', 'Utilization Percentage': 92.4}, {'Truck Type': 'dummy', 'Utilization Percentage': 7.64}]}
+2024-12-16 19:32:23,304 - INFO - Genetic Algorithm: {'Total Distance': 24512.744999999995, 'Total Cost': 46539.473, 'Number of Trucks': 10, 'Capacity Utilization': [{'Truck Type': '12.5', 'Utilization Percentage': 61.84}, {'Truck Type': '16.5', 'Utilization Percentage': 30.92}, {'Truck Type': '12.5', 'Utilization Percentage': 61.84}, {'Truck Type': '12.5', 'Utilization Percentage': 61.84}, {'Truck Type': '16.5', 'Utilization Percentage': 30.92}, {'Truck Type': '9.6', 'Utilization Percentage': 38.2}, {'Truck Type': '16.5', 'Utilization Percentage': 7.64}, {'Truck Type': '9.6', 'Utilization Percentage': 38.2}, {'Truck Type': '9.6', 'Utilization Percentage': 38.2}, {'Truck Type': '9.6', 'Utilization Percentage': 38.2}]}
+2024-12-16 19:32:24,957 - INFO - 
+----------------------------------------
+Program completed successfully.
+----------------------------------------
+
